@@ -9,8 +9,7 @@
     ],
     "types": [
       "vite/client",
-      "node",
-      "dom-mediacapture-transform"
+      "node"
     ],
     "skipLibCheck": true,
     "noUnusedLocals": false,

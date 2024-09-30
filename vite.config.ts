@@ -7,6 +7,9 @@ import dns from "dns";
 dns.setDefaultResultOrder('verbatim')
 
 export default defineConfig({
+  define: {
+    "process.env": {}
+  },
   plugins: [react(), viteTsConfigPaths(), dynamicImport()],
   server: {
     open: true,
