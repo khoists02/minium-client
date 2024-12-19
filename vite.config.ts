@@ -13,7 +13,6 @@ export default defineConfig({
   plugins: [react(), viteTsConfigPaths(), dynamicImport()],
   server: {
     open: true,
-    host: "ui.ecommerce.local",
     port: 3000,
   },
   build: {

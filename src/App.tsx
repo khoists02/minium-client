@@ -1,33 +1,54 @@
-import React, { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import React, { useEffect, useState } from "react";
+import { IPostResponse } from "./types/general";
+import axios from "axios";
+import { format } from "date-fns";
 
 function App() {
-  const [count, setCount] = useState(0);
+
+  const [posts, setPosts] = useState<IPostResponse[]>([]);
+
+  const getPosts = async () => {
+    try {
+      const data = await axios.get("/public/posts");
+      setPosts(data.data.content || []);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getPosts();
+  }, [])
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="container mt-5">
+        <div className="row">
+          {posts?.map((p) => {
+            return <div className="col-md-12 mb-3" key={p.id}>
+              <div className="card">
+                <div className="card-header">
+                  <h3 className="title">{p.title}</h3>
+                </div>
+
+                <div className="card-body">
+                  {p.content}
+                </div>
+
+                <div className="card-footer">
+                  <p>
+                    <span>Author: </span>
+                    <span>{p.author} </span>
+                    <span>at {format(new Date(p.updatedAt), "dd/MM/yyyy HH:mm")}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          })}
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+
     </>
   );
 }
