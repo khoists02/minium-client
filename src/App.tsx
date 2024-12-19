@@ -1,18 +1,24 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Header } from "./components/Header";
 import { AdminRouter, PublicRouter } from "./routes";
-import { useAppSelector } from "./config/hook";
+import { useAppDispatch, useAppSelector } from "./config/hook";
+import { getAuthenticatedUser } from "./pages/admin/auth/ducks/operators";
 
 function App() {
+  const dispatch = useAppDispatch();
   const { isAuthenticated, sessionHasBeenFetched } = useAppSelector((state) => state.ath);
 
   const showAdminRouter = useMemo(() => {
     return sessionHasBeenFetched && isAuthenticated;
   }, [isAuthenticated, sessionHasBeenFetched]);
 
+  useEffect(() => {
+    dispatch(getAuthenticatedUser());
+  }, [])
+
   return (
     <>
-      <Header />
+      <Header showAdminRouter={showAdminRouter} />
       <div className="main"></div>
       <div className="container mt-5">
         <PublicRouter />

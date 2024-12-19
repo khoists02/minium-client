@@ -1,6 +1,25 @@
 import React, { FC } from "react";
+import { useAppDispatch, useAppSelector } from "../config/hook";
+import axios from "axios";
+import { authClearState } from "../pages/admin/auth/ducks/slices";
 
-export const Header: FC = () => {
+export const Header: FC<{ showAdminRouter?: boolean }> = ({
+    showAdminRouter,
+}) => {
+    const { account } = useAppSelector((state) => state.ath);
+    const dispatch = useAppDispatch();
+
+    const handleLogout = async () => {
+        try {
+            await axios.delete("auth/logout");
+            // clear state.
+            dispatch(authClearState());
+
+            window.location.reload();
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return (
         <>
             <header>
@@ -28,9 +47,13 @@ export const Header: FC = () => {
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="mr-2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
                             <strong>Posts</strong>
                         </a>
-                        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-                            <span className="navbar-toggler-icon"></span>
-                        </button>
+                        {showAdminRouter && <>
+                            <span className="text-white">
+
+                                <span>{account.name}</span>
+                                <span className="ml-2 " onClick={handleLogout}>Logout</span>
+                            </span>
+                        </>}
                     </div>
                 </div>
             </header>

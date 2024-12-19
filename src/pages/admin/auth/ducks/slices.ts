@@ -21,9 +21,15 @@ const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        clearState: () => initialState,
+        authClearState: () => initialState,
+        authenticationSuccess(state, action) {
+            state.loading = false;
+            state.isAuthenticated = true;
+            state.sessionHasBeenFetched = true;
+            state.account = action.payload;
+        }
     },
 });
 
-export const { clearState } = authSlice.actions;
+export const { authClearState, authenticationSuccess } = authSlice.actions;
 export default authSlice.reducer;
