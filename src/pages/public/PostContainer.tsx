@@ -16,10 +16,10 @@ const PostContainer: FC = () => {
         <>
             <div className="row">
                 {entities?.map((p) => {
-                    return <div className="col-md-12 mb-3" key={p.id}>
-                        <div className="card">
+                    return <div className="col-md-4 mb-3" key={p.id}>
+                        <div className="card post-card">
                             <div className="card-header mb-0 pb-1">
-                                <h4 className="title">{p.title}</h4>
+                                <h4 className="title text-truncate">{p.title}</h4>
                             </div>
 
                             <div className="card-body">

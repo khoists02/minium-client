@@ -16,7 +16,6 @@ const PublicRouter: FC = () => {
 const AdminRouter: FC = () => {
     return <Routes>
         <Route path="/Admin/Users" element={<span />}></Route>
-        {/* <Route path="*" element={<span>Not Found</span>}></Route> */}
     </Routes>
 }
 

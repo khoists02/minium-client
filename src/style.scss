@@ -8,3 +8,13 @@
     overflow: hidden;             // Hides overflowing text
     text-overflow: ellipsis;      // Adds ellipsis (...) for truncated text
   }
+
+  .text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .post-card {
+    height: 250px;
+  }
