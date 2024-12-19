@@ -3,6 +3,7 @@ import { IPostResponse } from "../../../types/general";
 
 export interface PublicPostState {
     entities: IPostResponse[];
+    post?: IPostResponse;
     loading: boolean;
     error?: any;
 }
@@ -11,6 +12,7 @@ const initialState: PublicPostState = {
     entities: [],
     loading: false,
     error: null,
+    post: null,
 };
 
 const publicPostSlice = createSlice({
@@ -26,9 +28,12 @@ const publicPostSlice = createSlice({
         getPostsFail: (state, action) => {
             state.error = action.payload;
         },
+        getPostDetailsSuccess(state, action) {
+            state.post = action.payload;
+        },
         clearState: () => initialState,
     },
 });
 
-export const { loading, getPostsSuccess, getPostsFail } = publicPostSlice.actions;
+export const { loading, getPostsSuccess, getPostsFail, getPostDetailsSuccess } = publicPostSlice.actions;
 export default publicPostSlice.reducer;

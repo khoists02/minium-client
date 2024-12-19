@@ -2,9 +2,11 @@ import React, { FC, useEffect } from "react";
 import { format } from "date-fns";
 import { useAppDispatch, useAppSelector } from "../../config/hook";
 import { getPublicPosts } from "./ducks/operators";
+import { useNavigate } from "react-router";
 
 const PostContainer: FC = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const { entities } = useAppSelector((state) => state.publicPost);
 
@@ -16,7 +18,9 @@ const PostContainer: FC = () => {
         <>
             <div className="row">
                 {entities?.map((p) => {
-                    return <div className="col-md-4 mb-3" key={p.id}>
+                    return <div className="col-md-4 mb-3" key={p.id} onClick={() => {
+                        navigate("/Posts/" + p.id)
+                    }}>
                         <div className="card post-card">
                             <div className="card-header mb-0 pb-1">
                                 <h4 className="title text-truncate">{p.title}</h4>

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { AppThunk } from "../../../config/store";
-import { getPostsFail, getPostsSuccess, loading } from "./slice";
+import { getPostDetailsSuccess, getPostsFail, getPostsSuccess, loading } from "./slice";
 
 export const getPublicPosts =
     (): AppThunk =>
@@ -11,6 +11,22 @@ export const getPublicPosts =
                 dispatch(
                     getPostsSuccess(
                         data.data.content
+                    )
+                );
+            } catch (err) {
+                dispatch(getPostsFail(err));
+            }
+        };
+
+export const getPublicPostsDetails =
+    (postId: string): AppThunk =>
+        async (dispatch) => {
+            try {
+                dispatch(loading);
+                const data = await axios.get("/posts/" + postId);
+                dispatch(
+                    getPostDetailsSuccess(
+                        data.data.post
                     )
                 );
             } catch (err) {

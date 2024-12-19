@@ -11,6 +11,11 @@ export interface IPostResponse {
     title?: string;
     content?: string;
     author?: string;
+    user?: {
+        id?: string;
+        name?: string;
+        email?: string;
+    }
     updatedAt?: Date | string;
 }
 
