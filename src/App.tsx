@@ -20,7 +20,7 @@ function App() {
     <>
       <Header showAdminRouter={showAdminRouter} />
       <div className="main"></div>
-      <div className="container mt-5">
+      <div className="container mt-4  ">
         <PublicRouter />
         {showAdminRouter && <AdminRouter />}
       </div>

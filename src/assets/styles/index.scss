@@ -1,0 +1,42 @@
+$border-color: #F2F2F2;
+$navbar-height: 57px;
+
+@import "./mixins/general.scss";
+
+// Vendors
+@import "./vendors/displays.scss";
+
+// Components
+@import "./components/border.scss";
+@import "./components/navbar.scss";
+
+.article--item {
+    .author {
+        font-size: 13px;
+        color: #242424;
+        line-height: 20px;
+    }
+
+    .title {
+        font-size: 24px;
+        line-height: 30px;
+        font-weight: 700;
+    }
+
+    .description {
+        font-size: 16px;
+        color: #6B6B6B;
+        line-height: 20px;
+    }
+
+    .footer {
+        font-size: 13px;
+        color: #6B6B6B;
+        line-height: 20px;
+    }
+
+    .break {
+        margin-top: 20px;
+        border-bottom: solid 1px #F2F2F2;
+    }
+}

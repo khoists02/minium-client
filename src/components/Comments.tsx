@@ -46,7 +46,7 @@ const Comments: React.FC = () => {
 
   return (
     <div className="mt-4">
-      <h2>Comments</h2>
+      <h4>Comments</h4>
 
       <Form>
         <InputGroup className="mb-3">

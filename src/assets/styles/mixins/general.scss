@@ -1,0 +1,23 @@
+@mixin border(
+  $width: 1px, 
+  $style: solid, 
+  $color: black, 
+  $sides: all
+) {
+  @if $sides == all {
+    border: $width $style $color;
+  } @else {
+    @each $side in $sides {
+      @if $side == top {
+        border-top: $width $style $color;
+      } @else if $side == right {
+        border-right: $width $style $color;
+      } @else if $side == bottom {
+        border-bottom: $width $style $color;
+      } @else if $side == left {
+        border-left: $width $style $color;
+      }
+    }
+  }
+}
+

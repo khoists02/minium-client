@@ -10,6 +10,7 @@ const PostDetailsContainer: FC = () => {
     const dispatch = useAppDispatch();
     const { postId } = useParams<{ postId: string }>();
     const { post } = useAppSelector((state) => state.publicPost);
+    const { account } = useAppSelector((state) => state.ath);
     const [preview, setPreview] = useState(true);
 
     const [editorContent, setEditorContent] = useState<string>("");
@@ -37,15 +38,18 @@ const PostDetailsContainer: FC = () => {
         <>
             <h4>{title}</h4>
             <small className="text-muted">{post?.user?.name}</small>
-            <div className="mt-2">
-                <ToggleSwitch initialState={preview} onChange={(e) => setPreview(e)} />
-            </div>
+            {account?.id === post?.user?.id && (
+                <div className="mt-2">
+                    <ToggleSwitch initialState={preview} onChange={(e) => setPreview(e)} />
+                </div>
+            )}
+
             {preview && (
                 <div className="preview" dangerouslySetInnerHTML={{ __html: editorContent }}>
 
                 </div>
             )}
-            {!preview && <Editor value={editorContent} onChange={handleEditorChange} />}
+            {!preview && account?.id === post?.user?.id && <Editor value={editorContent} onChange={handleEditorChange} />}
 
             <Comments />
         </>

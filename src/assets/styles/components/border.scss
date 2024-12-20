@@ -1,0 +1,19 @@
+.border {
+    @include border(1px, solid, $border-color);
+}
+
+.border-l {
+    @include border(1px, solid, $border-color, (left));
+}
+
+.border-r {
+    @include border(1px, solid, $border-color, (right));
+}
+
+.border-b {
+    @include border(1px, solid, $border-color, (bottom));
+}
+
+.border-t {
+    @include border(1px, solid, $border-color, (top));
+}

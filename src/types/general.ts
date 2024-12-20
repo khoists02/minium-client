@@ -10,6 +10,8 @@ export interface IPostResponse {
     id?: string;
     title?: string;
     content?: string;
+    description?: string;
+    backgroundUrl?: string;
     author?: string;
     user?: {
         id?: string;

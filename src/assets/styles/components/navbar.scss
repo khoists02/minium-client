@@ -1,0 +1,13 @@
+.navbar {
+    @include border(1px, solid, $border-color, (bottom));
+    height: $navbar-height;
+    padding: 0 24px;
+    align-items: center;
+    display: flex;
+
+    &__left {
+        display: flex;
+        flex: 1 0 auto;
+        align-items: center;
+    }
+}
