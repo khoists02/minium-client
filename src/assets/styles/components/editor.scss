@@ -1,5 +1,13 @@
+.editor-editable {
+    outline: none;
+    border: none;
+    padding: 0; // Optional: Adjust padding if necessary
+    box-shadow: none;
+}
+
 .editor-item {
     position: relative;
+    margin-bottom: 15px;
 
     .add-new {
         position: absolute;
@@ -15,5 +23,9 @@
         color: #ffffff;
         top: -8px;
         cursor: pointer;
+
+        &.title {
+            top: -4px;
+        }
     }
 }

@@ -1,10 +1,10 @@
 import React from "react";
-import { Editor, Transforms, Text } from "slate";
 import { useSlate } from "slate-react";
+import { isFormatActive, toggleFormat } from "./helpers";
 
 interface ToolbarButtonProps {
   format: string;
-  icon: string; // Replace with an actual icon or text for simplicity.
+  icon: React.ReactElement | React.ReactElement[] | string
 }
 
 const ToolbarButton: React.FC<ToolbarButtonProps> = ({ format, icon }) => {
@@ -14,11 +14,7 @@ const ToolbarButton: React.FC<ToolbarButtonProps> = ({ format, icon }) => {
 
   return (
     <button
-      style={{
-        fontWeight: isActive ? "bold" : "normal",
-        margin: "0 5px",
-        cursor: "pointer",
-      }}
+      className={`btn btn-${isActive ? "primary" : "light"}`}
       onMouseDown={(event) => {
         event.preventDefault();
         toggleFormat(editor, format);
@@ -26,26 +22,6 @@ const ToolbarButton: React.FC<ToolbarButtonProps> = ({ format, icon }) => {
     >
       {icon}
     </button>
-  );
-};
-
-const isFormatActive = (editor: Editor, format: string) => {
-  const [match] = Array.from(
-    Editor.nodes(editor, {
-      // @ts-ignore
-      match: (n) => Text.isText(n) && n[format as keyof Text] === true,
-      universal: true,
-    })
-  );
-  return !!match;
-};
-
-const toggleFormat = (editor: Editor, format: string) => {
-  const isActive = isFormatActive(editor, format);
-  Transforms.setNodes(
-    editor,
-    { [format]: isActive ? undefined : true },
-    { match: (n) => Text.isText(n), split: true }
   );
 };
 

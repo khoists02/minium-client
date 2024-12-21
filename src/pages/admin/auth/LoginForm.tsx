@@ -45,13 +45,11 @@ export const LoginForm: FC<{ onSubmit: (data: ILoginForm) => void }> = ({
                             className="form-control"
                             id="email"
                             name="email"
-                            placeholder="Enter your email"
                             value={formData.email}
                             onChange={handleChange}
                             required
                         />
                     </div>
-
                     <div className="form-group">
                         <label htmlFor="password">Password</label>
                         <input
@@ -59,13 +57,11 @@ export const LoginForm: FC<{ onSubmit: (data: ILoginForm) => void }> = ({
                             className="form-control"
                             id="password"
                             name="password"
-                            placeholder="Enter your password"
                             value={formData.password}
                             onChange={handleChange}
                             required
                         />
                     </div>
-
                     <button type="submit" disabled={!formData.password} className="btn btn-primary btn-block">
                         Login
                     </button>
