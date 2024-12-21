@@ -7,12 +7,19 @@ import { CustomElement } from "../types/slate";
 
 const SlateEditor: React.FC = () => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
-  const [id, setId] = useState(uuidv4());
   const [value, setValue] = useState<Descendant[]>([
     {
-      id: id,
+      id: uuidv4(),
+      type: "title",
+      placeholder: "Title...",
+      children: [{
+        text: "",
+      }]
+    },
+    {
+      id: uuidv4(),
       type: "paragraph",
-      placeholder: "Title",
+      placeholder: "Tell your story...",
       children: [{
         text: "",
       }]
@@ -182,6 +189,28 @@ const Element: React.FC<{ attributes: any; children: any; element: any }> = ({
           <code>{children}</code>
         </pre>
       );
+    case "title":
+      return (
+        <WrapperElement isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
+          <h3 {...attributes} style={{ position: "relative" }}>
+            {isEmpty && (
+              <span
+                contentEditable={false}
+                style={{
+                  position: "absolute",
+                  pointerEvents: "none",
+                  opacity: 0.5,
+                  userSelect: "none",
+                }}
+              >
+                {element.placeholder}
+              </span>
+            )}
+            {children}
+          </h3>
+        </WrapperElement>
+
+      );
     default:
       return <p {...attributes}>{children}</p>;
   }
@@ -190,7 +219,7 @@ const Element: React.FC<{ attributes: any; children: any; element: any }> = ({
 const WrapperElement: FC<{ children: any; isEmpty: boolean; focused?: boolean; id?: string }> = ({ children, isEmpty, focused, id }) => {
   const isShowAddSidebar = useMemo(() => focused && isEmpty, [focused, isEmpty])
   return <div data-id={id} data-focused={focused} className="editor-item">
-    {isShowAddSidebar && <div className="add-new">+</div>}
+    {isShowAddSidebar && <div contentEditable={false} className="add-new">+</div>}
     {children}
   </div>
 }

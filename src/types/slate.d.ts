@@ -8,6 +8,7 @@ type CustomElement =
     | { type: "quote"; children: CustomText[], placeholder?: string, id: string }
     | { type: "image", url: string, alt: string, children: CustomText[], id: string }
     | { type: "code", children: CustomText[], id: string }
+    | { type: "title", placeholder?: string, children: CustomText[], id: string };
 
 type CustomText = { text: string; bold?: boolean; italic?: boolean, code?: boolean; };
 
