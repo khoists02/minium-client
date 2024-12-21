@@ -11,6 +11,9 @@ export default defineConfig({
     "process.env": {}
   },
   plugins: [react(), viteTsConfigPaths(), dynamicImport()],
+  optimizeDeps: {
+    include: ["slate", "slate-react", "slate-history"],
+  },
   server: {
     open: true,
     port: 3000,
