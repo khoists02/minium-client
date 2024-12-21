@@ -1,0 +1,19 @@
+.editor-item {
+    position: relative;
+
+    .add-new {
+        position: absolute;
+        left: -50px;
+        width: 40px;
+        height: 40px;
+        font-size: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #d1d1d1;
+        color: #ffffff;
+        top: -8px;
+        cursor: pointer;
+    }
+}

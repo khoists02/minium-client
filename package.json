@@ -45,6 +45,7 @@
     "slate-dom": "^0.111.0",
     "slate-history": "^0.110.3",
     "slate-react": "^0.112.0",
+    "uuid": "^11.0.3",
     "vite-plugin-dynamic-import": "^1.6.0",
     "vite-tsconfig-paths": "^5.0.1"
   },
