@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { Header } from "./components/Header";
-import { AdminRouter, PublicRouter } from "./routes";
+import { AppRouter } from "./routes";
 import { useAppDispatch, useAppSelector } from "./config/hook";
 import { getAuthenticatedUser } from "./pages/admin/auth/ducks/operators";
 
@@ -21,8 +21,7 @@ function App() {
       <Header showAdminRouter={showAdminRouter} />
       <div className="main"></div>
       <div className="container mt-4  ">
-        <PublicRouter />
-        {showAdminRouter && <AdminRouter />}
+        <AppRouter isAuthenticated={showAdminRouter} />
       </div>
     </>
   );

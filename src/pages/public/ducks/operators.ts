@@ -23,7 +23,7 @@ export const getPublicPostsDetails =
         async (dispatch) => {
             try {
                 dispatch(loading);
-                const data = await axios.get("/posts/" + postId);
+                const data = await axios.get("/public/posts/" + postId);
                 dispatch(
                     getPostDetailsSuccess(
                         data.data.post

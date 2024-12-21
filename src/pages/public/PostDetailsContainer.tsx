@@ -51,7 +51,7 @@ const PostDetailsContainer: FC = () => {
             )}
             {!preview && account?.id === post?.user?.id && <Editor value={editorContent} onChange={handleEditorChange} />}
 
-            <Comments />
+            {/* <Comments /> */}
         </>
     )
 }
