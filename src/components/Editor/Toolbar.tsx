@@ -13,14 +13,14 @@ const Toolbar: FC<ToolbarProps> = ({
   const renderTooltip = (props: any) => (
     <Tooltip id="button-tooltip" {...props} className="toolbar-tooltip">
       <ToolbarButton icon={<i className="fa fa-bold" />} format="bold" />
-      <HighlightButton />
+      <HighlightButton className="ml-2" />
     </Tooltip>
   );
 
   return (
     <OverlayTrigger
       trigger={["click"]}
-      placement="top" // Position of the tooltip: top, right, bottom, left
+      placement="top-start" // Position of the tooltip: top, right, bottom, left
       delay={{ show: 250, hide: 400 }} // Delay in showing/hiding tooltip
       overlay={renderTooltip} // Tooltip content
     >

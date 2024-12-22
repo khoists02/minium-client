@@ -7,8 +7,6 @@ import { CustomElement } from "../types/slate";
 import { Element } from "./Editor/Element";
 import { Leaf } from "./Editor/Leaf";
 import { toggleMark } from "./Editor/helpers";
-import ToolbarButton from "./Editor/ToolbarButton";
-import Toolbar from "./Editor/Toolbar";
 
 const SlateEditor: React.FC = () => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);

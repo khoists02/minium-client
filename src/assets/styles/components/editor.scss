@@ -3,6 +3,10 @@
     border: none;
     padding: 0; // Optional: Adjust padding if necessary
     box-shadow: none;
+
+    p {
+        font-size: 18px;
+    }
 }
 
 .editor-item {
@@ -27,5 +31,12 @@
         &.title {
             top: -4px;
         }
+    }
+}
+
+.toolbar-tooltip {
+    .tooltip-inner {
+        background: #c9c9c9;
+        padding: 10px;
     }
 }
