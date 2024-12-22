@@ -1,4 +1,5 @@
 import React, { FC, useMemo } from "react";
+import Toolbar from "./Toolbar";
 
 interface WrapperElementProps {
   children: React.ReactElement | React.ReactElement[];
@@ -14,12 +15,12 @@ export const WrapperElement: FC<WrapperElementProps> = (
     isEmpty,
     focused,
     id,
-    type
+    type = "",
   }
 ) => {
   const isShowAddSidebar = useMemo(() => focused && isEmpty, [focused, isEmpty])
   return <div data-id={id} data-focused={focused} className="editor-item">
-    {isShowAddSidebar && <div contentEditable={false} className={`add-new ${type}`}>+</div>}
+    {isShowAddSidebar && <Toolbar wrapperClass={`add-new ${type}`} />}
     {children}
   </div>
 }

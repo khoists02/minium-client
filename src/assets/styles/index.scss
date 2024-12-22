@@ -11,8 +11,7 @@ $navbar-height: 57px;
 @import "./components/navbar.scss";
 @import "./components/editor.scss";
 
-// font
-@import "../fonts/font-awesome-4.7.0/scss/font-awesome.scss";
+@import "font-awesome/css/font-awesome.min.css";
 
 .article--item {
     .author {

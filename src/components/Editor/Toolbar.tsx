@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import ToolbarButton from "./ToolbarButton";
+import { HighlightButton } from "./HighlightButton";
 
 interface ToolbarProps {
   wrapperClass?: string;
@@ -10,8 +11,9 @@ const Toolbar: FC<ToolbarProps> = ({
   wrapperClass = "",
 }) => {
   const renderTooltip = (props: any) => (
-    <Tooltip id="button-tooltip" {...props}>
+    <Tooltip id="button-tooltip" {...props} className="toolbar-tooltip">
       <ToolbarButton icon={<i className="fa fa-bold" />} format="bold" />
+      <HighlightButton />
     </Tooltip>
   );
 

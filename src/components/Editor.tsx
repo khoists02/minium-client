@@ -90,29 +90,12 @@ const SlateEditor: React.FC = () => {
     }
   };
 
-  // Render a button to toggle highlight
-  const HighlightButton = () => {
-    return (
-      <button
-        className="btn btn-primary"
-        onMouseDown={(event) => {
-          event.preventDefault(); // Prevent default behavior to not blur the editor
-          toggleMark(editor, "highlight");
-        }}
-      >
-        Highlight
-      </button>
-    );
-  };
-
   return (
     <div>
 
       <Slate editor={editor} initialValue={value} onChange={(newValue) => {
         setValue(newValue);
       }}>
-        <HighlightButton />
-        <Toolbar />
         <Editable
           className="editor-editable"
           onKeyDown={handleKeyDown}
