@@ -13,6 +13,7 @@ const Toolbar: FC<ToolbarProps> = ({
   const renderTooltip = (props: any) => (
     <Tooltip id="button-tooltip" {...props} className="toolbar-tooltip">
       <ToolbarButton icon={<i className="fa fa-bold" />} format="bold" />
+      <ToolbarButton className="ml-2" icon={<i className="fa fa-image " />} format="image" />
       <HighlightButton className="ml-2" />
     </Tooltip>
   );
