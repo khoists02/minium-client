@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { createEditor, Descendant, Editor, Transforms, Range } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
 import { withHistory } from "slate-history";
@@ -28,6 +28,17 @@ const SlateEditor: React.FC = () => {
       }]
     }
   ]);
+
+  const handlePaste = useCallback(
+    (event: React.ClipboardEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      const text = event.clipboardData.getData("text/plain").trim();
+
+      // Insert the pasted text into the current block
+      Transforms.insertText(editor, text);
+    },
+    [editor]
+  );
 
   const handleAddNewElement = () => {
     const newUuid = uuidv4();
@@ -88,6 +99,19 @@ const SlateEditor: React.FC = () => {
     }
   };
 
+  const handleSelect = (fmt: string) => {
+    const newUuid = uuidv4();
+    const item: CustomElement = {
+      type: fmt as unknown as any,
+      id: newUuid,
+      placeholder: "",
+      children: [{ text: "" }],
+    };
+
+    // Insert new paragraph with the UUID
+    Transforms.insertNodes(editor, item);
+  }
+
   return (
     <div>
 
@@ -95,9 +119,12 @@ const SlateEditor: React.FC = () => {
         setValue(newValue);
       }}>
         <Editable
+          onPaste={handlePaste}
           className="editor-editable"
           onKeyDown={handleKeyDown}
-          renderElement={(props) => <Element {...props} />}
+          renderElement={(props) => <Element onSelect={(fmt: string) => {
+            handleSelect(fmt);
+          }} {...props} />}
           renderLeaf={(props) => <Leaf {...props} />}
         />
       </Slate>

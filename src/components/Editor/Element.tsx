@@ -3,13 +3,21 @@ import { CustomElement } from "../../types/slate";
 import { useSlate } from "slate-react";
 import { WrapperElement } from "./WrapperElement";
 import { isBlockFocused } from "./helpers";
+import { CodeBlock } from "./CodeBlock";
+import { LanguageSelector } from "./LanguageSelector";
 
-interface ElementProps { attributes: any; children: React.ReactElement | React.ReactElement[]; element: CustomElement }
+interface ElementProps {
+  attributes: any;
+  children: React.ReactElement | React.ReactElement[];
+  element: CustomElement,
+  onSelect: (format: string) => void;
+}
 
 export const Element: FC<ElementProps> = ({
   attributes,
   element,
   children,
+  onSelect,
 }) => {
   const editor = useSlate();
   const isEmpty = element.children[0]?.text === "";
@@ -17,7 +25,7 @@ export const Element: FC<ElementProps> = ({
   switch (element.type) {
     case "paragraph":
       return (
-        <WrapperElement isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
+        <WrapperElement onSelect={onSelect} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
           <p {...attributes} style={{ position: "relative" }}>
             {isEmpty && (
               <span
@@ -76,24 +84,31 @@ export const Element: FC<ElementProps> = ({
           {children}
         </div>
       );
-    case "code":
+    case "code-block":
       return (
-        <pre
-          {...attributes}
-          style={{
-            background: "#f5f5f5",
-            padding: "10px",
-            borderRadius: "5px",
-            fontFamily: "monospace",
-            overflowX: "auto",
-          }}
-        >
-          <code>{children}</code>
-        </pre>
+        <WrapperElement onSelect={onSelect} type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
+          {isEmpty && (
+            <span
+              contentEditable={false}
+              style={{
+                position: "absolute",
+                pointerEvents: "none",
+                opacity: 0.5,
+                userSelect: "none",
+              }}
+            >
+              {element.placeholder}
+            </span>
+          )}
+          {isCurrentBlockFocused && <LanguageSelector editor={editor} />}
+
+          <CodeBlock attributes={attributes} children={children} element={element} />
+        </WrapperElement>
+
       );
     case "title":
       return (
-        <WrapperElement type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
+        <WrapperElement onSelect={onSelect} type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
           <h3 {...attributes} style={{ position: "relative" }}>
             {isEmpty && (
               <span

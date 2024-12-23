@@ -5,19 +5,17 @@ import ToolbarButton from "./ToolbarButton";
 
 interface ToolbarProps {
   wrapperClass?: string;
+  onSelect: (format: string) => void;
 }
 
 const Toolbar: FC<ToolbarProps> = ({
+  onSelect,
   wrapperClass = "",
 }) => {
   const renderTooltip = (props: any) => (
     <Tooltip id="button-tooltip" {...props} className="toolbar-tooltip">
-      {/* <ToolbarButton icon={<i className="fa fa-bold" />} format="bold" /> */}
-      <ToolbarButton icon={<i className="fa fa-image " />} format="image" />
-      <ToolbarButton className="ml-2" icon={<i className="fa fa-image " />} format="image" />
-      <ToolbarButton className="ml-2" icon={<i className="fa fa-image " />} format="image" />
-      <ToolbarButton className="ml-2" icon={<i className="fa fa-image " />} format="image" />
-      {/* <HighlightButton className="ml-2" /> */}
+      <ToolbarButton onClick={() => onSelect("image")} icon={<i className="fa fa-image " />} format="image" />
+      <ToolbarButton onClick={() => onSelect("code-block")} className="ml-2" icon={<i className="fa fa-code " />} format="code-block" />
     </Tooltip>
   );
 
@@ -27,6 +25,8 @@ const Toolbar: FC<ToolbarProps> = ({
       placement="right" // Position of the tooltip: top, right, bottom, left
       delay={{ show: 500, hide: 400 }} // Delay in showing/hiding tooltip
       overlay={renderTooltip} // Tooltip content
+      rootClose
+      rootCloseEvent="mousedown"
     >
       <i className={`fa fa-plus ${wrapperClass}`} />
     </OverlayTrigger>

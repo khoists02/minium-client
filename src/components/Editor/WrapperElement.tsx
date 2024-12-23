@@ -7,6 +7,7 @@ interface WrapperElementProps {
   focused?: boolean;
   id?: string;
   type?: string;
+  onSelect: (format: string) => void;
 }
 
 export const WrapperElement: FC<WrapperElementProps> = (
@@ -16,11 +17,12 @@ export const WrapperElement: FC<WrapperElementProps> = (
     focused,
     id,
     type = "",
+    onSelect,
   }
 ) => {
   const isShowAddSidebar = useMemo(() => focused && isEmpty, [focused, isEmpty])
   return <div data-id={id} data-focused={focused} className="editor-item">
-    {isShowAddSidebar && <Toolbar wrapperClass={`add-new ${type}`} />}
+    {isShowAddSidebar && <Toolbar onSelect={onSelect} wrapperClass={`add-new ${type}`} />}
     {children}
   </div>
 }
