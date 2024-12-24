@@ -27,14 +27,15 @@ const SlateEditor: FC<SlateEditorProps> = ({
   const [tooltipTarget, setTooltipTarget] = useState<HTMLElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
 
-  const handleDoubleClick = () => {
+  const handleDoubleClick = (event: React.MouseEvent) => {
     const selection = window.getSelection();
 
     if (selection?.rangeCount) {
       const range = selection.getRangeAt(0);
+      const target = event.target as HTMLElement;
 
       // Show the tooltip and set the target element
-      setTooltipTarget(event.target as HTMLElement);
+      setTooltipTarget(target as HTMLElement);
       setShowTooltip(true);
     }
   };
@@ -168,11 +169,31 @@ const SlateEditor: FC<SlateEditorProps> = ({
   }
 
   return (
-    <div ref={overlayRef}>
+    <Slate editor={editor} initialValue={initValue} onChange={(newValue) => {
+      setValue(newValue);
+    }}>
+      <div style={{ position: "relative" }} ref={overlayRef}>
 
-      <Slate editor={editor} initialValue={initValue} onChange={(newValue) => {
-        setValue(newValue);
-      }}>
+        <input
+          type="file"
+          accept="image/*"
+          style={{ display: "none" }}
+          id="image-upload"
+          onChange={handleFileUpload}
+          ref={inputRef}
+        />
+        <Editable
+          disabled={readonly}
+          contentEditable={!readonly}
+          onDoubleClick={handleDoubleClick}
+          onPaste={handlePaste}
+          className="editor-editable"
+          onKeyDown={handleKeyDown}
+          renderElement={(props) => <Element readonly={readonly} onSelect={(fmt: string) => {
+            handleSelect(fmt);
+          }} {...props} />}
+          renderLeaf={(props) => <Leaf {...props} />}
+        />
         {tooltipTarget && (
           <Overlay
             target={tooltipTarget}
@@ -189,29 +210,10 @@ const SlateEditor: FC<SlateEditorProps> = ({
             )}
           </Overlay>
         )}
-        <input
-          type="file"
-          accept="image/*"
-          style={{ display: "none" }}
-          id="image-upload"
-          onChange={handleFileUpload}
-          ref={inputRef}
-        />
-        <Editable
+      </div>
 
-          disabled={readonly}
-          contentEditable={!readonly}
-          onDoubleClick={handleDoubleClick}
-          onPaste={handlePaste}
-          className="editor-editable"
-          onKeyDown={handleKeyDown}
-          renderElement={(props) => <Element readonly={readonly} onSelect={(fmt: string) => {
-            handleSelect(fmt);
-          }} {...props} />}
-          renderLeaf={(props) => <Leaf {...props} />}
-        />
-      </Slate>
-    </div>
+    </Slate>
+
   );
 };
 

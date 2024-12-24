@@ -28,8 +28,5 @@ export const Leaf: FC<LeafProps> = ({
   if (leaf.link) {
     children = <a className="link" href={leaf.link}>{children}</a>;
   }
-
-  console.log({ leaf })
-
   return <span {...attributes}>{children}</span>;
 };
