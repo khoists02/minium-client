@@ -34,11 +34,7 @@ export const Image: FC<ImageProps> = ({
     </div>}
     <img
       onClick={() => {
-        setClicked(true);
-      }}
-      onBlur={() => {
-        console.log(1)
-        setClicked(false);
+        if (!readonly) setClicked(true);
       }}
       contentEditable={false}
       src={element.url}

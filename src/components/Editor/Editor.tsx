@@ -30,6 +30,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
   const tooltipTarget = useRef();
 
   const handleDoubleClick = (event: React.MouseEvent) => {
+    if (readonly) return;
     const selection = window.getSelection();
     const selectedText = selection.toString();
 
@@ -51,6 +52,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
 
   const handlePaste = useCallback(
     (event: React.ClipboardEvent<HTMLDivElement>) => {
+      if (readonly) return;
       event.preventDefault();
       const text = event.clipboardData.getData("text/plain").trim();
 
@@ -61,6 +63,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
   );
 
   const handleAddNewElement = () => {
+    if (readonly) return;
     const newUuid = uuidv4();
     const newParagraph: CustomElement = {
       type: "paragraph",
@@ -74,6 +77,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
   }
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (readonly) return;
     if (event.key === "Enter") {
       event.preventDefault();
       // GENERATE NEW UUID.
@@ -169,6 +173,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
 
 
   const handleSelect = (fmt: string) => {
+    if (readonly) return;
     if (fmt !== "image") {
       const newUuid = uuidv4();
       const item: CustomElement = {
@@ -187,7 +192,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
   }
 
   const handleFormatClick = (fmt: string) => {
-
+    if (readonly) return;
     toggleFormat(editor, fmt);
   }
 

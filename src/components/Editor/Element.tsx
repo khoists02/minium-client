@@ -95,8 +95,9 @@ export const Element: FC<ElementProps> = ({
     case "break":
       return (
         <>
-          <p style={{ width: "100%", height: 1, background: "#000000" }}>
-          </p>
+          <div style={{ width: "100%", height: 1, background: "#000000" }}>
+
+          </div>
           {children}
         </>
 
