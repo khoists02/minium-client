@@ -78,6 +78,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
       return;
     }
 
+    // ctrl keys events.
     if (event.ctrlKey) {
       switch (event.key) {
         case "z": // Undo
@@ -102,6 +103,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
       Transforms.select(editor, range);
     }
 
+    // delete event
     if (event.ctrlKey && event.key === "Backspace") {
       // Ctrl + Backspace (Delete) to delete selected content
       event.preventDefault();
