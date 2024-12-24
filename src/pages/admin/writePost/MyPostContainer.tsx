@@ -45,15 +45,11 @@ const MyPostContainer: FC = () => {
     {
       Header: "",
       id: "actions", // unique id for the column
-      style: { width: "100px" }, // set width for this column
+      style: { width: "80px" }, // set width for this column
       Cell: ({ row }: any) => (
         <div className="text-right">
-          <Button variant="warning" className="mr-2" onClick={() => handleEdit(row.original)}>
-            <i className="fa fa-pencil" aria-hidden="true" />
-          </Button>
-          <Button variant="danger" onClick={() => handleDelete(row.original)}>
-            <i className="fa fa-trash" aria-hidden="true" />
-          </Button>
+          <i className="fa fa-pencil cursor-pointer" aria-hidden="true" onClick={() => handleEdit(row.original)} />
+          <i className="fa fa-trash ml-2 text-danger cursor-pointer" aria-hidden="true" onClick={() => handleDelete(row.original)} />
         </div>
       ),
     },
