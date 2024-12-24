@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../config/hook";
 import { getPublicPostsDetails } from "./ducks/operators";
-import Editor from "../../components/Editor";
+import Editor from "../../components/Editor/Editor";
 import { Descendant } from "slate";
 import { format } from "date-fns";
 

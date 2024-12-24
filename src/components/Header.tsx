@@ -50,6 +50,7 @@ export const Header: FC<{ showAdminRouter?: boolean }> = ({
                                     <Dropdown.Menu align="end">
                                         <Dropdown.Item href="/profile">Profile</Dropdown.Item>
                                         <Dropdown.Item href="/WritePost">Write</Dropdown.Item>
+                                        <Dropdown.Item href="/MyPost">My Posts</Dropdown.Item>
                                         <Dropdown.Divider />
                                         <Dropdown.Item onClick={handleLogout}>Sign Out</Dropdown.Item>
                                     </Dropdown.Menu>

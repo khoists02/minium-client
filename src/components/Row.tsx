@@ -10,6 +10,6 @@ export const Row: FC<IRow> = ({
     content,
 }) => {
     return <>
-        {/* <textarea className="form-control" /> */}
+
     </>
 }

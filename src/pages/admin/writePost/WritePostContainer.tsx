@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import Editor from "../../../components/Editor";
+import Editor from "../../../components/Editor/Editor";
 import { Row } from "../../../components/Row";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";

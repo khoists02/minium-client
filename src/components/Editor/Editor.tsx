@@ -1,13 +1,13 @@
 import React, { FC, useCallback, useMemo, useRef, useState } from "react";
-import { createEditor, Descendant, Editor, Transforms, Range, Text } from "slate";
+import { createEditor, Descendant, Editor, Transforms, Range } from "slate";
 import { Slate, Editable, withReact, } from "slate-react";
 import { withHistory } from "slate-history";
 import { v4 as uuidv4 } from "uuid";
-import { CustomElement } from "../types/slate";
-import { Element } from "./Editor/Element";
-import { Leaf } from "./Editor/Leaf";
-import { isFormatActive, toggleFormat, toggleMark } from "./Editor/helpers";
-import { Overlay, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { CustomElement } from "../../types/slate";
+import { Element } from "./Element";
+import { Leaf } from "./Leaf";
+import { toggleFormat, toggleMark } from "./helpers";
+import { Overlay, Tooltip } from "react-bootstrap";
 
 interface SlateEditorProps {
   onSave: (content: any) => void;
@@ -175,7 +175,6 @@ const SlateEditor: FC<SlateEditorProps> = ({
       setValue(newValue);
     }}>
       <div style={{ position: "relative" }} ref={overlayRef}>
-
         <input
           type="file"
           accept="image/*"
