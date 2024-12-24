@@ -14,27 +14,6 @@ const MyPostDetailsContainer: FC = () => {
   const { post } = useAppSelector((state) => state.publicPost);
   const [editorContent, setEditorContent] = useState<Descendant[]>([]);
 
-  // const getFinalUrl = async (url) => {
-  //   try {
-  //     const response = await axios.get(url, {
-  //       responseType: "blob",
-  //     });
-  //     // Create a URL for the Blob
-  //     const newUrl = URL.createObjectURL(response.data);
-  //     return new Promise((rs) => rs(newUrl));
-  //   } catch (error) {
-  //     return Promise.reject();
-  //   }
-  // }
-
-  // const handleReRenderImage = async (items) => {
-  //   for (const item of items) {
-  //     if (item.type === "image")
-  //       item.url = getFinalUrl(item.url)
-  //   }
-  //   setEditorContent(items);
-  // }
-
   useEffect(() => {
     if (post) {
       const beforeRender: CustomElement[] = JSON.parse(post?.content);
@@ -58,7 +37,7 @@ const MyPostDetailsContainer: FC = () => {
       title = titleArr[0]?.children[0]?.text;
     }
     // FIlter content.
-    const final = content.filter((x) => x.type === "image" || (x.type !== "image" && x.children[0]?.text !== ""));
+    const final = content.filter((x) => x.type === "image" || x.type === "break" || (x.type !== "image" && x.children[0]?.text !== ""));
     try {
       await axios.put(`/posts/${post.id}`, {
         title: post.title,

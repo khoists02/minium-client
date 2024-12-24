@@ -34,7 +34,7 @@ const WritePostContainer: FC = () => {
             title = titleArr[0]?.children[0]?.text;
         }
         // FIlter content.
-        const final = content.filter((x) => x.type !== "image" && x.children[0]?.text !== "");
+        const final = content.filter((x) => x.type === "image" || x.type === "break" || (x.type !== "image" && x.children[0]?.text !== ""));
         try {
             await axios.post("/posts", {
                 title: title,

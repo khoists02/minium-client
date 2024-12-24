@@ -24,20 +24,28 @@ const SlateEditor: FC<SlateEditorProps> = ({
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   const [value, setValue] = useState<Descendant[]>();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [showTooltip, setShowTooltip] = useState(false);
-  const [tooltipTarget, setTooltipTarget] = useState<HTMLElement | null>(null);
-  const overlayRef = useRef<HTMLDivElement | null>(null);
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [tooltipText, setTooltipText] = useState("");
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+  const tooltipTarget = useRef();
 
   const handleDoubleClick = (event: React.MouseEvent) => {
     const selection = window.getSelection();
+    const selectedText = selection.toString();
 
-    if (selection?.rangeCount) {
-      const range = selection.getRangeAt(0);
-      const target = event.target as HTMLElement;
-
-      // Show the tooltip and set the target element
-      setTooltipTarget(target as HTMLElement);
-      setShowTooltip(true);
+    if (selectedText.trim()) {
+      setTooltipText(`Selected: "${selectedText}"`);
+      // @ts-ignore
+      const rect = event.target.getBoundingClientRect();
+      setPosition({
+        top: rect.top + window.scrollY,
+        left: rect.left + rect.width / 2,
+      });
+      // @ts-ignore
+      tooltipTarget.current = event.target;
+      setTooltipVisible(true);
+    } else {
+      setTooltipVisible(false);
     }
   };
 
@@ -181,53 +189,45 @@ const SlateEditor: FC<SlateEditorProps> = ({
   const handleFormatClick = (fmt: string) => {
 
     toggleFormat(editor, fmt);
-    setTimeout(() => {
-      setTooltipTarget(null);
-    }, 1);
   }
 
   return (
     <Slate editor={editor} initialValue={initValue} onChange={(newValue) => {
       setValue(newValue);
     }}>
-      <div style={{ position: "relative" }} ref={overlayRef}>
-        <input
-          type="file"
-          accept="image/*"
-          style={{ display: "none" }}
-          id="image-upload"
-          onChange={handleFileUpload}
-          ref={inputRef}
-        />
-        <Editable
-          disabled={readonly}
-          contentEditable={!readonly}
-          onDoubleClick={handleDoubleClick}
-          onPaste={handlePaste}
-          className="editor-editable"
-          onKeyDown={handleKeyDown}
-          renderElement={(props) => <Element readonly={readonly} onSelect={(fmt: string) => {
-            handleSelect(fmt);
-          }} {...props} />}
-          renderLeaf={(props) => <Leaf {...props} />}
-        />
-        {tooltipTarget && (
-          <Overlay
-            target={tooltipTarget}
-            show={showTooltip}
-            placement="top"
-            container={overlayRef.current}
-          >
-            {(props) => (
-              <Tooltip className="tooltip-format" id="tooltip" {...props} style={{ background: "transparent" }}>
-                <i contentEditable={false} className="fa fa-bold text-success cursor-pointer" onClick={() => handleFormatClick("bold")}></i>
-                <i contentEditable={false} className="fa fa-italic text-success cursor-pointer ml-2" onClick={() => handleFormatClick("italic")}></i>
-                <i contentEditable={false} className="fa fa-link text-success cursor-pointer ml-2" onClick={() => handleFormatClick("link")}></i>
-              </Tooltip>
-            )}
-          </Overlay>
-        )}
-      </div>
+      <input
+        type="file"
+        accept="image/*"
+        style={{ display: "none" }}
+        id="image-upload"
+        onChange={handleFileUpload}
+        ref={inputRef}
+      />
+      <Editable
+        disabled={readonly}
+        contentEditable={!readonly}
+        onDoubleClick={handleDoubleClick}
+        onPaste={handlePaste}
+        className="editor-editable"
+        onKeyDown={handleKeyDown}
+        renderElement={(props) => <Element readonly={readonly} onSelect={(fmt: string) => {
+          handleSelect(fmt);
+        }} {...props} />}
+        renderLeaf={(props) => <Leaf {...props} />}
+      />
+      <Overlay
+        target={tooltipTarget.current}
+        show={tooltipVisible}
+        placement="top"
+        rootClose
+        onHide={() => setTooltipVisible(false)}
+      >
+        <Tooltip id="slate-tooltip">
+          <i contentEditable={false} className="fa fa-bold text-success cursor-pointer" onClick={() => handleFormatClick("bold")}></i>
+          <i contentEditable={false} className="fa fa-italic text-success cursor-pointer ml-2" onClick={() => handleFormatClick("italic")}></i>
+          <i contentEditable={false} className="fa fa-link text-success cursor-pointer ml-2" onClick={() => handleFormatClick("link")}></i>
+        </Tooltip>
+      </Overlay>
 
     </Slate>
 

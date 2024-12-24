@@ -7,14 +7,17 @@ export type QuoteElement = { type: "quote"; children: CustomText[], placeholder?
 export type ImageElement = { type: "image", url: string, alt: string, children: CustomText[], id: string };
 export type CodeElement = { type: "code-block", children: CustomText[], id: string, language: "javascript", placeholder?: string };
 export type TitleElement = { type: "title", placeholder?: string, children: CustomText[], id: string };
-
+export type HeaderElement = { type: "header", placeholder?: string, children: CustomText[], id: string };
+export type BreakLine = { type: "break", placeholder?: string, children: CustomText[], id: string };
 // Define custom types for your blocks
 export type CustomElement =
     | ParagraphElement
     | QuoteElement
     | ImageElement
     | CodeElement
-    | TitleElement;
+    | TitleElement
+    | HeaderElement
+    | BreakLine;
 
 export type CustomText = {
     text: string;

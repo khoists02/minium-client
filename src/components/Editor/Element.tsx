@@ -9,6 +9,7 @@ import { Paragraph } from "./Elements/Paragraph";
 import { Quote } from "./Elements/Quote";
 import { Title } from "./Elements/Title";
 import { Image } from "./Elements/Image";
+import { HeaderEl } from "./Elements/HeaderEl";
 
 interface ElementProps {
   attributes: any;
@@ -71,6 +72,22 @@ export const Element: FC<ElementProps> = ({
         <WrapperElement onSelect={onSelect} type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
           <Title readonly={readonly} attributes={attributes} children={children} element={element} />
         </WrapperElement>
+
+      );
+    case "header":
+      return (
+        <WrapperElement onSelect={onSelect} type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
+          <HeaderEl readonly={readonly} attributes={attributes} children={children} element={element} />
+        </WrapperElement>
+
+      );
+    case "break":
+      return (
+        <>
+          <p style={{ width: "100%", height: 1, background: "#000000" }}>
+          </p>
+          {children}
+        </>
 
       );
     default:
