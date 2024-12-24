@@ -22,17 +22,8 @@ export const Leaf: FC<LeafProps> = ({
   }
 
   if (leaf.highlight) {
-    children = <span style={{ backgroundColor: "yellow" }}>{children}</span>;
+    children = <span style={{ backgroundColor: "green" }}>{children}</span>;
   }
-
-  // if (leaf.code) {
-  //   children = <pre style={{
-  //     background: "#f5f5f5",
-  //     borderRadius: "5px",
-  //     fontFamily: "monospace",
-  //     overflowX: "auto",
-  //   }}>{children}</pre>;
-  // }
 
   return <span {...attributes}>{children}</span>;
 };

@@ -1,12 +1,13 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { createEditor, Descendant, Editor, Transforms, Range } from "slate";
-import { Slate, Editable, withReact } from "slate-react";
+import React, { FC, useCallback, useMemo, useRef, useState } from "react";
+import { createEditor, Descendant, Editor, Transforms, Range, Text } from "slate";
+import { Slate, Editable, withReact, } from "slate-react";
 import { withHistory } from "slate-history";
 import { v4 as uuidv4 } from "uuid";
 import { CustomElement } from "../types/slate";
 import { Element } from "./Editor/Element";
 import { Leaf } from "./Editor/Leaf";
-import { toggleMark } from "./Editor/helpers";
+import { isFormatActive, toggleFormat, toggleMark } from "./Editor/helpers";
+import { Overlay, OverlayTrigger, Tooltip } from "react-bootstrap";
 
 interface SlateEditorProps {
   onSave: (content: any) => void;
@@ -22,6 +23,22 @@ const SlateEditor: FC<SlateEditorProps> = ({
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   const [value, setValue] = useState<Descendant[]>();
   const inputRef = useRef<HTMLInputElement>(null);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [tooltipTarget, setTooltipTarget] = useState<HTMLElement | null>(null);
+  const overlayRef = useRef<HTMLDivElement | null>(null);
+
+  const handleDoubleClick = () => {
+    const selection = window.getSelection();
+
+    if (selection?.rangeCount) {
+      const range = selection.getRangeAt(0);
+
+      // Show the tooltip and set the target element
+      setTooltipTarget(event.target as HTMLElement);
+      setShowTooltip(true);
+    }
+  };
+
   const handlePaste = useCallback(
     (event: React.ClipboardEvent<HTMLDivElement>) => {
       event.preventDefault();
@@ -109,7 +126,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
       alt,
       children: [{ text: "" }], // Images must have an empty text node as children
     };
-    Transforms.insertNodes(editor, image as any);
+    Transforms.setNodes(editor, image as any);
   };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -135,19 +152,43 @@ const SlateEditor: FC<SlateEditorProps> = ({
       };
 
       // Insert new paragraph with the UUID
-      Transforms.insertNodes(editor, item);
+      Transforms.setNodes(editor, item as any);
     } else {
       // Handle insert image.
       inputRef.current.click();
     }
   }
 
+  const handleFormatClick = (fmt: string) => {
+
+    toggleFormat(editor, fmt);
+    setTimeout(() => {
+      setTooltipTarget(null);
+    }, 1);
+  }
+
   return (
-    <div>
+    <div ref={overlayRef}>
 
       <Slate editor={editor} initialValue={initValue} onChange={(newValue) => {
         setValue(newValue);
       }}>
+        {tooltipTarget && (
+          <Overlay
+            target={tooltipTarget}
+            show={showTooltip}
+            placement="top"
+            container={overlayRef.current}
+          >
+            {(props) => (
+              <Tooltip className="tooltip-format" id="tooltip" {...props} style={{ background: "transparent" }}>
+                <i contentEditable={false} className="fa fa-bold text-success cursor-pointer" onClick={() => handleFormatClick("bold")}></i>
+                <i contentEditable={false} className="fa fa-italic text-success cursor-pointer ml-2" onClick={() => handleFormatClick("italic")}></i>
+
+              </Tooltip>
+            )}
+          </Overlay>
+        )}
         <input
           type="file"
           accept="image/*"
@@ -157,8 +198,10 @@ const SlateEditor: FC<SlateEditorProps> = ({
           ref={inputRef}
         />
         <Editable
+
           disabled={readonly}
           contentEditable={!readonly}
+          onDoubleClick={handleDoubleClick}
           onPaste={handlePaste}
           className="editor-editable"
           onKeyDown={handleKeyDown}

@@ -16,6 +16,7 @@ const Toolbar: FC<ToolbarProps> = ({
     <Tooltip id="button-tooltip" {...props} className="toolbar-tooltip">
       <ToolbarButton onClick={() => onSelect("image")} icon={<i className="fa fa-image " />} format="image" />
       <ToolbarButton onClick={() => onSelect("code-block")} className="ml-2" icon={<i className="fa fa-code " />} format="code-block" />
+      <ToolbarButton onClick={() => onSelect("quote")} className="ml-2" icon={<i className="fa fa-quote-right " />} format="quote" />
     </Tooltip>
   );
 

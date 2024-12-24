@@ -1,10 +1,14 @@
 import React, { FC } from "react";
 import { CustomElement } from "../../types/slate";
 import { useSlate } from "slate-react";
-import { WrapperElement } from "./WrapperElement";
+import { WrapperElement } from "./Elements/WrapperElement";
 import { isBlockFocused } from "./helpers";
-import { CodeBlock } from "./CodeBlock";
+import { CodeBlock } from "./Elements/CodeBlock";
 import { LanguageSelector } from "./LanguageSelector";
+import { Paragraph } from "./Elements/Paragraph";
+import { Quote } from "./Elements/Quote";
+import { Title } from "./Elements/Title";
+import { Image } from "./Elements/Image";
 
 interface ElementProps {
   attributes: any;
@@ -28,69 +32,17 @@ export const Element: FC<ElementProps> = ({
     case "paragraph":
       return (
         <WrapperElement onSelect={onSelect} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
-          <p contentEditable={!readonly} {...attributes} style={{ position: "relative" }}>
-            {isEmpty && (
-              <span
-                contentEditable={false}
-                style={{
-                  position: "absolute",
-                  pointerEvents: "none",
-                  opacity: 0.5,
-                  userSelect: "none",
-                }}
-              >
-                {element.placeholder}
-              </span>
-            )}
-            {children}
-          </p>
+          <Paragraph isEmpty={isEmpty} readonly={readonly} element={element} children={children} attributes={attributes} />
         </WrapperElement>
 
       );
     case "quote":
       return (
-        <blockquote
-          contentEditable={!readonly}
-          {...attributes}
-          style={{
-            position: "relative",
-            borderLeft: "4px solid #ccc",
-            paddingLeft: "10px",
-            color: "#555",
-            fontStyle: "italic",
-          }}
-        >
-          {isEmpty && (
-            <span
-              contentEditable={false}
-              style={{
-                position: "absolute",
-                pointerEvents: "none",
-                opacity: 0.5,
-                userSelect: "none",
-              }}
-            >
-              {element.placeholder}
-            </span>
-          )}
-          {children}
-        </blockquote>
+        <Quote isEmpty={isEmpty} readonly={readonly} element={element} children={children} attributes={attributes} />
       );
     case "image":
       return (
-        <div {...attributes} contentEditable={!readonly}>
-          {!readonly && <div contentEditable={false} className="text-center w-100 mb-3">
-            <button className="btn btn-light">Full</button>
-            <button className="btn btn-light ml-2 mr-2">Fit</button>
-            <button className="btn btn-light">Small</button>
-          </div>}
-          <img
-            src={element.url}
-            alt={element.alt}
-            style={{ maxWidth: "100%", height: "auto", display: "block" }}
-          />
-          {children}
-        </div>
+        <Image readonly={readonly} attributes={attributes} children={children} element={element} focused={isCurrentBlockFocused} />
       );
     case "code-block":
       return (
@@ -117,22 +69,7 @@ export const Element: FC<ElementProps> = ({
     case "title":
       return (
         <WrapperElement onSelect={onSelect} type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
-          <h3 contentEditable={!readonly} {...attributes} style={{ position: "relative" }}>
-            {isEmpty && (
-              <span
-                contentEditable={false}
-                style={{
-                  position: "absolute",
-                  pointerEvents: "none",
-                  opacity: 0.5,
-                  userSelect: "none",
-                }}
-              >
-                {element.placeholder}
-              </span>
-            )}
-            {children}
-          </h3>
+          <Title readonly={readonly} attributes={attributes} children={children} element={element} />
         </WrapperElement>
 
       );

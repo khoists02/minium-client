@@ -4,6 +4,25 @@ import { Row } from "../../../components/Row";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
+const initValue = [
+    {
+        id: uuidv4(),
+        type: "title",
+        placeholder: "Title...",
+        children: [{
+            text: "Your Title",
+        }]
+    },
+    {
+        id: uuidv4(),
+        type: "paragraph",
+        placeholder: "Tell your story...",
+        children: [{
+            text: "",
+        }]
+    }
+]
+
 const WritePostContainer: FC = () => {
 
     const handleSavePost = async (content: any) => {
@@ -21,7 +40,7 @@ const WritePostContainer: FC = () => {
                 content: JSON.stringify(final)
             })
         } catch (error) {
-            console.log("Save post error !!!");
+            console.log("Save post error !!!", error);
         }
     }
 
@@ -29,24 +48,7 @@ const WritePostContainer: FC = () => {
         <div className="row">
             <div className="col-md-12">
                 <Row />
-                <Editor initValue={[
-                    {
-                        id: uuidv4(),
-                        type: "title",
-                        placeholder: "Title...",
-                        children: [{
-                            text: "",
-                        }]
-                    },
-                    {
-                        id: uuidv4(),
-                        type: "paragraph",
-                        placeholder: "Tell your story...",
-                        children: [{
-                            text: "",
-                        }]
-                    }
-                ]} onSave={(value) => {
+                <Editor initValue={initValue as any} onSave={(value) => {
                     handleSavePost(value)
                 }} />
             </div>

@@ -1,5 +1,5 @@
 import React, { FC, useMemo } from "react";
-import Toolbar from "./Toolbar";
+import Toolbar from "../Toolbar";
 
 interface WrapperElementProps {
   children: React.ReactElement | React.ReactElement[];
