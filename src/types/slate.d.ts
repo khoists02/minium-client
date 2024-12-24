@@ -16,7 +16,15 @@ export type CustomElement =
     | CodeElement
     | TitleElement;
 
-export type CustomText = { text: string; bold?: boolean; italic?: boolean; small?: boolean; highlight?: boolean; underline?: boolean };
+export type CustomText = {
+    text: string;
+    bold?: boolean;
+    italic?: boolean;
+    small?: boolean;
+    highlight?: boolean;
+    underline?: boolean;
+    link?: boolean;
+};
 
 // Extend the Slate editor type
 export type CustomEditor = BaseEditor & ReactEditor & HistoryEditor;

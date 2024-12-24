@@ -184,7 +184,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
               <Tooltip className="tooltip-format" id="tooltip" {...props} style={{ background: "transparent" }}>
                 <i contentEditable={false} className="fa fa-bold text-success cursor-pointer" onClick={() => handleFormatClick("bold")}></i>
                 <i contentEditable={false} className="fa fa-italic text-success cursor-pointer ml-2" onClick={() => handleFormatClick("italic")}></i>
-
+                <i contentEditable={false} className="fa fa-link text-success cursor-pointer ml-2" onClick={() => handleFormatClick("link")}></i>
               </Tooltip>
             )}
           </Overlay>
