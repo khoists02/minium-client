@@ -7,7 +7,7 @@ import { Button, Dropdown, Nav } from "react-bootstrap";
 export const Header: FC<{ showAdminRouter?: boolean }> = ({
     showAdminRouter,
 }) => {
-    const { account } = useAppSelector((state) => state.ath);
+    const { account } = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
 
     const [dropdownOpen, setDropdownOpen] = useState(false);

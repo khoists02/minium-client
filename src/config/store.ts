@@ -5,7 +5,7 @@ import authReducer from "../pages/admin/auth/ducks/slices";
 export const store = configureStore({
     reducer: {
         publicPost: publicPostReducer,
-        ath: authReducer,
+        auth: authReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(), // Add custom middleware if needed

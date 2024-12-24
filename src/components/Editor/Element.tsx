@@ -11,6 +11,7 @@ interface ElementProps {
   children: React.ReactElement | React.ReactElement[];
   element: CustomElement,
   onSelect: (format: string) => void;
+  readonly: boolean;
 }
 
 export const Element: FC<ElementProps> = ({
@@ -18,6 +19,7 @@ export const Element: FC<ElementProps> = ({
   element,
   children,
   onSelect,
+  readonly,
 }) => {
   const editor = useSlate();
   const isEmpty = element.children[0]?.text === "";
@@ -26,7 +28,7 @@ export const Element: FC<ElementProps> = ({
     case "paragraph":
       return (
         <WrapperElement onSelect={onSelect} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
-          <p {...attributes} style={{ position: "relative" }}>
+          <p contentEditable={!readonly} {...attributes} style={{ position: "relative" }}>
             {isEmpty && (
               <span
                 contentEditable={false}
@@ -48,6 +50,7 @@ export const Element: FC<ElementProps> = ({
     case "quote":
       return (
         <blockquote
+          contentEditable={!readonly}
           {...attributes}
           style={{
             position: "relative",
@@ -75,7 +78,7 @@ export const Element: FC<ElementProps> = ({
       );
     case "image":
       return (
-        <div {...attributes} contentEditable={false}>
+        <div {...attributes} contentEditable={!readonly}>
           <img
             src={element.url}
             alt={element.alt}
@@ -100,16 +103,16 @@ export const Element: FC<ElementProps> = ({
               {element.placeholder}
             </span>
           )}
-          {isCurrentBlockFocused && <LanguageSelector editor={editor} />}
+          {isCurrentBlockFocused && !readonly && <LanguageSelector editor={editor} />}
 
-          <CodeBlock attributes={attributes} children={children} element={element} />
+          <CodeBlock readonly={readonly} attributes={attributes} children={children} element={element} />
         </WrapperElement>
 
       );
     case "title":
       return (
         <WrapperElement onSelect={onSelect} type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
-          <h3 {...attributes} style={{ position: "relative" }}>
+          <h3 contentEditable={!readonly} {...attributes} style={{ position: "relative" }}>
             {isEmpty && (
               <span
                 contentEditable={false}

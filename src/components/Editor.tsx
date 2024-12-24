@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { createEditor, Descendant, Editor, Transforms, Range } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
 import { withHistory } from "slate-history";
@@ -8,26 +8,19 @@ import { Element } from "./Editor/Element";
 import { Leaf } from "./Editor/Leaf";
 import { toggleMark } from "./Editor/helpers";
 
-const SlateEditor: React.FC = () => {
+interface SlateEditorProps {
+  onSave: (content: any) => void;
+  initValue?: Descendant[];
+  readonly?: boolean;
+}
+
+const SlateEditor: FC<SlateEditorProps> = ({
+  onSave,
+  initValue = [],
+  readonly = false,
+}) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
-  const [value, setValue] = useState<Descendant[]>([
-    {
-      id: uuidv4(),
-      type: "title",
-      placeholder: "Title...",
-      children: [{
-        text: "",
-      }]
-    },
-    {
-      id: uuidv4(),
-      type: "paragraph",
-      placeholder: "Tell your story...",
-      children: [{
-        text: "",
-      }]
-    }
-  ]);
+  const [value, setValue] = useState<Descendant[]>();
 
   const handlePaste = useCallback(
     (event: React.ClipboardEvent<HTMLDivElement>) => {
@@ -60,6 +53,12 @@ const SlateEditor: React.FC = () => {
       handleAddNewElement();
     }
 
+    // Detect Cmd+S (macOS) or Ctrl+S (Windows/Linux)
+    if ((event.metaKey || event.ctrlKey) && event.key === "s") {
+      event.preventDefault(); // Prevent default browser save dialog
+      onSave(value);
+      return;
+    }
 
     if (event.ctrlKey) {
       switch (event.key) {
@@ -71,9 +70,13 @@ const SlateEditor: React.FC = () => {
           event.preventDefault();
           editor.redo();
           break;
+        case "s": // Save
+          event.preventDefault();
+          break;
       }
     }
 
+    // Select all
     if (event.ctrlKey && event.key === "a") {
       // Ctrl + A to select all text
       event.preventDefault();
@@ -115,14 +118,16 @@ const SlateEditor: React.FC = () => {
   return (
     <div>
 
-      <Slate editor={editor} initialValue={value} onChange={(newValue) => {
+      <Slate editor={editor} initialValue={initValue} onChange={(newValue) => {
         setValue(newValue);
       }}>
         <Editable
+          disabled={readonly}
+          contentEditable={!readonly}
           onPaste={handlePaste}
           className="editor-editable"
           onKeyDown={handleKeyDown}
-          renderElement={(props) => <Element onSelect={(fmt: string) => {
+          renderElement={(props) => <Element readonly={readonly} onSelect={(fmt: string) => {
             handleSelect(fmt);
           }} {...props} />}
           renderLeaf={(props) => <Leaf {...props} />}
