@@ -79,6 +79,11 @@ export const Element: FC<ElementProps> = ({
     case "image":
       return (
         <div {...attributes} contentEditable={!readonly}>
+          {!readonly && <div contentEditable={false} className="text-center w-100 mb-3">
+            <button className="btn btn-light">Full</button>
+            <button className="btn btn-light ml-2 mr-2">Fit</button>
+            <button className="btn btn-light">Small</button>
+          </div>}
           <img
             src={element.url}
             alt={element.alt}

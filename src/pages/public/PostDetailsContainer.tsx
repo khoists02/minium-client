@@ -4,19 +4,16 @@ import { useAppDispatch, useAppSelector } from "../../config/hook";
 import { getPublicPostsDetails } from "./ducks/operators";
 import Editor from "../../components/Editor";
 import { Descendant } from "slate";
+import { format } from "date-fns";
 
 const PostDetailsContainer: FC = () => {
     const dispatch = useAppDispatch();
     const { postId } = useParams<{ postId: string }>();
     const { post } = useAppSelector((state) => state.publicPost);
-
     const [editorContent, setEditorContent] = useState<Descendant[]>([]);
-    const [title, setTitle] = useState("");
-
 
     useEffect(() => {
         if (post) {
-            setTitle(post?.title);
             setEditorContent(JSON.parse(post?.content));
         }
     }, [post])
@@ -30,9 +27,8 @@ const PostDetailsContainer: FC = () => {
 
     return (
         <>
-            <h4>{title}</h4>
-            <small className="text-muted">{post?.user?.name}</small>
-            {editorContent.length > 0 && <Editor readonly initValue={editorContent} onSave={() => { }} />}
+            {post && <p className="text-muted">{post?.user?.name} at {format(post?.updatedAt, "yyyy MM")}</p>}
+            {post && editorContent.length > 0 && <Editor readonly initValue={editorContent} onSave={() => { }} />}
         </>
     )
 }

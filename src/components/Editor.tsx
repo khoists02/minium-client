@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createEditor, Descendant, Editor, Transforms, Range } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
 import { withHistory } from "slate-history";
@@ -21,7 +21,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
 }) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   const [value, setValue] = useState<Descendant[]>();
-
+  const inputRef = useRef<HTMLInputElement>(null);
   const handlePaste = useCallback(
     (event: React.ClipboardEvent<HTMLDivElement>) => {
       event.preventDefault();
@@ -102,17 +102,44 @@ const SlateEditor: FC<SlateEditorProps> = ({
     }
   };
 
-  const handleSelect = (fmt: string) => {
-    const newUuid = uuidv4();
-    const item: CustomElement = {
-      type: fmt as unknown as any,
-      id: newUuid,
-      placeholder: "",
-      children: [{ text: "" }],
+  const insertImage = (editor: any, url: string, alt: string = "") => {
+    const image = {
+      type: "image",
+      url,
+      alt,
+      children: [{ text: "" }], // Images must have an empty text node as children
     };
+    Transforms.insertNodes(editor, image as any);
+  };
 
-    // Insert new paragraph with the UUID
-    Transforms.insertNodes(editor, item);
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Simulate upload and get a URL (replace with your upload logic)
+      const url = URL.createObjectURL(file);
+
+      // Insert the image into the editor
+      insertImage(editor, url, file.name);
+    }
+  };
+
+
+  const handleSelect = (fmt: string) => {
+    if (fmt !== "image") {
+      const newUuid = uuidv4();
+      const item: CustomElement = {
+        type: fmt as unknown as any,
+        id: newUuid,
+        placeholder: "",
+        children: [{ text: "" }],
+      };
+
+      // Insert new paragraph with the UUID
+      Transforms.insertNodes(editor, item);
+    } else {
+      // Handle insert image.
+      inputRef.current.click();
+    }
   }
 
   return (
@@ -121,6 +148,14 @@ const SlateEditor: FC<SlateEditorProps> = ({
       <Slate editor={editor} initialValue={initValue} onChange={(newValue) => {
         setValue(newValue);
       }}>
+        <input
+          type="file"
+          accept="image/*"
+          style={{ display: "none" }}
+          id="image-upload"
+          onChange={handleFileUpload}
+          ref={inputRef}
+        />
         <Editable
           disabled={readonly}
           contentEditable={!readonly}

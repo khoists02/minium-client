@@ -7,10 +7,18 @@ import { v4 as uuidv4 } from "uuid";
 const WritePostContainer: FC = () => {
 
     const handleSavePost = async (content: any) => {
+        if (!content || content.length === 0) return;
+        let title = uuidv4();
+        const titleArr = content?.filter((x) => x.type === "title" || x.type === "paragraph");
+        if (titleArr?.length > 0) {
+            title = titleArr[0]?.children[0]?.text;
+        }
+        // FIlter content.
+        const final = content.filter((x) => x.type !== "image" && x.children[0]?.text !== "");
         try {
             await axios.post("/posts", {
-                title: "Here’s a detailed guide to handling the onChange event in a Slate editor.",
-                content: JSON.stringify(content)
+                title: title,
+                content: JSON.stringify(final)
             })
         } catch (error) {
             console.log("Save post error !!!");
