@@ -8,6 +8,7 @@ interface ImageProps {
   element?: ImageElement;
   children?: any;
   focused?: boolean;
+  onDelete?: () => void;
 }
 
 export const Image: FC<ImageProps> = ({
@@ -17,27 +18,32 @@ export const Image: FC<ImageProps> = ({
   element,
   children,
   focused = false,
+  onDelete,
 }) => {
   const [clicked, setClicked] = useState(false);
   return <div {...attributes} contentEditable={!readonly}>
-    {!readonly && (focused || clicked) && <div contentEditable={false} className="text-center w-100 mb-3">
-      <button className="btn btn-light">Full</button>
-      <button className="btn btn-light ml-2 mr-2">Fit</button>
-      <button className="btn btn-light">Small</button>
+    {!readonly && clicked && <div contentEditable={false} className="text-center w-100 mb-3">
+      <button className="btn btn-success ">Full</button>
+      <button className="btn btn-success  ml-2 mr-2">Fit</button>
+      <button className="btn btn-success ">Small</button>
+      <button className="btn btn-danger ml-2" onClick={() => {
+        if (onDelete) onDelete();
+      }}>
+        <i className="fa fa-trash text-white"></i>
+      </button>
     </div>}
     <img
-      onFocus={() => {
-        setClicked(true);
-      }}
       onClick={() => {
         setClicked(true);
       }}
       onBlur={() => {
+        console.log(1)
         setClicked(false);
       }}
+      contentEditable={false}
       src={element.url}
       alt={element.alt}
-      style={{ maxWidth: "100%", height: "auto", display: "block" }}
+      style={{ maxWidth: "100%", height: "auto", display: "block", border: focused || clicked ? "3px solid green" : "" }}
     />
     {children}
   </div>

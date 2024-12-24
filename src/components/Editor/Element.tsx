@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { CustomElement } from "../../types/slate";
-import { useSlate } from "slate-react";
+import { ReactEditor, useSlate } from "slate-react";
 import { WrapperElement } from "./Elements/WrapperElement";
 import { isBlockFocused } from "./helpers";
 import { CodeBlock } from "./Elements/CodeBlock";
@@ -10,6 +10,7 @@ import { Quote } from "./Elements/Quote";
 import { Title } from "./Elements/Title";
 import { Image } from "./Elements/Image";
 import { HeaderEl } from "./Elements/HeaderEl";
+import { Transforms } from "slate";
 
 interface ElementProps {
   attributes: any;
@@ -43,7 +44,17 @@ export const Element: FC<ElementProps> = ({
       );
     case "image":
       return (
-        <Image readonly={readonly} attributes={attributes} children={children} element={element} focused={isCurrentBlockFocused} />
+        <Image onDelete={() => {
+          // Remove node.
+          const path = ReactEditor.findPath(editor, element);
+          // @ts-ignore
+          Transforms.removeNodes(editor, { at: path });
+        }}
+          readonly={readonly}
+          attributes={attributes}
+          children={children}
+          element={element}
+          focused={isCurrentBlockFocused} />
       );
     case "code-block":
       return (
