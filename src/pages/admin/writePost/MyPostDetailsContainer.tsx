@@ -1,12 +1,12 @@
 import React, { FC, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Descendant } from "slate";
-import { format } from "date-fns";
 import { getPublicPostsDetails } from "../../public/ducks/operators";
 import { useAppDispatch, useAppSelector } from "../../../config/hook";
 import Editor from "../../../components/Editor/Editor";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
+import { CustomElement } from "../../../types/slate";
 
 const MyPostDetailsContainer: FC = () => {
   const dispatch = useAppDispatch();
@@ -14,15 +14,39 @@ const MyPostDetailsContainer: FC = () => {
   const { post } = useAppSelector((state) => state.publicPost);
   const [editorContent, setEditorContent] = useState<Descendant[]>([]);
 
+  // const getFinalUrl = async (url) => {
+  //   try {
+  //     const response = await axios.get(url, {
+  //       responseType: "blob",
+  //     });
+  //     // Create a URL for the Blob
+  //     const newUrl = URL.createObjectURL(response.data);
+  //     return new Promise((rs) => rs(newUrl));
+  //   } catch (error) {
+  //     return Promise.reject();
+  //   }
+  // }
+
+  // const handleReRenderImage = async (items) => {
+  //   for (const item of items) {
+  //     if (item.type === "image")
+  //       item.url = getFinalUrl(item.url)
+  //   }
+  //   setEditorContent(items);
+  // }
+
   useEffect(() => {
     if (post) {
-      setEditorContent(JSON.parse(post?.content));
+      const beforeRender: CustomElement[] = JSON.parse(post?.content);
+      setEditorContent(beforeRender)
+
     }
   }, [post])
 
   useEffect(() => {
     if (postId) {
       dispatch(getPublicPostsDetails(postId));
+      localStorage.setItem("postId", postId);
     }
   }, [postId]);
 

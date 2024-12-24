@@ -20,7 +20,8 @@ const initValue = [
         children: [{
             text: "",
         }]
-    }
+    },
+
 ]
 
 const WritePostContainer: FC = () => {

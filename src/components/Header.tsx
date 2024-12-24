@@ -1,15 +1,16 @@
-import React, { FC, useState } from "react";
+import React, { FC, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../config/hook";
 import axios from "axios";
 import { authClearState } from "../pages/admin/auth/ducks/slices";
 import { Button, Dropdown, Nav } from "react-bootstrap";
+import { useLocation } from "react-router";
 
 export const Header: FC<{ showAdminRouter?: boolean }> = ({
     showAdminRouter,
 }) => {
     const { account } = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
-
+    const { pathname } = useLocation();
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const toggleDropdown = () => {
@@ -27,6 +28,19 @@ export const Header: FC<{ showAdminRouter?: boolean }> = ({
             console.log(error)
         }
     }
+
+    const showPublishPost = useMemo(() => {
+        return pathname.includes("/MyPost/");
+    }, [pathname]);
+
+    const publishPost = async () => {
+        try {
+            await axios.put(`/posts/${localStorage.getItem("postId")}/publish`);
+        } catch (error) {
+
+        }
+    }
+
     return (
         <>
             <div className="navbar">
@@ -35,7 +49,8 @@ export const Header: FC<{ showAdminRouter?: boolean }> = ({
                         <a href="/" className="navbar-brand d-flex align-items-center text-dark">
                             Posts
                         </a>
-                        {showAdminRouter && <>
+                        {showAdminRouter && <div className="d-flex align-items-center">
+                            {showPublishPost && <span onClick={() => publishPost()} className="text-success cursor-pointer">Publish</span>}
                             <Nav className="ms-auto">
                                 <Dropdown show={dropdownOpen} onToggle={toggleDropdown}>
                                     <Dropdown.Toggle
@@ -56,7 +71,7 @@ export const Header: FC<{ showAdminRouter?: boolean }> = ({
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </Nav>
-                        </>}
+                        </div>}
                     </div>
                 </div>
             </div>

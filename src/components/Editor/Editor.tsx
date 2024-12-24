@@ -8,6 +8,7 @@ import { Element } from "./Element";
 import { Leaf } from "./Leaf";
 import { toggleFormat, toggleMark } from "./helpers";
 import { Overlay, Tooltip } from "react-bootstrap";
+import axios from "axios";
 
 interface SlateEditorProps {
   onSave: (content: any) => void;
@@ -135,11 +136,26 @@ const SlateEditor: FC<SlateEditorProps> = ({
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // Simulate upload and get a URL (replace with your upload logic)
-      const url = URL.createObjectURL(file);
+      // // Simulate upload and get a URL (replace with your upload logic)
+      // const url = URL.createObjectURL(file);
+
+      const fd = new FormData();
+      fd.append("postImage", file);
+      fd.append("fieldname", uuidv4())
+
+      try {
+        const rs = await axios.post("/posts/upload", fd, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          }
+        });
+
+        insertImage(editor, rs.data.imgUrl, file.name);
+      } catch (error) {
+
+      }
 
       // Insert the image into the editor
-      insertImage(editor, url, file.name);
     }
   };
 

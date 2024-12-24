@@ -13,8 +13,13 @@ const MyPostContainer: FC = () => {
     navigate(`/MyPost/${row.id}/Edit`);
   };
 
-  const handleDelete = (row) => {
-    alert(`Deleting ${row.title}`);
+  const handleDelete = async (row) => {
+    try {
+      await axios.delete("/posts/" + row.id);
+      getMyPost();
+    } catch (error) {
+
+    }
   };
 
   const getMyPost = async () => {
