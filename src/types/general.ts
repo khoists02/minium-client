@@ -14,6 +14,7 @@ export interface IUserResponse {
     email?: string;
     photoUrl?: string;
     updatedAt?: Date | string;
+    description?: string;
 }
 
 export interface IPostResponse {
@@ -28,6 +29,7 @@ export interface IPostResponse {
         id?: string;
         name?: string;
         photoUrl?: string;
+        description?: string;
     };
     draft?: boolean;
     updatedAt?: Date | string;

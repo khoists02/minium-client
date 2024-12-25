@@ -81,7 +81,7 @@ export const Header: FC<{ showAdminRouter?: boolean }> = ({
                             {showPublishPost && <i onClick={() => publishPost()} className="fa fa-upload header-write cursor-pointer mr-3"></i>}
                             <Nav className="ms-auto">
                                 <Dropdown show={dropdownOpen} onToggle={toggleDropdown}>
-                                    {account?.photoUrl ? <Avatar onClick={toggleDropdown} size="xs" className="" url={account?.photoUrl} /> : (
+                                    {account?.photoUrl ? <Avatar allowTrigger={false} onClick={toggleDropdown} size="xs" className="" url={account?.photoUrl} /> : (
                                         <Dropdown.Toggle
                                             as={Button}
                                             variant="light"

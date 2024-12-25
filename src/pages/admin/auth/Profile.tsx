@@ -8,7 +8,7 @@
  * from LKG.  Access to the source code contained herein is hereby forbidden to anyone except current LKG employees, managers or contractors who have executed
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
-import React, { FC, useMemo, useRef, useState } from "react";
+import React, { FC, useEffect, useMemo, useRef, useState } from "react";
 import { useAppSelector } from "../../../config/hook";
 import { Avatar } from "../../../components/Avatar";
 import axios from "axios";
@@ -17,6 +17,7 @@ const Profile: FC = () => {
   const { account } = useAppSelector((state) => state.auth);
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [description, setDescription] = useState("");
 
   const getSortAccountName = useMemo(() => {
     if (!account?.name) return "A";
@@ -44,17 +45,21 @@ const Profile: FC = () => {
 
   const handleUpdateProfile = async () => {
     try {
-      const fd = new FormData();
-      fd.append("profileImage", file);
+      if (file) {
+        const fd = new FormData();
+        fd.append("profileImage", file);
 
-      await axios.post("/authenticatedUser/profile", fd, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        }
-      });
+        await axios.post("/authenticatedUser/profile", fd, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          }
+        });
+      }
+
+      if (description) await axios.put("/authenticatedUser/description", { description });
 
     } catch (error) {
-
+      console.log("Handle upload error !!!", error);
     }
   }
 
@@ -65,6 +70,10 @@ const Profile: FC = () => {
   const showLogo = useMemo(() => {
     return account.photoUrl && !blobUrl;
   }, [account, blobUrl]);
+
+  useEffect(() => {
+    setDescription(account?.description);
+  }, [account])
 
   return <>
     <div className="row">
@@ -110,6 +119,13 @@ const Profile: FC = () => {
       <div className="item form-group col-md-8 col-xs-12">
         <label htmlFor="name" className="text-muted">Email*</label>
         <input disabled type="email" className="form-control" id="email" name="email" value={account.email} />
+      </div>
+    </div>
+
+    <div className="row mt-3">
+      <div className="item form-group col-md-8 col-xs-12">
+        <label htmlFor="name" className="text-muted">Description</label>
+        <textarea onChange={(e) => setDescription(e.target.value)} value={account.description} className="form-control" id="description" name="description" />
       </div>
     </div>
 

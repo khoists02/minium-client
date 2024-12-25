@@ -51,7 +51,7 @@ const PostContainer: FC = () => {
         return !user?.photoUrl ? <span className="author btn-profile size-xs mr-1" style={{ background: getRandomColor() }}>
             {getSortAuthor(user?.name)}
         </span> : (
-            <Avatar size="xxs" url={`${axios.defaults.baseURL.replace("/api", "")}${user.photoUrl}`} className="mr-2" />
+            <Avatar description={user.description} size="xxs" url={`${axios.defaults.baseURL.replace("/api", "")}${user.photoUrl}`} className="mr-2" />
         )
     }
 
