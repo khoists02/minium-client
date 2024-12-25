@@ -14,7 +14,7 @@ const AppRouter: FC<{ isAuthenticated: boolean }> = ({ isAuthenticated }) => {
         <Route path="/Posts" element={<PostContainer />}></Route>
         <Route path="/Posts/:postId" element={<PostDetailsContainer />}></Route>
         <Route path="/Register" element={<RegisterContainer />}></Route>
-        <Route path="/Login" element={<LoginContainer />}></Route>
+        {!isAuthenticated && <Route path="/Login" element={<LoginContainer />}></Route>}
         <Route path="*" element={<span>Not Found</span>}></Route>
         {isAuthenticated && <>
             <Route path="/WritePost" element={<WritePostContainer />}></Route>

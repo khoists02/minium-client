@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { CSSProperties, FC, useMemo, useState } from "react";
 import { ImageElement } from "../../../types/slate";
 
 interface ImageProps {
@@ -21,6 +21,17 @@ export const Image: FC<ImageProps> = ({
   onDelete,
 }) => {
   const [clicked, setClicked] = useState(false);
+
+  const showBorder = useMemo(() => (focused || clicked) && !readonly, [readonly, clicked, focused]);
+  const imageStyles = useMemo((): CSSProperties => {
+    return {
+      maxWidth: "100%",
+      height: "auto",
+      display: "block",
+      border: showBorder ? "3px solid green" : ""
+    }
+  }, [showBorder])
+
   return <div {...attributes} contentEditable={!readonly}>
     {!readonly && clicked && <div contentEditable={false} className="text-center w-100 mb-3">
       <button className="btn btn-success ">Full</button>
@@ -39,7 +50,7 @@ export const Image: FC<ImageProps> = ({
       contentEditable={false}
       src={element.url}
       alt={element.alt}
-      style={{ maxWidth: "100%", height: "auto", display: "block", border: focused || clicked ? "3px solid green" : "" }}
+      style={imageStyles}
     />
     {children}
   </div>
