@@ -69,10 +69,10 @@ export const Header: FC<{ showAdminRouter?: boolean }> = ({
                                     <Dropdown.Toggle
                                         as={Button}
                                         variant="light"
-                                        className="btn-outline "
+                                        className="btn-profile "
                                         onClick={toggleDropdown}
                                     >
-                                        <div className="circle-acc">{getSortAccountName}</div>
+                                        <span>{getSortAccountName}</span>
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu align="end">
