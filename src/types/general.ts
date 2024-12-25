@@ -23,6 +23,8 @@ export interface IPostResponse {
     description?: string;
     backgroundUrl?: string;
     author?: string;
+    countLikes?: number;
+    countComments?: number;
     user?: {
         id?: string;
         name?: string;

@@ -15,11 +15,13 @@ import { getPublicPostsDetails } from "./ducks/operators";
 import Editor from "../../components/Editor/Editor";
 import { Descendant } from "slate";
 import { format } from "date-fns";
+import { CountBlock } from "./CountBlock";
 
 const PostDetailsContainer: FC = () => {
     const dispatch = useAppDispatch();
     const { postId } = useParams<{ postId: string }>();
     const { post } = useAppSelector((state) => state.publicPost);
+    const { account } = useAppSelector((state) => state.auth);
     const [editorContent, setEditorContent] = useState<Descendant[]>([]);
 
     useEffect(() => {
@@ -34,15 +36,16 @@ const PostDetailsContainer: FC = () => {
         }
     }, [postId]);
 
+    const reload = () => {
+        dispatch(getPublicPostsDetails(postId));
+    }
+
 
     return (
         <>
             {post && <p ><span className="text-muted">Published in</span> Coding Beauty by <span className="text-muted">{format(post?.updatedAt, "MMM, dd yyyy")}</span></p>}
             <div className="border-top border-bottom mb-5 pt-2 pb-2 d-flex flex-center-between">
-                <div className="left">
-                    <span className="text-muted mr-4 cursor-pointer"><i className="fa fa-heart-o "></i> <span>3</span></span>
-                    <span className="text-muted cursor-pointer"><i className="fa fa-comment-o"></i> <span >3</span></span>
-                </div>
+                <CountBlock reload={reload} account={account} post={post} />
 
                 <div className="right">
                     <i className="fa fa-share"></i>
