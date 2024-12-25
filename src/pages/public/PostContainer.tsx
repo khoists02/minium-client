@@ -64,7 +64,7 @@ const PostContainer: FC = () => {
                             return <div className="col-md-12 mb-3 article--item" key={p.id} >
                                 <span className="d-flex align-items-center mb-2">
                                     {sortAuthor(p.user)}
-                                    <small>{p.user?.name}</small>
+                                    <span className="username text-muted">{p.user?.name}</span >
                                 </span>
                                 <h2 onClick={() => {
                                     navigate("/Posts/" + p.id)

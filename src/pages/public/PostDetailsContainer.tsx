@@ -16,6 +16,8 @@ import Editor from "../../components/Editor/Editor";
 import { Descendant } from "slate";
 import { format } from "date-fns";
 import { CountBlock } from "./CountBlock";
+import { Avatar } from "../../components/Avatar";
+import axios from "axios";
 
 const PostDetailsContainer: FC = () => {
     const dispatch = useAppDispatch();
@@ -42,10 +44,38 @@ const PostDetailsContainer: FC = () => {
 
     const showEditor = useMemo(() => post && editorContent.length > 0, [post, editorContent]);
 
+    const getSortAuthor = (name: string) => {
+        if (!name) return "A";
+        const splitObject = name.split(" ");
+
+        let letter = splitObject[0][0].toUpperCase();
+
+        if (splitObject.length > 1) {
+            letter = `${letter}${splitObject[1][0].toUpperCase()}`
+        }
+        return letter;
+    }
+
+    const getRandomColor = (): string => {
+        const letters = "0123456789ABCDEF";
+        let color = "#";
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    const sortAuthor = (user: any) => {
+        return !user?.photoUrl ? <span className="author btn-profile size-xs mr-1" style={{ background: getRandomColor() }}>
+            {getSortAuthor(user?.name)}
+        </span> : (
+            <Avatar description={user.description} size="xxs" url={`${axios.defaults.baseURL.replace("/api", "")}${user.photoUrl}`} className="mr-2 mb-4" />
+        )
+    }
 
     return (
         <>
-            {post && <p ><span className="text-muted">Published in</span> Coding Beauty by <span className="text-muted">{post?.user?.name}</span> at <span className="text-muted">{format(post?.updatedAt, "MMM, dd yyyy")}</span></p>}
+            {sortAuthor(post?.user)}
             <div className="border-top border-bottom mb-5 pt-2 pb-2 d-flex flex-center-between">
                 <CountBlock reload={reload} account={account} post={post} />
                 <div className="right">
