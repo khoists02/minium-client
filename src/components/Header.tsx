@@ -13,12 +13,13 @@ import { useAppDispatch, useAppSelector } from "../config/hook";
 import axios from "axios";
 import { authClearState } from "../pages/admin/auth/ducks/slices";
 import { Button, Dropdown, Nav } from "react-bootstrap";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 export const Header: FC<{ showAdminRouter?: boolean }> = ({
     showAdminRouter,
 }) => {
     const { account } = useAppSelector((state) => state.auth);
+    const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { pathname } = useLocation();
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -69,11 +70,12 @@ export const Header: FC<{ showAdminRouter?: boolean }> = ({
             <div className="navbar">
                 <div className="navbar__left " >
                     <div className="container d-flex justify-content-between">
-                        <a href="/" className="navbar-brand d-flex align-items-center text-dark">
+                        <a href="/" className="navbar-brand d-flex align-items-center text-dark nav-logo">
                             Minium
                         </a>
                         {showAdminRouter && <div className="d-flex align-items-center">
-                            {showPublishPost && <i onClick={() => publishPost()} className="fa fa-upload cursor-pointer mr-3"></i>}
+                            <i onClick={() => navigate("/WritePost")} className="fa fa-pencil-square-o header-write mr-3" aria-hidden="true"></i>
+                            {showPublishPost && <i onClick={() => publishPost()} className="fa fa-upload header-write cursor-pointer mr-3"></i>}
                             <Nav className="ms-auto">
                                 <Dropdown show={dropdownOpen} onToggle={toggleDropdown}>
                                     <Dropdown.Toggle
@@ -87,7 +89,7 @@ export const Header: FC<{ showAdminRouter?: boolean }> = ({
 
                                     <Dropdown.Menu align="end">
                                         <Dropdown.Item href="/profile">Profile</Dropdown.Item>
-                                        <Dropdown.Item href="/WritePost">Write</Dropdown.Item>
+
                                         <Dropdown.Item href="/MyPost">My Posts</Dropdown.Item>
                                         <Dropdown.Divider />
                                         <Dropdown.Item onClick={handleLogout}>Sign Out</Dropdown.Item>

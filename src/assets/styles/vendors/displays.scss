@@ -62,7 +62,7 @@
     justify-content: center;
     border-radius: 100%;
     border: 1px solid #d1d1d1;
-    background: rgb(130, 215, 130);
+    background: #1e7e34;
     color: #ffffff;
     font-size: 14px;
 
@@ -75,4 +75,14 @@
     &::after {
         display: none;
     }
+}
+
+.nav-logo {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.header-write {
+    font-size: 24px;
+    cursor: pointer;
 }
