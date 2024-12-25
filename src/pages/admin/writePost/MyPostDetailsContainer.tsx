@@ -67,11 +67,11 @@ const MyPostDetailsContainer: FC = () => {
 
 
   return (
-    <>
+    <div className="pb-5">
       {post && editorContent.length > 0 && <Editor initValue={editorContent} onSave={(ct) => {
         handleSavePost(ct)
       }} />}
-    </>
+    </div>
   )
 }
 
