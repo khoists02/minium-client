@@ -18,11 +18,11 @@ const PostContainer: FC = () => {
         <>
             <div className="row">
                 {entities?.map((p) => {
-                    return <div className="col-md-12 mb-3 article--item" key={p.id} onClick={() => {
-                        navigate("/Posts/" + p.id)
-                    }}>
+                    return <div className="col-md-12 mb-3 article--item" key={p.id} >
                         <p className="author text-truncate mb-1">{p?.author}</p>
-                        <h2 className="title truncate-2-lines">{p.title}</h2>
+                        <h2 onClick={() => {
+                            navigate("/Posts/" + p.id)
+                        }} className="title cursor-pointer truncate-2-lines">{p.title}</h2>
                         <p className="description truncate-3-lines">{p.description}</p>
                         <p className="mb-0 footer">
                             <span>{format(new Date(p.updatedAt), "MMM yyyy")}</span>

@@ -45,7 +45,7 @@ const MyPostContainer: FC = () => {
     {
       Header: "",
       id: "actions", // unique id for the column
-      style: { width: "80px" }, // set width for this column
+      style: { minWidth: "80px" }, // set width for this column
       Cell: ({ row }: any) => (
         <div className="text-right">
           <i className="fa fa-pencil cursor-pointer" aria-hidden="true" onClick={() => handleEdit(row.original)} />

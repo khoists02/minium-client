@@ -17,7 +17,7 @@ const TableComponent: React.FC<TableComponentProps> = ({ columns, data }) => {
   });
 
   return (
-    <Table {...getTableProps()} striped bordered hover responsive>
+    <Table {...getTableProps()} bordered responsive>
       <thead>
         {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()}>
