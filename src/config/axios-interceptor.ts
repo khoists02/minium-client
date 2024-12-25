@@ -3,6 +3,7 @@ import axios, {
     AxiosResponse,
     InternalAxiosRequestConfig,
 } from "axios";
+import GroupPromise from "./GroupPromise";
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
     _retry: boolean;
@@ -24,7 +25,29 @@ const setupAxiosInterceptors = (): void => {
         return response;
     };
     const onResponseError = async (err: CustomAxiosError) => {
-        console.error(err);
+        const status = err.response?.status;
+        const apiError = err?.response?.data as { code?: number };
+        if (status === 401 && apiError.code === 1000) {
+            // window.location.href = "/";
+            return Promise.reject(err);
+        }
+
+        if (status === 401 && apiError.code === 1007) {
+            const originalRequest = err.config;
+            if (!originalRequest?._retry) {
+                originalRequest._retry = true;
+                const promise = GroupPromise.execute("/auth/refreshToken");
+                if (promise) {
+                    try {
+                        await promise;
+                    } catch (e) {
+                        // window.location.href = "/";
+                        return Promise.reject(e);
+                    }
+                    return await axios.request(originalRequest);
+                }
+            }
+        }
         return Promise.reject(err);
     };
     axios.interceptors.request.use(onRequestSuccess);
