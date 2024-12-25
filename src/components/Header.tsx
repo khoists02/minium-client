@@ -41,13 +41,26 @@ export const Header: FC<{ showAdminRouter?: boolean }> = ({
         }
     }
 
+    const getSortAccountName = useMemo(() => {
+        if (!account?.name) return "A";
+        const splitObject = account.name.split(" ");
+
+        let letter = splitObject[0][0].toUpperCase();
+
+        if (splitObject.length > 1) {
+            letter = `${letter}${splitObject[1][0].toUpperCase()}`
+        }
+        return letter;
+
+    }, [account])
+
     return (
         <>
             <div className="navbar">
                 <div className="navbar__left " >
                     <div className="container d-flex justify-content-between">
                         <a href="/" className="navbar-brand d-flex align-items-center text-dark">
-                            Posts
+                            Minium
                         </a>
                         {showAdminRouter && <div className="d-flex align-items-center">
                             {showPublishPost && <span onClick={() => publishPost()} className="text-success cursor-pointer">Publish</span>}
@@ -56,10 +69,10 @@ export const Header: FC<{ showAdminRouter?: boolean }> = ({
                                     <Dropdown.Toggle
                                         as={Button}
                                         variant="light"
-                                        className="d-flex align-items-center border-0"
+                                        className="btn-outline "
                                         onClick={toggleDropdown}
                                     >
-                                        <span>{account?.name}</span>
+                                        <div className="circle-acc">{getSortAccountName}</div>
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu align="end">

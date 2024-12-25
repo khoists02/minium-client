@@ -52,3 +52,27 @@
 .cursor-pointer {
     cursor: pointer;
 }
+
+.btn-outline {
+    background: transparent;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    border: 1px solid #d1d1d1;
+    background: rgb(130, 215, 130);
+    color: #ffffff;
+    font-size: 14px;
+
+    &:hover,
+    &:focus,
+    &:active {
+        background: transparent !important;
+    }
+
+    &::after {
+        display: none;
+    }
+}
