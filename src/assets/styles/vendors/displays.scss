@@ -63,8 +63,15 @@
     border-radius: 100%;
     border: 1px solid #d1d1d1;
     background: #1e7e34;
-    color: #ffffff;
+    color: #ffffff !important;
     font-size: 14px;
+
+    &.size-xs {
+        width: 30px;
+        height: 30px;
+        font-size: 11px !important;
+        color: #FFFFFF !important;
+    }
 
     &:hover,
     &:focus,
@@ -89,6 +96,10 @@
 
 .form-container {
     height: calc(100vh - 200px);
+
+    .form-inner {
+        max-width: 460px;
+    }
 }
 
 .btn-login {
@@ -102,5 +113,47 @@
     h4 {
         font-size: 26px;
         font-weight: bold;
+    }
+}
+
+.divider {
+    display: block;
+    text-align: center;
+    margin: 1rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+
+.divider .divider-text {
+    position: relative;
+    display: inline-block;
+    font-size: .9375rem;
+    color: #384551;
+    padding: 0rem .677rem;
+}
+
+.divider .divider-text:before {
+    right: 100%;
+}
+
+.divider .divider-text:after {
+    left: 100%;
+}
+
+.divider .divider-text:before,
+.divider .divider-text:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 100vw;
+    border-top: 1px solid rgba(34, 48, 62, .12);
+}
+
+.social-network {
+    .fa {
+        font-size: 18px;
+        padding: 10px;
+        cursor: pointer;
     }
 }

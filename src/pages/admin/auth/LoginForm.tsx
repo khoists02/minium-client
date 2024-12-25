@@ -42,7 +42,7 @@ export const LoginForm: FC<{ onSubmit: (data: ILoginForm) => void }> = ({
 
     return (
 
-        <div className="card">
+        <div className="card form-inner">
             <div className="card-body">
                 <div className="app-brand pt-3 pb-3 flex-center">
                     <h4>Minium</h4>
@@ -80,9 +80,21 @@ export const LoginForm: FC<{ onSubmit: (data: ILoginForm) => void }> = ({
                     <div className="form-group remember-me">
                         <span><input type="checkbox" name="" id="" /> <span className="font-weight ml-1">Remember me</span></span>
                     </div>
+
                     <button type="submit" disabled={!formData.password} className="btn btn-primary btn-block btn-login mt-4">
                         Login
                     </button>
+
+                    <div className="divider my-6">
+                        <div className="divider-text">or</div>
+                    </div>
+
+                    <div className="d-flex justify-content-center social-network">
+                        <i className="fa fa-google "></i>
+                        <i className="fa fa-apple "></i>
+                        <i className="fa fa-github "></i>
+                        <i className="fa fa-facebook-official "></i>
+                    </div>
                 </form>
             </div>
         </div>

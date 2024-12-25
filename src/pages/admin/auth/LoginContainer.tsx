@@ -22,12 +22,10 @@ const LoginContainer: React.FC = () => {
         }
     }
     return (
-        <div className="row form-container flex-center">
-            <div className="col-md-6">
-                <LoginForm onSubmit={(data) => {
-                    handleLogin(data);
-                }} />
-            </div>
+        <div className="form-container flex-center">
+            <LoginForm onSubmit={(data) => {
+                handleLogin(data);
+            }} />
         </div>
     );
 };
