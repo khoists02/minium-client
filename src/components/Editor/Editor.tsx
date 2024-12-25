@@ -149,7 +149,6 @@ const SlateEditor: FC<SlateEditorProps> = ({
     const file = event.target.files?.[0];
     if (file) {
       // // Simulate upload and get a URL (replace with your upload logic)
-      // const url = URL.createObjectURL(file);
 
       const fd = new FormData();
       fd.append("postImage", file);

@@ -17,6 +17,8 @@ axios.defaults.timeout = TIMEOUT;
 axios.defaults.withCredentials = true;
 // axios.defaults.baseURL = process.env.VITE_APP_API_URL;
 
+const originIgnore = ["/Login"];
+
 const setupAxiosInterceptors = (): void => {
     const onRequestSuccess = (config: InternalAxiosRequestConfig) => {
         return config;
@@ -27,8 +29,8 @@ const setupAxiosInterceptors = (): void => {
     const onResponseError = async (err: CustomAxiosError) => {
         const status = err.response?.status;
         const apiError = err?.response?.data as { code?: number };
-        if (status === 401 && apiError.code === 1000) {
-            // window.location.href = "/";
+        if (!originIgnore.includes(window.location.pathname) && status === 401 && apiError.code === 1000) {
+            window.location.href = "/Login";
             return Promise.reject(err);
         }
 

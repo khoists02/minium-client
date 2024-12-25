@@ -63,7 +63,7 @@ export const Header: FC<{ showAdminRouter?: boolean }> = ({
                             Minium
                         </a>
                         {showAdminRouter && <div className="d-flex align-items-center">
-                            {showPublishPost && <span onClick={() => publishPost()} className="text-success cursor-pointer">Publish</span>}
+                            {showPublishPost && <i onClick={() => publishPost()} className="fa fa-upload cursor-pointer mr-3"></i>}
                             <Nav className="ms-auto">
                                 <Dropdown show={dropdownOpen} onToggle={toggleDropdown}>
                                     <Dropdown.Toggle
