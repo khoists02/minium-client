@@ -73,8 +73,8 @@ const Profile: FC = () => {
           <div className="text-muted">Photo</div>
           <div className="mt-2 d-flex">
             {showSortImage && <button className="btn-profile size-sm mr-3">{getSortAccountName}</button>}
-            {blobUrl && <Avatar className="mr-3" url={blobUrl} />}
-            {showLogo && <Avatar className="mr-3" url={account.photoUrl} />}
+            {blobUrl && <Avatar size="sm" className="mr-3" url={blobUrl} />}
+            {showLogo && <Avatar size="sm" className="mr-3" url={account.photoUrl} />}
             <div className="">
               <div>
                 <span className="cursor-pointer" onClick={() => inputRef?.current.click()}>Upload</span>

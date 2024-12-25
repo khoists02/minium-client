@@ -10,12 +10,16 @@
  */
 import React, { FC } from "react";
 
-export const Avatar: FC<{ url: string; className: string }> = ({
+export const Avatar: FC<{ url: string; className: string, size: string; onClick?: () => void; }> = ({
   url,
   className,
+  size = "sm",
+  onClick
 }) => {
   return <>
-    <div className={`avatar ${className}`}>
+    <div onClick={() => {
+      if (onClick) onClick();
+    }} className={`avatar ${onClick ? "cursor-pointer" : ""} ${size} ${className}`}>
       <img src={url} alt="Profile Image" />
     </div>
   </>

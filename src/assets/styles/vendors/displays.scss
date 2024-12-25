@@ -173,8 +173,23 @@
 }
 
 .avatar {
-    width: 4rem;
-    height: 4rem;
+
+    &.sm {
+        width: 4rem;
+        height: 4rem;
+
+    }
+
+    &.xs {
+        width: 2.8rem;
+        height: 2.8rem;
+
+    }
+
+    &.xxs {
+        width: 2rem;
+        height: 2rem;
+    }
 
     img {
         width: 100%;

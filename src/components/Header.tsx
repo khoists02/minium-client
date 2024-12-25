@@ -14,6 +14,7 @@ import axios from "axios";
 import { authClearState } from "../pages/admin/auth/ducks/slices";
 import { Button, Dropdown, Nav } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router";
+import { Avatar } from "./Avatar";
 
 export const Header: FC<{ showAdminRouter?: boolean }> = ({
     showAdminRouter,
@@ -80,14 +81,16 @@ export const Header: FC<{ showAdminRouter?: boolean }> = ({
                             {showPublishPost && <i onClick={() => publishPost()} className="fa fa-upload header-write cursor-pointer mr-3"></i>}
                             <Nav className="ms-auto">
                                 <Dropdown show={dropdownOpen} onToggle={toggleDropdown}>
-                                    <Dropdown.Toggle
-                                        as={Button}
-                                        variant="light"
-                                        className="btn-profile "
-                                        onClick={toggleDropdown}
-                                    >
-                                        <span>{getSortAccountName}</span>
-                                    </Dropdown.Toggle>
+                                    {account?.photoUrl ? <Avatar onClick={toggleDropdown} size="xs" className="" url={account?.photoUrl} /> : (
+                                        <Dropdown.Toggle
+                                            as={Button}
+                                            variant="light"
+                                            className="btn-profile "
+                                            onClick={toggleDropdown}
+                                        >
+                                            <span>{getSortAccountName}</span>
+                                        </Dropdown.Toggle>
+                                    )}
 
                                     <Dropdown.Menu align="end">
                                         <Dropdown.Item href="/Profile">Profile</Dropdown.Item>

@@ -22,13 +22,12 @@ export interface IPostResponse {
     content?: string;
     description?: string;
     backgroundUrl?: string;
-    author?: string;
     countLikes?: number;
     countComments?: number;
     user?: {
         id?: string;
         name?: string;
-        email?: string;
+        photoUrl?: string;
     };
     draft?: boolean;
     updatedAt?: Date | string;
@@ -37,8 +36,4 @@ export interface IPostResponse {
 export interface ICommentResponse {
     id?: string;
     content?: string;
-    author?: {
-        id?: string;
-        name?: string;
-    }
 }

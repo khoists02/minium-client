@@ -13,6 +13,8 @@ import { format } from "date-fns";
 import { useAppDispatch, useAppSelector } from "../../config/hook";
 import { getPublicPosts } from "./ducks/operators";
 import { useNavigate } from "react-router";
+import { Avatar } from "../../components/Avatar";
+import axios from "axios";
 
 const PostContainer: FC = () => {
     const dispatch = useAppDispatch();
@@ -45,6 +47,14 @@ const PostContainer: FC = () => {
         return letter;
     }
 
+    const sortAuthor = (user: any) => {
+        return !user?.photoUrl ? <span className="author btn-profile size-xs mr-1" style={{ background: getRandomColor() }}>
+            {getSortAuthor(user?.name)}
+        </span> : (
+            <Avatar size="xxs" url={`${axios.defaults.baseURL.replace("/api", "")}${user.photoUrl}`} className="mr-2" />
+        )
+    }
+
     return (
         <>
             <div className="row">
@@ -53,10 +63,8 @@ const PostContainer: FC = () => {
                         {entities?.map((p) => {
                             return <div className="col-md-12 mb-3 article--item" key={p.id} >
                                 <span className="d-flex align-items-center mb-2">
-                                    <span className="author btn-profile size-xs mr-1" style={{ background: getRandomColor() }}>
-                                        {getSortAuthor(p.author)}
-                                    </span>
-                                    <small>{p.author}</small>
+                                    {sortAuthor(p.user)}
+                                    <small>{p.user?.name}</small>
                                 </span>
                                 <h2 onClick={() => {
                                     navigate("/Posts/" + p.id)
