@@ -86,3 +86,21 @@
     font-size: 24px;
     cursor: pointer;
 }
+
+.form-container {
+    height: calc(100vh - 200px);
+}
+
+.btn-login {
+    color: #fff;
+    background-color: #696cff !important;
+    border-color: #696cff !important;
+    box-shadow: 0 .125rem .25rem 0 rgba(105, 108, 255, .4);
+}
+
+.app-brand {
+    h4 {
+        font-size: 26px;
+        font-weight: bold;
+    }
+}

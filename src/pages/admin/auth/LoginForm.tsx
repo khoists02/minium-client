@@ -43,16 +43,21 @@ export const LoginForm: FC<{ onSubmit: (data: ILoginForm) => void }> = ({
     return (
 
         <div className="card">
-            <div className="card-header text-center">
-                <h3>Login</h3>
-            </div>
             <div className="card-body">
+                <div className="app-brand pt-3 pb-3 flex-center">
+                    <h4>Minium</h4>
+                </div>
+                <div className="app-description">
+                    <h5>Welcome to Minium  👋</h5>
+                    <p className="text-muted">Please sign-in to your account and start the adventure</p>
+                </div>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="email">Email</label>
+                        <small className="mb-2">Email</small>
                         <input
                             type="email"
                             className="form-control"
+                            placeholder=""
                             id="email"
                             name="email"
                             value={formData.email}
@@ -61,7 +66,7 @@ export const LoginForm: FC<{ onSubmit: (data: ILoginForm) => void }> = ({
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password">Password</label>
+                        <small className="mb-2">Password</small>
                         <input
                             type="password"
                             className="form-control"
@@ -72,7 +77,10 @@ export const LoginForm: FC<{ onSubmit: (data: ILoginForm) => void }> = ({
                             required
                         />
                     </div>
-                    <button type="submit" disabled={!formData.password} className="btn btn-primary btn-block">
+                    <div className="form-group remember-me">
+                        <span><input type="checkbox" name="" id="" /> <span className="font-weight ml-1">Remember me</span></span>
+                    </div>
+                    <button type="submit" disabled={!formData.password} className="btn btn-primary btn-block btn-login mt-4">
                         Login
                     </button>
                 </form>
