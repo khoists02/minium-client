@@ -51,7 +51,7 @@ export const toggleFormat = (editor: Editor, format: string) => {
   const isActive = isFormatActive(editor, format);
   Transforms.setNodes(
     editor,
-    { [format]: isActive ? undefined : true },
+    { [format]: isActive ? false : true },
     { match: (n) => Text.isText(n), split: true }
   );
 };

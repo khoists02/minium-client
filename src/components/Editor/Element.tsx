@@ -1,15 +1,31 @@
 import React, { FC } from "react";
 import { CustomElement } from "../../types/slate";
-import { useSlate } from "slate-react";
-import { WrapperElement } from "./WrapperElement";
+import { ReactEditor, useSlate } from "slate-react";
+import { WrapperElement } from "./Elements/WrapperElement";
 import { isBlockFocused } from "./helpers";
+import { CodeBlock } from "./Elements/CodeBlock";
+import { LanguageSelector } from "./LanguageSelector";
+import { Paragraph } from "./Elements/Paragraph";
+import { Quote } from "./Elements/Quote";
+import { Title } from "./Elements/Title";
+import { Image } from "./Elements/Image";
+import { HeaderEl } from "./Elements/HeaderEl";
+import { Transforms } from "slate";
 
-interface ElementProps { attributes: any; children: React.ReactElement | React.ReactElement[]; element: CustomElement }
+interface ElementProps {
+  attributes: any;
+  children: React.ReactElement | React.ReactElement[];
+  element: CustomElement,
+  onSelect: (format: string) => void;
+  readonly: boolean;
+}
 
 export const Element: FC<ElementProps> = ({
   attributes,
   element,
   children,
+  onSelect,
+  readonly,
 }) => {
   const editor = useSlate();
   const isEmpty = element.children[0]?.text === "";
@@ -17,38 +33,32 @@ export const Element: FC<ElementProps> = ({
   switch (element.type) {
     case "paragraph":
       return (
-        <WrapperElement isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
-          <p {...attributes} style={{ position: "relative" }}>
-            {isEmpty && (
-              <span
-                contentEditable={false}
-                style={{
-                  position: "absolute",
-                  pointerEvents: "none",
-                  opacity: 0.5,
-                  userSelect: "none",
-                }}
-              >
-                {element.placeholder}
-              </span>
-            )}
-            {children}
-          </p>
+        <WrapperElement onSelect={onSelect} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
+          <Paragraph isEmpty={isEmpty} readonly={readonly} element={element} children={children} attributes={attributes} />
         </WrapperElement>
 
       );
     case "quote":
       return (
-        <blockquote
-          {...attributes}
-          style={{
-            position: "relative",
-            borderLeft: "4px solid #ccc",
-            paddingLeft: "10px",
-            color: "#555",
-            fontStyle: "italic",
-          }}
-        >
+        <Quote isEmpty={isEmpty} readonly={readonly} element={element} children={children} attributes={attributes} />
+      );
+    case "image":
+      return (
+        <Image onDelete={() => {
+          // Remove node.
+          const path = ReactEditor.findPath(editor, element);
+          // @ts-ignore
+          Transforms.removeNodes(editor, { at: path });
+        }}
+          readonly={readonly}
+          attributes={attributes}
+          children={children}
+          element={element}
+          focused={isCurrentBlockFocused} />
+      );
+    case "code-block":
+      return (
+        <WrapperElement onSelect={onSelect} type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
           {isEmpty && (
             <span
               contentEditable={false}
@@ -62,55 +72,34 @@ export const Element: FC<ElementProps> = ({
               {element.placeholder}
             </span>
           )}
-          {children}
-        </blockquote>
-      );
-    case "image":
-      return (
-        <div {...attributes} contentEditable={false}>
-          <img
-            src={element.url}
-            alt={element.alt}
-            style={{ maxWidth: "100%", height: "auto", display: "block" }}
-          />
-          {children}
-        </div>
-      );
-    case "code":
-      return (
-        <pre
-          {...attributes}
-          style={{
-            background: "#f5f5f5",
-            padding: "10px",
-            borderRadius: "5px",
-            fontFamily: "monospace",
-            overflowX: "auto",
-          }}
-        >
-          <code>{children}</code>
-        </pre>
+          {isCurrentBlockFocused && !readonly && <LanguageSelector editor={editor} />}
+
+          <CodeBlock readonly={readonly} attributes={attributes} children={children} element={element} />
+        </WrapperElement>
+
       );
     case "title":
       return (
-        <WrapperElement type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
-          <h3 {...attributes} style={{ position: "relative" }}>
-            {isEmpty && (
-              <span
-                contentEditable={false}
-                style={{
-                  position: "absolute",
-                  pointerEvents: "none",
-                  opacity: 0.5,
-                  userSelect: "none",
-                }}
-              >
-                {element.placeholder}
-              </span>
-            )}
-            {children}
-          </h3>
+        <WrapperElement onSelect={onSelect} type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
+          <Title readonly={readonly} attributes={attributes} children={children} element={element} />
         </WrapperElement>
+
+      );
+    case "header":
+      return (
+        <WrapperElement onSelect={onSelect} type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
+          <HeaderEl readonly={readonly} attributes={attributes} children={children} element={element} />
+        </WrapperElement>
+
+      );
+    case "break":
+      return (
+        <>
+          <div style={{ width: "100%", height: 1, background: "#000000" }}>
+
+          </div>
+          {children}
+        </>
 
       );
     default:

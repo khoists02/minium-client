@@ -17,7 +17,8 @@ export interface IPostResponse {
         id?: string;
         name?: string;
         email?: string;
-    }
+    };
+    draft?: boolean;
     updatedAt?: Date | string;
 }
 
