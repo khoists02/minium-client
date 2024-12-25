@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import { store } from './config/store';
 import "./style.scss";
 
-setupAxiosInterceptors();
+setupAxiosInterceptors(store);
 
 axios.defaults.baseURL = "http://localhost:8080/api";
 

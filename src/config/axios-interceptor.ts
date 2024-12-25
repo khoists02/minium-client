@@ -4,6 +4,7 @@ import axios, {
     InternalAxiosRequestConfig,
 } from "axios";
 import GroupPromise from "./GroupPromise";
+import { authClearState } from "../pages/admin/auth/ducks/slices";
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
     _retry: boolean;
@@ -19,7 +20,7 @@ axios.defaults.withCredentials = true;
 
 const originIgnore = ["/Login"];
 
-const setupAxiosInterceptors = (): void => {
+const setupAxiosInterceptors = (store: any): void => {
     const onRequestSuccess = (config: InternalAxiosRequestConfig) => {
         return config;
     };
@@ -30,6 +31,7 @@ const setupAxiosInterceptors = (): void => {
         const status = err.response?.status;
         const apiError = err?.response?.data as { code?: number };
         if (!originIgnore.includes(window.location.pathname) && status === 401 && apiError.code === 1000) {
+            store.dispatch(authClearState());
             window.location.href = "/Login";
             return Promise.reject(err);
         }
@@ -44,6 +46,7 @@ const setupAxiosInterceptors = (): void => {
                         await promise;
                     } catch (e) {
                         // window.location.href = "/";
+                        store.dispatch(authClearState());
                         return Promise.reject(e);
                     }
                     return await axios.request(originalRequest);
