@@ -52,7 +52,7 @@ export const CountBlock: FC<{
           checkVisibleLike();
         }
       } catch (error) {
-
+        console.log("Count Error", error);
       }
 
     }, [visible, loading]);

@@ -27,6 +27,7 @@ const Toolbar: FC<ToolbarProps> = ({
       <ToolbarButton onClick={() => onSelect("code-block")} className="ml-2" icon={<i className="fa fa-code " />} format="code-block" />
       <ToolbarButton onClick={() => onSelect("quote")} className="ml-2" icon={<i className="fa fa-quote-right " />} format="quote" />
       <ToolbarButton onClick={() => onSelect("header")} className="ml-2" icon={<i className="fa fa-header " />} format="header" />
+      <ToolbarButton onClick={() => onSelect("description")} className="ml-2" icon={<i className="fa fa-text-width " />} format="description" />
       <ToolbarButton onClick={() => onSelect("break")} className="ml-2" icon={<i className="fa fa-scissors " />} format="break" />
     </Tooltip>
   );

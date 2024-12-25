@@ -8,7 +8,7 @@
  * from LKG.  Access to the source code contained herein is hereby forbidden to anyone except current LKG employees, managers or contractors who have executed
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../config/hook";
 import { getPublicPostsDetails } from "./ducks/operators";
@@ -40,19 +40,19 @@ const PostDetailsContainer: FC = () => {
         dispatch(getPublicPostsDetails(postId));
     }
 
+    const showEditor = useMemo(() => post && editorContent.length > 0, [post, editorContent]);
+
 
     return (
         <>
-            {post && <p ><span className="text-muted">Published in</span> Coding Beauty by <span className="text-muted">{format(post?.updatedAt, "MMM, dd yyyy")}</span></p>}
+            {post && <p ><span className="text-muted">Published in</span> Coding Beauty by <span className="text-muted">{post?.user?.name}</span> at <span className="text-muted">{format(post?.updatedAt, "MMM, dd yyyy")}</span></p>}
             <div className="border-top border-bottom mb-5 pt-2 pb-2 d-flex flex-center-between">
                 <CountBlock reload={reload} account={account} post={post} />
-
                 <div className="right">
                     <i className="fa fa-share"></i>
                 </div>
-
             </div>
-            {post && editorContent.length > 0 && <Editor readonly initValue={editorContent} onSave={() => { }} />}
+            {showEditor && <Editor readonly initValue={editorContent} onSave={() => { }} />}
             <div className="mt-5"></div>
         </>
     )

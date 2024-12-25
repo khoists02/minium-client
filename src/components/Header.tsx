@@ -63,8 +63,10 @@ export const Header: FC<{ showAdminRouter?: boolean }> = ({
         }
         return letter;
 
-    }, [account])
+    }, [account]);
 
+
+    const showWritePost = useMemo(() => pathname !== "/WritePost", [pathname]);
     return (
         <>
             <div className="navbar">
@@ -74,7 +76,7 @@ export const Header: FC<{ showAdminRouter?: boolean }> = ({
                             Minium
                         </a>
                         {showAdminRouter && <div className="d-flex align-items-center">
-                            <i onClick={() => navigate("/WritePost")} className="fa fa-pencil-square-o header-write mr-3" aria-hidden="true"></i>
+                            {showWritePost && <i onClick={() => navigate("/WritePost")} className="fa fa-pencil-square-o header-write mr-3" aria-hidden="true"></i>}
                             {showPublishPost && <i onClick={() => publishPost()} className="fa fa-upload header-write cursor-pointer mr-3"></i>}
                             <Nav className="ms-auto">
                                 <Dropdown show={dropdownOpen} onToggle={toggleDropdown}>
@@ -88,7 +90,7 @@ export const Header: FC<{ showAdminRouter?: boolean }> = ({
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu align="end">
-                                        <Dropdown.Item href="/profile">Profile</Dropdown.Item>
+                                        <Dropdown.Item href="/Profile">Profile</Dropdown.Item>
 
                                         <Dropdown.Item href="/MyPost">My Posts</Dropdown.Item>
                                         <Dropdown.Divider />

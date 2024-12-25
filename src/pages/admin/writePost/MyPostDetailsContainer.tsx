@@ -42,16 +42,23 @@ const MyPostDetailsContainer: FC = () => {
   const handleSavePost = async (content: any) => {
     if (!content || content.length === 0) return;
     let title = uuidv4();
+    let description = "";
     const titleArr = content?.filter((x) => x.type === "title" || x.type === "paragraph");
+    const descriptionArr = content?.filter((x) => x.type === "description");
     if (titleArr?.length > 0) {
       title = titleArr[0]?.children[0]?.text;
+    }
+
+    if (descriptionArr?.length > 0) {
+      description = descriptionArr[0]?.children[0]?.text;
     }
     // FIlter content.
     const final = content.filter((x) => x.type === "image" || x.type === "break" || (x.type !== "image" && x.children[0]?.text !== ""));
     try {
       await axios.put(`/posts/${post.id}`, {
         title: post.title,
-        content: JSON.stringify(final)
+        content: JSON.stringify(final),
+        description: description,
       })
     } catch (error) {
       console.log("Updated post error !!!", error);

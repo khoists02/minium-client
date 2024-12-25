@@ -21,6 +21,7 @@ import { Title } from "./Elements/Title";
 import { Image } from "./Elements/Image";
 import { HeaderEl } from "./Elements/HeaderEl";
 import { Transforms } from "slate";
+import { Description } from "./Elements/Description";
 
 interface ElementProps {
   attributes: any;
@@ -92,6 +93,13 @@ export const Element: FC<ElementProps> = ({
       return (
         <WrapperElement onSelect={onSelect} type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
           <Title readonly={readonly} attributes={attributes} children={children} element={element} />
+        </WrapperElement>
+
+      );
+    case "description":
+      return (
+        <WrapperElement onSelect={onSelect} type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
+          <Description readonly={readonly} attributes={attributes} children={children} element={element} />
         </WrapperElement>
 
       );

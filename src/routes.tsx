@@ -17,6 +17,7 @@ import PostDetailsContainer from "./pages/public/PostDetailsContainer";
 import WritePostContainer from "./pages/admin/writePost/WritePostContainer";
 import MyPostContainer from "./pages/admin/writePost/MyPostContainer";
 import MyPostDetailsContainer from "./pages/admin/writePost/MyPostDetailsContainer";
+import Profile from "./pages/admin/auth/Profile";
 
 const AppRouter: FC<{ isAuthenticated: boolean }> = ({ isAuthenticated }) => {
     return <Routes>
@@ -28,6 +29,7 @@ const AppRouter: FC<{ isAuthenticated: boolean }> = ({ isAuthenticated }) => {
         <Route path="*" element={<span>Not Found</span>}></Route>
         {isAuthenticated && <>
             <Route path="/WritePost" element={<WritePostContainer />}></Route>
+            <Route path="/Profile" element={<Profile />}></Route>
             <Route path="/MyPost" element={<MyPostContainer />}></Route>
             <Route path="/MyPost/:postId/Edit" element={<MyPostDetailsContainer />}></Route>
         </>}

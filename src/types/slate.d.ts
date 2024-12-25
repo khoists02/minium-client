@@ -13,6 +13,7 @@ import { ReactEditor } from "slate-react";
 import { HistoryEditor } from "slate-history";
 
 export type ParagraphElement = { type: "paragraph"; children: CustomText[], placeholder?: string, id: string; placeholder?: string, };
+export type DescriptionElement = { type: "description"; children: CustomText[], placeholder?: string, id: string; placeholder?: string, };
 export type QuoteElement = { type: "quote"; children: CustomText[], placeholder?: string, id: string };
 export type ImageElement = { type: "image", url: string, alt: string, children: CustomText[], id: string };
 export type CodeElement = { type: "code-block", children: CustomText[], id: string, language: "javascript", placeholder?: string };
@@ -26,6 +27,7 @@ export type CustomElement =
     | ImageElement
     | CodeElement
     | TitleElement
+    | DescriptionElement
     | HeaderElement
     | BreakLine;
 

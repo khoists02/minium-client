@@ -8,37 +8,15 @@
  * from LKG.  Access to the source code contained herein is hereby forbidden to anyone except current LKG employees, managers or contractors who have executed
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
-export interface IUserResponse {
-    id?: string;
-    name?: string;
-    email?: string;
-    photoUrl?: string;
-    updatedAt?: Date | string;
-}
+import React, { FC } from "react";
 
-export interface IPostResponse {
-    id?: string;
-    title?: string;
-    content?: string;
-    description?: string;
-    backgroundUrl?: string;
-    author?: string;
-    countLikes?: number;
-    countComments?: number;
-    user?: {
-        id?: string;
-        name?: string;
-        email?: string;
-    };
-    draft?: boolean;
-    updatedAt?: Date | string;
-}
-
-export interface ICommentResponse {
-    id?: string;
-    content?: string;
-    author?: {
-        id?: string;
-        name?: string;
-    }
-}
+export const Avatar: FC<{ url: string; className: string }> = ({
+  url,
+  className,
+}) => {
+  return <>
+    <div className={`avatar ${className}`}>
+      <img src={url} alt="Profile Image" />
+    </div>
+  </>
+} 

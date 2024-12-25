@@ -47,29 +47,27 @@ const PostContainer: FC = () => {
 
     return (
         <>
-            <div className="container">
-                <div className="row">
-                    <div className="col-md-8">
-                        <div className="row">
-                            {entities?.map((p) => {
-                                return <div className="col-md-12 mb-3 article--item" key={p.id} >
-                                    <span className="d-flex align-items-center mb-2">
-                                        <span className="author btn-profile size-xs mr-1" style={{ background: getRandomColor() }}>
-                                            {getSortAuthor(p.author)}
-                                        </span>
-                                        <small>{p.author}</small>
+            <div className="row">
+                <div className="col-md-8 col-sm-12 col-xs-12">
+                    <div className="row">
+                        {entities?.map((p) => {
+                            return <div className="col-md-12 mb-3 article--item" key={p.id} >
+                                <span className="d-flex align-items-center mb-2">
+                                    <span className="author btn-profile size-xs mr-1" style={{ background: getRandomColor() }}>
+                                        {getSortAuthor(p.author)}
                                     </span>
-                                    <h2 onClick={() => {
-                                        navigate("/Posts/" + p.id)
-                                    }} className="title cursor-pointer truncate-2-lines">{p.title}</h2>
-                                    <p className="description truncate-3-lines">{p.description}</p>
-                                    <p className="mb-0 footer">
-                                        <span>{format(new Date(p.updatedAt), "MMM, dd yyyy")}</span>
-                                    </p>
-                                    <p className="break"></p>
-                                </div>
-                            })}
-                        </div>
+                                    <small>{p.author}</small>
+                                </span>
+                                <h2 onClick={() => {
+                                    navigate("/Posts/" + p.id)
+                                }} className="title cursor-pointer truncate-2-lines">{p.title}</h2>
+                                <p className="description truncate-3-lines">{p.description}</p>
+                                <p className="mb-0 footer">
+                                    <span>{format(new Date(p.updatedAt), "MMM, dd yyyy HH:mm")}</span>
+                                </p>
+                                <p className="break"></p>
+                            </div>
+                        })}
                     </div>
                 </div>
             </div>
