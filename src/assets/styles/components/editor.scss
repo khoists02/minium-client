@@ -71,8 +71,12 @@
         .comment-menu {
             width: 100%;
 
+            &__header {
+                text-align: left;
+            }
+
             &__textarea {
-                font-size: 12px;
+                font-size: 12px !important;
             }
 
             &__button {

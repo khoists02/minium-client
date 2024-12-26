@@ -8,7 +8,7 @@
  * from LKG.  Access to the source code contained herein is hereby forbidden to anyone except current LKG employees, managers or contractors who have executed
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 import { Descendant } from "slate";
 import { getPublicPostsDetails } from "../../public/ducks/operators";
@@ -65,10 +65,14 @@ const MyPostDetailsContainer: FC = () => {
     }
   }
 
+  const showEditor = useMemo(() => post && editorContent.length > 0, [post, editorContent]);
 
   return (
     <div className="pb-5">
-      {post && editorContent.length > 0 && <Editor initValue={editorContent} onSave={(ct) => {
+      {showEditor && <Editor postId={postId} author={{
+        ...post?.user,
+        photoUrl: `${axios.defaults.baseURL.replace("/api", "")}${post?.user?.photoUrl}`
+      }} initValue={editorContent} onSave={(ct) => {
         handleSavePost(ct)
       }} />}
     </div>

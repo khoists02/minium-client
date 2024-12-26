@@ -19,17 +19,22 @@ import { Leaf } from "./Leaf";
 import { toggleFormat, toggleMark } from "./helpers";
 import axios from "axios";
 import { CommentInBlock } from "./CommentInBlock";
+import { IUserResponse } from "../../types/general";
 
 interface SlateEditorProps {
   onSave: (content: any) => void;
   initValue?: Descendant[];
   readonly?: boolean;
+  postId?: string;
+  author?: IUserResponse;
 }
 
 const SlateEditor: FC<SlateEditorProps> = ({
   onSave,
   initValue = [],
   readonly = false,
+  postId,
+  author,
 }) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   const [value, setValue] = useState<Descendant[]>();
@@ -41,10 +46,11 @@ const SlateEditor: FC<SlateEditorProps> = ({
     position: { x: 0, y: 0 },
   });
 
+
   const handleSelection = useCallback(() => {
     const domSelection = window.getSelection();
     if (!domSelection || domSelection.rangeCount === 0) {
-      setMenu({ show: false, visible: false, position: { x: 0, y: 0 } });
+      setMenu({ ...menu, show: false, visible: false, });
       return;
     }
 
@@ -58,7 +64,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
         position: { x: rect.left + rect.width / 2 + window.scrollX, y: rect.top + window.scrollY - 125 },
       });
     } else {
-      setMenu({ show: false, visible: false, position: { x: 0, y: 0 } });
+      setMenu({ ...menu, show: false, visible: false });
     }
   }, []);
 
@@ -216,7 +222,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [menu]);
 
   return (
     <div style={{ position: "relative" }}>
@@ -262,10 +268,12 @@ const SlateEditor: FC<SlateEditorProps> = ({
             <i contentEditable={false} className="fa fa-italic  cursor-pointer ml-2" onClick={() => handleFormatClick("italic")}></i>
             <i contentEditable={false} className="fa fa-link  cursor-pointer ml-2" onClick={() => handleFormatClick("link")}></i>
             <CommentInBlock
+              author={author}
               onCancel={() => {
                 setMenu({
                   ...menu,
                   visible: true,
+                  show: true,
                 });
               }}
               onSubmit={() => {
@@ -278,6 +286,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
               onClick={() => {
                 setMenu({
                   ...menu,
+                  show: true,
                   visible: false,
                 })
               }} icoClassName="cursor-pointer ml-2" />

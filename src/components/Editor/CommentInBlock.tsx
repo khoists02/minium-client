@@ -11,12 +11,15 @@
 
 import React, { FC, useState } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { IUserResponse } from "../../types/general";
+import { Avatar } from "../Avatar";
 
 interface CommentInBlockProps {
   icoClassName?: string;
   onClick?: () => void;
   onCancel?: () => void;
   onSubmit?: () => void;
+  author?: IUserResponse;
 }
 
 export const CommentInBlock: FC<CommentInBlockProps> = ({
@@ -24,6 +27,7 @@ export const CommentInBlock: FC<CommentInBlockProps> = ({
   onClick,
   onCancel,
   onSubmit,
+  author,
 }) => {
   const [show, setShow] = useState(false);
 
@@ -46,12 +50,16 @@ export const CommentInBlock: FC<CommentInBlockProps> = ({
   const renderTooltip = (props: any) => (
     <Tooltip onClick={(e) => e.stopPropagation()} contentEditable={false} id="button-tooltip" {...props} className="comment-tooltip">
       <div className="comment-menu">
-        <div className="comment-menu__header mb-2">
-
+        <div className="comment-menu__header mb-2 d-flex">
+          <Avatar url={author?.photoUrl} className={""} size={"xxs"} />
+          <span className="ml-3">
+            <p className="text-muted mb-1">{author?.name}</p>
+            <p className="text-muted truncate-3-lines mb-0">{author?.description}</p>
+          </span>
         </div>
 
         <div className="comment-menu__textarea mb-2">
-          <textarea className="form-control" name="" id=""></textarea>
+          <textarea style={{ fontSize: 12 }} className="form-control" name="" id=""></textarea>
         </div>
 
         <div className="comment-menu__button">
