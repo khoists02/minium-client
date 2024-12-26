@@ -18,8 +18,9 @@ interface CommentInBlockProps {
   icoClassName?: string;
   onClick?: () => void;
   onCancel?: () => void;
-  onSubmit?: () => void;
+  onSubmit?: (title?: string, content?: string) => void;
   author?: IUserResponse;
+  text?: string;
 }
 
 export const CommentInBlock: FC<CommentInBlockProps> = ({
@@ -28,8 +29,10 @@ export const CommentInBlock: FC<CommentInBlockProps> = ({
   onCancel,
   onSubmit,
   author,
+  text,
 }) => {
   const [show, setShow] = useState(false);
+  const [content, setContent] = useState("");
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -39,7 +42,7 @@ export const CommentInBlock: FC<CommentInBlockProps> = ({
 
   const handleSubmit = () => {
     setShow(false);
-    if (onSubmit) onSubmit();
+    if (onSubmit) onSubmit(text, content);
   }
 
   const handleCancel = () => {
@@ -48,7 +51,7 @@ export const CommentInBlock: FC<CommentInBlockProps> = ({
   }
 
   const renderTooltip = (props: any) => (
-    <Tooltip onClick={(e) => e.stopPropagation()} contentEditable={false} id="button-tooltip" {...props} className="comment-tooltip">
+    <Tooltip onClick={(e) => e.stopPropagation()} id="button-tooltip" {...props} className="comment-tooltip">
       <div className="comment-menu">
         <div className="comment-menu__header mb-2 d-flex">
           <Avatar url={author?.photoUrl} className={""} size={"xxs"} />
@@ -59,12 +62,14 @@ export const CommentInBlock: FC<CommentInBlockProps> = ({
         </div>
 
         <div className="comment-menu__textarea mb-2">
-          <textarea style={{ fontSize: 12 }} className="form-control" name="" id=""></textarea>
+          <textarea onChange={(e) => {
+            setContent(e.target.value)
+          }} style={{ fontSize: 12 }} className="form-control" name="" id=""></textarea>
         </div>
 
         <div className="comment-menu__button">
           <button className="btn btn-light" onClick={handleCancel}>Cancel</button>
-          <button onClick={handleSubmit} className="btn btn-success">Save</button>
+          <button onClick={handleSubmit} disabled={!content} className="btn btn-success">Save</button>
         </div>
 
       </div>

@@ -40,38 +40,43 @@ const SlateEditor: FC<SlateEditorProps> = ({
   const [value, setValue] = useState<Descendant[]>();
   const inputRef = useRef<HTMLInputElement>(null);
   const tooltipTarget = React.useRef<HTMLDivElement | null>(null);
-  const [menu, setMenu] = useState<{ show: boolean; visible: boolean, position: { x: number; y: number } }>({
+  const [menu, setMenu] = useState<{ text: string; show: boolean; visible: boolean, position: { x: number; y: number } }>({
     show: false,
     visible: false,
     position: { x: 0, y: 0 },
+    text: "",
   });
 
 
   const handleSelection = useCallback(() => {
     const domSelection = window.getSelection();
     if (!domSelection || domSelection.rangeCount === 0) {
-      setMenu({ ...menu, show: false, visible: false, });
+      setMenu({ ...menu, show: false, visible: false, text: "" });
       return;
     }
 
     const range = domSelection.getRangeAt(0);
     const rect = range.getBoundingClientRect();
 
+
     if (rect.width > 0 && domSelection.toString().trim()) {
+      const pY = !readonly ? rect.top + window.scrollY - 125 : rect.top + window.scrollY - 280;
       setMenu({
         show: true,
+        text: domSelection.toString().trim(),
         visible: true,
-        position: { x: rect.left + rect.width / 2 + window.scrollX, y: rect.top + window.scrollY - 125 },
+        position: { x: rect.left + rect.width / 2 + window.scrollX, y: pY },
       });
     } else {
-      setMenu({ ...menu, show: false, visible: false });
+      setMenu({ ...menu, show: false, visible: false, text: "" });
     }
-  }, []);
+  }, [editor, readonly]);
 
   const handlePaste = useCallback(
     (event: React.ClipboardEvent<HTMLDivElement>) => {
       if (readonly) return;
       event.preventDefault();
+
       const text = event.clipboardData.getData("text/plain").trim();
 
       // Insert the pasted text into the current block
@@ -225,9 +230,9 @@ const SlateEditor: FC<SlateEditorProps> = ({
   }, [menu]);
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative" }} >
       <Slate editor={editor} initialValue={initValue} onChange={(newValue) => {
-        setValue(newValue);
+        if (!readonly) setValue(newValue);
       }}>
         <input
           type="file"
@@ -238,10 +243,14 @@ const SlateEditor: FC<SlateEditorProps> = ({
           ref={inputRef}
         />
         <Editable
-          disabled={readonly}
-          contentEditable={!readonly}
-          onSelect={handleSelection}
+          readOnly={readonly}
+          onSelect={() => {
+            if (!readonly) handleSelection();
+          }}
           onPaste={handlePaste}
+          onMouseUp={() => {
+            if (readonly) handleSelection();
+          }}
           className="editor-editable"
           onKeyDown={handleKeyDown}
           renderElement={(props) => <Element readonly={readonly} onSelect={(fmt: string) => {
@@ -249,9 +258,6 @@ const SlateEditor: FC<SlateEditorProps> = ({
           }} {...props} />}
           renderLeaf={(props) => <Leaf {...props} />}
         />
-
-
-
       </Slate>
       {menu.show && (
         <div
@@ -264,10 +270,13 @@ const SlateEditor: FC<SlateEditorProps> = ({
           }}
         >
           <div className="menu-inner">
-            <i contentEditable={false} className="fa fa-bold  cursor-pointer" onClick={() => handleFormatClick("bold")}></i>
-            <i contentEditable={false} className="fa fa-italic  cursor-pointer ml-2" onClick={() => handleFormatClick("italic")}></i>
-            <i contentEditable={false} className="fa fa-link  cursor-pointer ml-2" onClick={() => handleFormatClick("link")}></i>
+            {!readonly && <>
+              <i className="fa fa-bold  cursor-pointer" onClick={() => handleFormatClick("bold")}></i>
+              <i className="fa fa-italic  cursor-pointer " onClick={() => handleFormatClick("italic")}></i>
+              <i className="fa fa-link  cursor-pointer " onClick={() => handleFormatClick("link")}></i>
+            </>}
             <CommentInBlock
+              text={menu.text}
               author={author}
               onCancel={() => {
                 setMenu({
@@ -276,7 +285,8 @@ const SlateEditor: FC<SlateEditorProps> = ({
                   show: true,
                 });
               }}
-              onSubmit={() => {
+              onSubmit={(title, content) => {
+                // console.log({ title, content });
                 setMenu({
                   ...menu,
                   visible: false,
@@ -289,9 +299,10 @@ const SlateEditor: FC<SlateEditorProps> = ({
                   show: true,
                   visible: false,
                 })
-              }} icoClassName="cursor-pointer ml-2" />
+              }}
+              icoClassName="cursor-pointer"
+            />
           </div>
-
         </div>
       )}
     </div>

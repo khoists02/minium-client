@@ -30,7 +30,7 @@ export const WrapperElement: FC<WrapperElementProps> = (
     onSelect,
   }
 ) => {
-  const isShowAddSidebar = useMemo(() => focused && isEmpty, [focused, isEmpty])
+  const isShowAddSidebar = useMemo(() => focused && isEmpty, [focused, isEmpty]);
   return <div data-id={id} data-focused={focused} className="editor-item">
     {isShowAddSidebar && <Toolbar onSelect={onSelect} wrapperClass={`add-new ${type}`} />}
     {children}

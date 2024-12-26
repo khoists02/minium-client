@@ -82,7 +82,7 @@ const PostDetailsContainer: FC = () => {
                     <i className="fa fa-share"></i>
                 </div>
             </div>
-            {showEditor && <Editor readonly initValue={editorContent} onSave={() => { }} />}
+            {showEditor && <Editor readonly postId={postId} author={account} initValue={editorContent} onSave={() => { }} />}
             <div className="mt-5"></div>
         </>
     )

@@ -45,7 +45,12 @@ export const Element: FC<ElementProps> = ({
     case "paragraph":
       return (
         <WrapperElement onSelect={onSelect} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
-          <Paragraph isEmpty={isEmpty} readonly={readonly} element={element} children={children} attributes={attributes} />
+          <Paragraph
+            isEmpty={isEmpty}
+            readonly={readonly}
+            element={element}
+            children={children}
+            attributes={attributes} />
         </WrapperElement>
 
       );
