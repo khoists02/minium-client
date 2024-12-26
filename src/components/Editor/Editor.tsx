@@ -210,7 +210,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (tooltipTarget.current && !tooltipTarget.current.contains(event.target as Node)) {
-        setMenu({ show: false, visible: false, position: { x: 0, y: 0 } });
+        setMenu({ ...menu, show: true, visible: false });
       }
     };
 
@@ -261,12 +261,26 @@ const SlateEditor: FC<SlateEditorProps> = ({
             <i contentEditable={false} className="fa fa-bold  cursor-pointer" onClick={() => handleFormatClick("bold")}></i>
             <i contentEditable={false} className="fa fa-italic  cursor-pointer ml-2" onClick={() => handleFormatClick("italic")}></i>
             <i contentEditable={false} className="fa fa-link  cursor-pointer ml-2" onClick={() => handleFormatClick("link")}></i>
-            <CommentInBlock onClick={() => {
-              setMenu({
-                ...menu,
-                visible: false,
-              })
-            }} icoClassName="cursor-pointer ml-2" />
+            <CommentInBlock
+              onCancel={() => {
+                setMenu({
+                  ...menu,
+                  visible: true,
+                });
+              }}
+              onSubmit={() => {
+                setMenu({
+                  ...menu,
+                  visible: false,
+                  show: false,
+                });
+              }}
+              onClick={() => {
+                setMenu({
+                  ...menu,
+                  visible: false,
+                })
+              }} icoClassName="cursor-pointer ml-2" />
           </div>
 
         </div>

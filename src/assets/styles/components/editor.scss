@@ -71,6 +71,10 @@
         .comment-menu {
             width: 100%;
 
+            &__textarea {
+                font-size: 12px;
+            }
+
             &__button {
                 display: flex;
                 justify-content: flex-end;

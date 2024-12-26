@@ -15,11 +15,15 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 interface CommentInBlockProps {
   icoClassName?: string;
   onClick?: () => void;
+  onCancel?: () => void;
+  onSubmit?: () => void;
 }
 
 export const CommentInBlock: FC<CommentInBlockProps> = ({
   icoClassName = "",
   onClick,
+  onCancel,
+  onSubmit,
 }) => {
   const [show, setShow] = useState(false);
 
@@ -29,7 +33,15 @@ export const CommentInBlock: FC<CommentInBlockProps> = ({
     if (onClick) onClick();
   };
 
-  console.log({ show })
+  const handleSubmit = () => {
+    setShow(false);
+    if (onSubmit) onSubmit();
+  }
+
+  const handleCancel = () => {
+    setShow(false);
+    if (onCancel) onCancel();
+  }
 
   const renderTooltip = (props: any) => (
     <Tooltip onClick={(e) => e.stopPropagation()} contentEditable={false} id="button-tooltip" {...props} className="comment-tooltip">
@@ -43,8 +55,8 @@ export const CommentInBlock: FC<CommentInBlockProps> = ({
         </div>
 
         <div className="comment-menu__button">
-          <button className="btn btn-light">Cancel</button>
-          <button className="btn btn-success">Save</button>
+          <button className="btn btn-light" onClick={handleCancel}>Cancel</button>
+          <button onClick={handleSubmit} className="btn btn-success">Save</button>
         </div>
 
       </div>
