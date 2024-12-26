@@ -8,7 +8,7 @@
  * from LKG.  Access to the source code contained herein is hereby forbidden to anyone except current LKG employees, managers or contractors who have executed
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
-import React, { FC } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import ToolbarButton from "./ToolbarButton";
 
@@ -21,26 +21,55 @@ const Toolbar: FC<ToolbarProps> = ({
   onSelect,
   wrapperClass = "",
 }) => {
+  const [show, setShow] = useState(false);
+  const tooltipTarget = useRef<HTMLDivElement>(null);
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setShow(!show);
+  }
+
+  const handleSelect = (fmt: string) => {
+    onSelect(fmt);
+    setShow(false);
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (tooltipTarget.current && !tooltipTarget.current.contains(event.target as Node)) {
+        setShow(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const renderTooltip = (props: any) => (
     <Tooltip id="button-tooltip" {...props} className="toolbar-tooltip">
-      <ToolbarButton onClick={() => onSelect("image")} icon={<i className="fa fa-image " />} format="image" />
-      <ToolbarButton onClick={() => onSelect("code-block")} className="" icon={<i className="fa fa-code " />} format="code-block" />
-      <ToolbarButton onClick={() => onSelect("quote")} className="" icon={<i className="fa fa-quote-right " />} format="quote" />
-      <ToolbarButton onClick={() => onSelect("header")} className="" icon={<i className="fa fa-header " />} format="header" />
-      <ToolbarButton onClick={() => onSelect("description")} className="" icon={<i className="fa fa-text-width " />} format="description" />
-      <ToolbarButton onClick={() => onSelect("break")} className="" icon={<i className="fa fa-scissors " />} format="break" />
+      <div ref={tooltipTarget}>
+        <ToolbarButton onClick={() => handleSelect("image")} icon={<i className="fa fa-image " />} format="image" />
+        <ToolbarButton onClick={() => handleSelect("code-block")} className="" icon={<i className="fa fa-code " />} format="code-block" />
+        <ToolbarButton onClick={() => handleSelect("quote")} className="" icon={<i className="fa fa-quote-right " />} format="quote" />
+        <ToolbarButton onClick={() => handleSelect("header")} className="" icon={<i className="fa fa-header " />} format="header" />
+        <ToolbarButton onClick={() => handleSelect("description")} className="" icon={<i className="fa fa-text-width " />} format="description" />
+        <ToolbarButton onClick={() => handleSelect("break")} className="" icon={<i className="fa fa-scissors " />} format="break" />
+      </div>
     </Tooltip>
   );
 
   return (
     <OverlayTrigger
-      trigger={["click"]}
-      placement="top-start" // Position of the tooltip: top, right, bottom, left
-      delay={{ show: 500, hide: 400 }} // Delay in showing/hiding tooltip
+      show={show}
+      placement="right" // Position of the tooltip: top, right, bottom, left
+      delay={{ show: 1000, hide: 400 }} // Delay in showing/hiding tooltip
       overlay={renderTooltip} // Tooltip content
     >
-      <i className={`fa fa-plus ${wrapperClass}`} />
+      <span onClick={handleClick} contentEditable={false} className={`toolbar_plus ${wrapperClass}`}>
+        {show ? "x" : "+"}
+      </span>
     </OverlayTrigger>
   );
 };

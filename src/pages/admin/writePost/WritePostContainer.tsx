@@ -59,8 +59,7 @@ const WritePostContainer: FC = () => {
 
     return (
         <div className="row">
-            <div className="col-md-12">
-                <Row />
+            <div className="col-md-12 pt-5">
                 <Editor
                     initValue={initValue as any}
                     author={{

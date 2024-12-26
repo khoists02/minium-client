@@ -18,15 +18,14 @@
         left: -50px;
         width: 40px;
         height: 40px;
-        font-size: 16px;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 50%;
-        background: #e2e0e0;
-        color: #ffffff;
+        color: #333333;
         top: -8px;
         cursor: pointer;
+        border: 1px solid #858585;
 
         &.title {
             top: -4px;
@@ -41,6 +40,8 @@
         background-repeat: repeat-x;
         border-radius: 5px;
         padding: 5px 10px;
+        width: 300px;
+        max-width: 300px !important;
 
         button {
             color: #ffffff;
@@ -147,4 +148,8 @@
     .content {
         font-size: 14px;
     }
+}
+
+.toolbar_plus {
+    font-size: 24px;
 }
