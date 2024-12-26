@@ -92,21 +92,21 @@ export const Element: FC<ElementProps> = ({
     case "title":
       return (
         <WrapperElement onSelect={onSelect} type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
-          <Title readonly={readonly} attributes={attributes} children={children} element={element} />
+          <Title isEmpty={isEmpty} readonly={readonly} attributes={attributes} children={children} element={element} />
         </WrapperElement>
 
       );
     case "description":
       return (
         <WrapperElement onSelect={onSelect} type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
-          <Description readonly={readonly} attributes={attributes} children={children} element={element} />
+          <Description isEmpty={isEmpty} readonly={readonly} attributes={attributes} children={children} element={element} />
         </WrapperElement>
 
       );
     case "header":
       return (
         <WrapperElement onSelect={onSelect} type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
-          <HeaderEl readonly={readonly} attributes={attributes} children={children} element={element} />
+          <HeaderEl isEmpty={isEmpty} readonly={readonly} attributes={attributes} children={children} element={element} />
         </WrapperElement>
 
       );

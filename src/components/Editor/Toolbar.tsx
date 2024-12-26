@@ -35,7 +35,7 @@ const Toolbar: FC<ToolbarProps> = ({
   return (
     <OverlayTrigger
       trigger={["click"]}
-      placement="right" // Position of the tooltip: top, right, bottom, left
+      placement="top-start" // Position of the tooltip: top, right, bottom, left
       delay={{ show: 500, hide: 400 }} // Delay in showing/hiding tooltip
       overlay={renderTooltip} // Tooltip content
       rootClose

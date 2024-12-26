@@ -235,3 +235,32 @@ h4,
 h5 {
     font-weight: 400 !important;
 }
+
+.table {
+    th {
+        font-size: .8125rem;
+        letter-spacing: .2px;
+        color: #384551;
+    }
+}
+
+.menu-wrapper {
+    position: absolute;
+    background: rgb(255, 255, 255);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px;
+    z-index: 1000;
+
+
+    .menu-inner {
+        position: relative;
+        background-image: linear-gradient(to bottom, rgba(49, 49, 47, .99), #262625);
+        background-repeat: repeat-x;
+        border-radius: 5px;
+        padding: 5px 10px;
+
+        .fa {
+            font-size: 18px;
+            color: #ffffff;
+        }
+    }
+}

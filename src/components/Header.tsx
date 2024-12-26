@@ -93,11 +93,26 @@ export const Header: FC<{ showAdminRouter?: boolean }> = ({
                                     )}
 
                                     <Dropdown.Menu align="end">
-                                        <Dropdown.Item href="/Profile">Profile</Dropdown.Item>
+                                        <Dropdown.Item href="/Profile">
+                                            <span className="text-muted">
+                                                <i className="fa fa-user mr-2"></i>
+                                                <span>Profile</span>
+                                            </span>
+                                        </Dropdown.Item>
 
-                                        <Dropdown.Item href="/MyPost">My Posts</Dropdown.Item>
+                                        <Dropdown.Item href="/MyPost">
+                                            <span className="text-muted">
+                                                <i className="fa fa-file-text-o mr-2"></i>
+                                                <span>My Posts</span>
+                                            </span>
+                                        </Dropdown.Item>
                                         <Dropdown.Divider />
-                                        <Dropdown.Item onClick={handleLogout}>Sign Out</Dropdown.Item>
+                                        <Dropdown.Item onClick={handleLogout}>
+                                            <span className="text-muted">
+                                                <i className="fa fa-sign-out mr-2"></i>
+                                                <span>Sign Out</span>
+                                            </span>
+                                        </Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </Nav>

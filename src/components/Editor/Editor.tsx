@@ -8,7 +8,7 @@
  * from LKG.  Access to the source code contained herein is hereby forbidden to anyone except current LKG employees, managers or contractors who have executed
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
-import React, { FC, useCallback, useMemo, useRef, useState } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createEditor, Descendant, Editor, Transforms, Range } from "slate";
 import { Slate, Editable, withReact, } from "slate-react";
 import { withHistory } from "slate-history";
@@ -17,7 +17,6 @@ import { CustomElement } from "../../types/slate";
 import { Element } from "./Element";
 import { Leaf } from "./Leaf";
 import { toggleFormat, toggleMark } from "./helpers";
-import { Overlay, Tooltip } from "react-bootstrap";
 import axios from "axios";
 
 interface SlateEditorProps {
@@ -34,31 +33,33 @@ const SlateEditor: FC<SlateEditorProps> = ({
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   const [value, setValue] = useState<Descendant[]>();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [tooltipVisible, setTooltipVisible] = useState(false);
-  const [tooltipText, setTooltipText] = useState("");
-  const [position, setPosition] = useState({ top: 0, left: 0 });
-  const tooltipTarget = useRef();
+  const tooltipTarget = React.useRef<HTMLDivElement | null>(null);
+  const [menu, setMenu] = useState<{ show: boolean; position: { x: number; y: number } }>({
+    show: false,
+    position: { x: 0, y: 0 },
+  });
 
-  const handleDoubleClick = (event: React.MouseEvent) => {
-    if (readonly) return;
-    const selection = window.getSelection();
-    const selectedText = selection.toString();
-
-    if (selectedText.trim()) {
-      setTooltipText(`Selected: "${selectedText}"`);
-      // @ts-ignore
-      const rect = event.target.getBoundingClientRect();
-      setPosition({
-        top: rect.top + window.scrollY,
-        left: rect.left + rect.width / 2,
-      });
-      // @ts-ignore
-      tooltipTarget.current = event.target;
-      setTooltipVisible(true);
-    } else {
-      setTooltipVisible(false);
+  const handleSelection = useCallback(() => {
+    const domSelection = window.getSelection();
+    if (!domSelection || domSelection.rangeCount === 0) {
+      setMenu({ show: false, position: { x: 0, y: 0 } });
+      return;
     }
-  };
+
+    const range = domSelection.getRangeAt(0);
+    const rect = range.getBoundingClientRect();
+
+    console.log(rect.width)
+
+    if (rect.width > 0 && domSelection.toString().trim()) {
+      setMenu({
+        show: true,
+        position: { x: rect.left + rect.width / 2 + window.scrollX, y: rect.top + window.scrollY - 120 },
+      });
+    } else {
+      setMenu({ show: false, position: { x: 0, y: 0 } });
+    }
+  }, []);
 
   const handlePaste = useCallback(
     (event: React.ClipboardEvent<HTMLDivElement>) => {
@@ -205,45 +206,64 @@ const SlateEditor: FC<SlateEditorProps> = ({
     toggleFormat(editor, fmt);
   }
 
-  return (
-    <Slate editor={editor} initialValue={initValue} onChange={(newValue) => {
-      setValue(newValue);
-    }}>
-      <input
-        type="file"
-        accept="image/*"
-        style={{ display: "none" }}
-        id="image-upload"
-        onChange={handleFileUpload}
-        ref={inputRef}
-      />
-      <Editable
-        disabled={readonly}
-        contentEditable={!readonly}
-        onDoubleClick={handleDoubleClick}
-        onPaste={handlePaste}
-        className="editor-editable"
-        onKeyDown={handleKeyDown}
-        renderElement={(props) => <Element readonly={readonly} onSelect={(fmt: string) => {
-          handleSelect(fmt);
-        }} {...props} />}
-        renderLeaf={(props) => <Leaf {...props} />}
-      />
-      <Overlay
-        target={tooltipTarget.current}
-        show={tooltipVisible}
-        placement="top"
-        rootClose
-        onHide={() => setTooltipVisible(false)}
-      >
-        <Tooltip id="slate-tooltip">
-          <i contentEditable={false} className="fa fa-bold text-success cursor-pointer" onClick={() => handleFormatClick("bold")}></i>
-          <i contentEditable={false} className="fa fa-italic text-success cursor-pointer ml-2" onClick={() => handleFormatClick("italic")}></i>
-          <i contentEditable={false} className="fa fa-link text-success cursor-pointer ml-2" onClick={() => handleFormatClick("link")}></i>
-        </Tooltip>
-      </Overlay>
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (tooltipTarget.current && !tooltipTarget.current.contains(event.target as Node)) {
+        setMenu({ show: false, position: { x: 0, y: 0 } });
+      }
+    };
 
-    </Slate>
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div style={{ position: "relative" }}>
+      <Slate editor={editor} initialValue={initValue} onChange={(newValue) => {
+        setValue(newValue);
+      }}>
+        <input
+          type="file"
+          accept="image/*"
+          style={{ display: "none" }}
+          id="image-upload"
+          onChange={handleFileUpload}
+          ref={inputRef}
+        />
+        <Editable
+          disabled={readonly}
+          contentEditable={!readonly}
+          onSelect={handleSelection}
+          onPaste={handlePaste}
+          className="editor-editable"
+          onKeyDown={handleKeyDown}
+          renderElement={(props) => <Element readonly={readonly} onSelect={(fmt: string) => {
+            handleSelect(fmt);
+          }} {...props} />}
+          renderLeaf={(props) => <Leaf {...props} />}
+        />
+
+
+
+      </Slate>
+      {menu.show && (
+        <div
+          ref={tooltipTarget}
+          className="menu-wrapper"
+          style={{
+            top: menu.position.y,
+            left: menu.position.x,
+          }}
+        >
+          <div className="menu-inner">
+            <i contentEditable={false} className="fa fa-bold  cursor-pointer" onClick={() => handleFormatClick("bold")}></i>
+            <i contentEditable={false} className="fa fa-italic  cursor-pointer ml-2" onClick={() => handleFormatClick("italic")}></i>
+            <i contentEditable={false} className="fa fa-link  cursor-pointer ml-2" onClick={() => handleFormatClick("link")}></i>
+          </div>
+
+        </div>
+      )}
+    </div>
 
   );
 };

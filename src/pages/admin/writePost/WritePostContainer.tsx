@@ -20,7 +20,7 @@ const initValue = [
         type: "title",
         placeholder: "Title...",
         children: [{
-            text: "Your Title",
+            text: "",
         }]
     },
     {
