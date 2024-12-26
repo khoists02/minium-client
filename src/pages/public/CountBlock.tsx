@@ -66,7 +66,7 @@ export const CountBlock: FC<{
       <>
         <div className="block-count">
           <span className="text-muted mr-4 cursor-pointer">
-            <i className="fa fa-heart-o " onClick={handleLikeOrUnlike} ></i>
+            <i className={`fa fa-heart-o  ${visible ? "text-danger" : ""}`} onClick={handleLikeOrUnlike} ></i>
             {post?.countLikes > 0 && <span className="ml-1">{post?.countLikes}</span>}
           </span>
           <span className="text-muted cursor-pointer">
