@@ -78,7 +78,7 @@ export const Header: FC<{ showAdminRouter?: boolean }> = ({
                         </a>
                         {showAdminRouter && <div className="d-flex align-items-center">
                             {showWritePost && <i onClick={() => navigate("/WritePost")} className="fa fa-pencil-square-o header-write mr-3" aria-hidden="true"></i>}
-                            {showPublishPost && <i onClick={() => publishPost()} className="fa fa-upload header-write cursor-pointer mr-3"></i>}
+                            {showPublishPost && <span onClick={() => publishPost()} className="btn-publish cursor-pointer mr-3">Publish</span>}
                             <Nav className="ms-auto">
                                 <Dropdown show={dropdownOpen} onToggle={toggleDropdown}>
                                     {account?.photoUrl ? <Avatar allowTrigger={false} onClick={toggleDropdown} size="xs" className="" url={account?.photoUrl} /> : (

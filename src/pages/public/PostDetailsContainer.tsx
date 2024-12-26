@@ -127,7 +127,7 @@ const PostDetailsContainer: FC = () => {
             }
             <div className="mt-5"></div>
 
-            <Comments author={account} comments={comments} />
+            <Comments postId={postId} fetching={getAllComments} author={account} comments={comments} />
         </>
     )
 }

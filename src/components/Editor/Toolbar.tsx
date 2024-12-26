@@ -36,20 +36,25 @@ const Toolbar: FC<ToolbarProps> = ({
     setShow(false);
   }
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (tooltipTarget.current && !tooltipTarget.current.contains(event.target as Node)) {
-        setShow(false);
-      }
-    };
+  const handleClickOutside = (event: MouseEvent) => {
+    if (tooltipTarget.current && !tooltipTarget.current.contains(event.target as Node)) {
+      setShow(false);
+    }
+  };
 
+  useEffect(() => {
+    if (show) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [show]);
 
   const renderTooltip = (props: any) => (
     <Tooltip id="button-tooltip" {...props} className="toolbar-tooltip">
-      <div ref={tooltipTarget}>
+      <div >
         <ToolbarButton onClick={() => handleSelect("image")} icon={<i className="fa fa-image " />} format="image" />
         <ToolbarButton onClick={() => handleSelect("code-block")} className="" icon={<i className="fa fa-code " />} format="code-block" />
         <ToolbarButton onClick={() => handleSelect("quote")} className="" icon={<i className="fa fa-quote-right " />} format="quote" />
@@ -61,16 +66,18 @@ const Toolbar: FC<ToolbarProps> = ({
   );
 
   return (
-    <OverlayTrigger
-      show={show}
-      placement="right" // Position of the tooltip: top, right, bottom, left
-      delay={{ show: 1000, hide: 400 }} // Delay in showing/hiding tooltip
-      overlay={renderTooltip} // Tooltip content
-    >
-      <span onClick={handleClick} contentEditable={false} className={`toolbar_plus ${wrapperClass}`}>
-        {show ? "x" : "+"}
-      </span>
-    </OverlayTrigger>
+    <div ref={tooltipTarget}>
+      <OverlayTrigger
+        show={show}
+        placement="right" // Position of the tooltip: top, right, bottom, left
+        delay={{ show: 1000, hide: 400 }} // Delay in showing/hiding tooltip
+        overlay={renderTooltip} // Tooltip content
+      >
+        <span onClick={handleClick} contentEditable={false} className={`toolbar_plus ${wrapperClass}`}>
+          {show ? "x" : "+"}
+        </span>
+      </OverlayTrigger>
+    </div>
   );
 };
 

@@ -8,14 +8,62 @@
  * from LKG.  Access to the source code contained herein is hereby forbidden to anyone except current LKG employees, managers or contractors who have executed
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
+
+import Prism from "prismjs";
+
+// Import Prism.js core, languages, and plugins
+import "prismjs/components/prism-javascript";
+import "prismjs/themes/prism.css"; // Use your preferred theme
+import "prismjs/plugins/line-numbers/prism-line-numbers";
+import "prismjs/plugins/line-numbers/prism-line-numbers.css";
+
 
 export const CodeBlock = ({ attributes, children, element, readonly }) => {
   const language = element.language || "plaintext";
-
+  const codeText = element.children.map((child) => child.text).join("\n");
+  const highlightedCode = Prism.highlight(
+    codeText,
+    Prism.languages[language],
+    language
+  );
   return (
-    <pre contentEditable={!readonly} {...attributes} style={{ background: "#f5f5f5", padding: "10px" }}>
-      <code data-language={language}>{children}</code>
+    <pre contentEditable={!readonly} {...attributes} style={{ position: "relative" }}>
+      {/* Render Prism.js highlighting */}
+      <code
+        className={`language-${language}`}
+        dangerouslySetInnerHTML={{ __html: highlightedCode }}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          opacity: 1,
+          userSelect: "text",
+        }}
+      />
+      {readonly ? <div
+        style={{
+          position: "relative",
+          background: "transparent",
+          whiteSpace: "pre-wrap",
+          wordWrap: "break-word",
+          visibility: readonly ? "hidden" : "visible",
+        }}
+      >
+        {codeText}
+      </div> : <div
+        style={{
+          position: "relative",
+          background: "transparent",
+          whiteSpace: "pre-wrap",
+          wordWrap: "break-word",
+          opacity: 0,
+        }}
+      >
+        {children}
+      </div>}
+
     </pre>
   );
 };

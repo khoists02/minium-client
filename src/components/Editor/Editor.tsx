@@ -47,8 +47,8 @@ const SlateEditor: FC<SlateEditorProps> = ({
     text: "",
   });
 
-
-  const handleSelection = useCallback(() => {
+  const handleSelection = useCallback((event) => {
+    event.preventDefault();
     const domSelection = window.getSelection();
     if (!domSelection || domSelection.rangeCount === 0) {
       setMenu({ ...menu, show: false, visible: false, text: "" });
@@ -100,7 +100,6 @@ const SlateEditor: FC<SlateEditorProps> = ({
   }
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (readonly) return;
     if (event.key === "Enter") {
       event.preventDefault();
       // GENERATE NEW UUID.
@@ -193,10 +192,25 @@ const SlateEditor: FC<SlateEditorProps> = ({
     }
   };
 
-
   const handleSelect = (fmt: string) => {
     if (readonly) return;
-    if (fmt !== "image") {
+    if (fmt === "image") {
+      // Handle insert image.
+      inputRef.current.click();
+
+    } else if (fmt === "code-block") {
+      const newUuid = uuidv4();
+      const item: CustomElement = {
+        type: fmt as unknown as any,
+        id: newUuid,
+        language: "javascript",
+        placeholder: "",
+        children: [{ text: "" }],
+      };
+
+      // Insert new paragraph with the UUID
+      Transforms.setNodes(editor, item as any);
+    } else {
       const newUuid = uuidv4();
       const item: CustomElement = {
         type: fmt as unknown as any,
@@ -207,9 +221,6 @@ const SlateEditor: FC<SlateEditorProps> = ({
 
       // Insert new paragraph with the UUID
       Transforms.setNodes(editor, item as any);
-    } else {
-      // Handle insert image.
-      inputRef.current.click();
     }
   }
 
@@ -275,12 +286,12 @@ const SlateEditor: FC<SlateEditorProps> = ({
         />
         <Editable
           readOnly={readonly}
-          onSelect={() => {
-            if (!readonly) handleSelection();
+          onSelect={(e) => {
+            if (!readonly) handleSelection(e);
           }}
           onPaste={handlePaste}
-          onMouseUp={() => {
-            if (readonly) handleSelection();
+          onMouseUp={(e) => {
+            if (readonly) handleSelection(e);
           }}
           className="editor-editable"
           onKeyDown={handleKeyDown}

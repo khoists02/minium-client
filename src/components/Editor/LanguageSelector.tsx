@@ -10,11 +10,13 @@
  */
 import React from "react";
 import { Editor, Transforms } from "slate";
+import { useSlateStatic } from "slate-react";
 
 // Language Selector Component
-export const LanguageSelector = ({ editor }) => {
-  const languages = ["javascript", "python", "java", "html", "css", "plaintext"];
-
+export const LanguageSelector = ({
+  lang
+}) => {
+  const editor = useSlateStatic();
   const handleChange = (event) => {
     const language = event.target.value;
 
@@ -37,15 +39,20 @@ export const LanguageSelector = ({ editor }) => {
   };
 
   return (
-    <select contentEditable={false} onChange={handleChange} defaultValue="">
-      <option value="" disabled>
-        Select Language
-      </option>
-      {languages.map((lang) => (
-        <option key={lang} value={lang}>
-          {lang}
-        </option>
-      ))}
+    <select
+      data-test-id="language-select"
+      contentEditable={false}
+      onChange={handleChange}
+      value={lang}
+      style={{
+        position: "absolute",
+        right: 5,
+        top: -30,
+        zIndex: 1,
+      }}
+    >
+      <option value="css">CSS</option>
+      <option value="javascript">JavaScript</option>
     </select>
   );
 };

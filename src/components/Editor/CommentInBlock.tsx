@@ -62,7 +62,7 @@ export const CommentInBlock: FC<CommentInBlockProps> = ({
         </div>
 
         <div className="comment-menu__textarea mb-2">
-          <textarea onChange={(e) => {
+          <textarea rows={3} onChange={(e) => {
             setContent(e.target.value)
           }} style={{ fontSize: 12 }} className="form-control" name="" id=""></textarea>
         </div>

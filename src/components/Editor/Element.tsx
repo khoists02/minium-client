@@ -75,21 +75,7 @@ export const Element: FC<ElementProps> = ({
     case "code-block":
       return (
         <WrapperElement onSelect={onSelect} type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
-          {isEmpty && (
-            <span
-              contentEditable={false}
-              style={{
-                position: "absolute",
-                pointerEvents: "none",
-                opacity: 0.5,
-                userSelect: "none",
-              }}
-            >
-              {element.placeholder}
-            </span>
-          )}
-          {isCurrentBlockFocused && !readonly && <LanguageSelector editor={editor} />}
-
+          {isCurrentBlockFocused && !readonly && <LanguageSelector lang={element.language} />}
           <CodeBlock readonly={readonly} attributes={attributes} children={children} element={element} />
         </WrapperElement>
 

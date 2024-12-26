@@ -5,13 +5,14 @@ $navbar-height: 57px;
 
 // Vendors
 @import "./vendors/displays.scss";
-
+@import "./vendors/code.scss";
 // Components
 @import "./components/border.scss";
 @import "./components/navbar.scss";
 @import "./components/editor.scss";
 
 @import "font-awesome/css/font-awesome.min.css";
+
 
 .article--item {
     .author {

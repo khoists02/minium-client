@@ -12,7 +12,7 @@ export default defineConfig({
   },
   plugins: [react(), viteTsConfigPaths(), dynamicImport()],
   optimizeDeps: {
-    include: ["slate", "slate-react", "slate-history"],
+    include: ["slate", "slate-react", "slate-history", "prismjs"],
   },
   server: {
     open: true,
