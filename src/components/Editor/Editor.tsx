@@ -18,6 +18,7 @@ import { Element } from "./Element";
 import { Leaf } from "./Leaf";
 import { toggleFormat, toggleMark } from "./helpers";
 import axios from "axios";
+import { CommentInBlock } from "./CommentInBlock";
 
 interface SlateEditorProps {
   onSave: (content: any) => void;
@@ -34,30 +35,30 @@ const SlateEditor: FC<SlateEditorProps> = ({
   const [value, setValue] = useState<Descendant[]>();
   const inputRef = useRef<HTMLInputElement>(null);
   const tooltipTarget = React.useRef<HTMLDivElement | null>(null);
-  const [menu, setMenu] = useState<{ show: boolean; position: { x: number; y: number } }>({
+  const [menu, setMenu] = useState<{ show: boolean; visible: boolean, position: { x: number; y: number } }>({
     show: false,
+    visible: false,
     position: { x: 0, y: 0 },
   });
 
   const handleSelection = useCallback(() => {
     const domSelection = window.getSelection();
     if (!domSelection || domSelection.rangeCount === 0) {
-      setMenu({ show: false, position: { x: 0, y: 0 } });
+      setMenu({ show: false, visible: false, position: { x: 0, y: 0 } });
       return;
     }
 
     const range = domSelection.getRangeAt(0);
     const rect = range.getBoundingClientRect();
 
-    console.log(rect.width)
-
     if (rect.width > 0 && domSelection.toString().trim()) {
       setMenu({
         show: true,
-        position: { x: rect.left + rect.width / 2 + window.scrollX, y: rect.top + window.scrollY - 120 },
+        visible: true,
+        position: { x: rect.left + rect.width / 2 + window.scrollX, y: rect.top + window.scrollY - 125 },
       });
     } else {
-      setMenu({ show: false, position: { x: 0, y: 0 } });
+      setMenu({ show: false, visible: false, position: { x: 0, y: 0 } });
     }
   }, []);
 
@@ -209,7 +210,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (tooltipTarget.current && !tooltipTarget.current.contains(event.target as Node)) {
-        setMenu({ show: false, position: { x: 0, y: 0 } });
+        setMenu({ show: false, visible: false, position: { x: 0, y: 0 } });
       }
     };
 
@@ -253,12 +254,19 @@ const SlateEditor: FC<SlateEditorProps> = ({
           style={{
             top: menu.position.y,
             left: menu.position.x,
+            visibility: menu.visible ? "visible" : "hidden",
           }}
         >
           <div className="menu-inner">
             <i contentEditable={false} className="fa fa-bold  cursor-pointer" onClick={() => handleFormatClick("bold")}></i>
             <i contentEditable={false} className="fa fa-italic  cursor-pointer ml-2" onClick={() => handleFormatClick("italic")}></i>
             <i contentEditable={false} className="fa fa-link  cursor-pointer ml-2" onClick={() => handleFormatClick("link")}></i>
+            <CommentInBlock onClick={() => {
+              setMenu({
+                ...menu,
+                visible: false,
+              })
+            }} icoClassName="cursor-pointer ml-2" />
           </div>
 
         </div>

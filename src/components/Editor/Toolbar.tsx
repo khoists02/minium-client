@@ -21,14 +21,15 @@ const Toolbar: FC<ToolbarProps> = ({
   onSelect,
   wrapperClass = "",
 }) => {
+
   const renderTooltip = (props: any) => (
     <Tooltip id="button-tooltip" {...props} className="toolbar-tooltip">
       <ToolbarButton onClick={() => onSelect("image")} icon={<i className="fa fa-image " />} format="image" />
-      <ToolbarButton onClick={() => onSelect("code-block")} className="ml-2" icon={<i className="fa fa-code " />} format="code-block" />
-      <ToolbarButton onClick={() => onSelect("quote")} className="ml-2" icon={<i className="fa fa-quote-right " />} format="quote" />
-      <ToolbarButton onClick={() => onSelect("header")} className="ml-2" icon={<i className="fa fa-header " />} format="header" />
-      <ToolbarButton onClick={() => onSelect("description")} className="ml-2" icon={<i className="fa fa-text-width " />} format="description" />
-      <ToolbarButton onClick={() => onSelect("break")} className="ml-2" icon={<i className="fa fa-scissors " />} format="break" />
+      <ToolbarButton onClick={() => onSelect("code-block")} className="" icon={<i className="fa fa-code " />} format="code-block" />
+      <ToolbarButton onClick={() => onSelect("quote")} className="" icon={<i className="fa fa-quote-right " />} format="quote" />
+      <ToolbarButton onClick={() => onSelect("header")} className="" icon={<i className="fa fa-header " />} format="header" />
+      <ToolbarButton onClick={() => onSelect("description")} className="" icon={<i className="fa fa-text-width " />} format="description" />
+      <ToolbarButton onClick={() => onSelect("break")} className="" icon={<i className="fa fa-scissors " />} format="break" />
     </Tooltip>
   );
 
@@ -38,8 +39,6 @@ const Toolbar: FC<ToolbarProps> = ({
       placement="top-start" // Position of the tooltip: top, right, bottom, left
       delay={{ show: 500, hide: 400 }} // Delay in showing/hiding tooltip
       overlay={renderTooltip} // Tooltip content
-      rootClose
-      rootCloseEvent="mousedown"
     >
       <i className={`fa fa-plus ${wrapperClass}`} />
     </OverlayTrigger>
