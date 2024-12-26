@@ -13,6 +13,7 @@ import Editor from "../../../components/Editor/Editor";
 import { Row } from "../../../components/Row";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import { useAppSelector } from "../../../config/hook";
 
 const initValue = [
     {
@@ -35,6 +36,7 @@ const initValue = [
 ]
 
 const WritePostContainer: FC = () => {
+    const { account } = useAppSelector((state) => state.auth);
 
     const handleSavePost = async (content: any) => {
         if (!content || content.length === 0) return;
@@ -59,9 +61,15 @@ const WritePostContainer: FC = () => {
         <div className="row">
             <div className="col-md-12">
                 <Row />
-                <Editor initValue={initValue as any} onSave={(value) => {
-                    handleSavePost(value)
-                }} />
+                <Editor
+                    initValue={initValue as any}
+                    author={{
+                        ...account,
+                        photoUrl: `${axios.defaults.baseURL.replace("/api", "")}${account?.photoUrl}`
+                    }}
+                    onSave={(value) => {
+                        handleSavePost(value)
+                    }} />
             </div>
         </div>
     )

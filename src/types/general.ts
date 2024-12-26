@@ -37,5 +37,7 @@ export interface IPostResponse {
 
 export interface ICommentResponse {
     id?: string;
+    title?: string;
     content?: string;
+    author?: IUserResponse;
 }

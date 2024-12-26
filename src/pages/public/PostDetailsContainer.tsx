@@ -18,6 +18,8 @@ import { format } from "date-fns";
 import { CountBlock } from "./CountBlock";
 import { Avatar } from "../../components/Avatar";
 import axios from "axios";
+import { ICommentResponse } from "../../types/general";
+import { Comments } from "../../components/Comments";
 
 const PostDetailsContainer: FC = () => {
     const dispatch = useAppDispatch();
@@ -25,15 +27,30 @@ const PostDetailsContainer: FC = () => {
     const { post } = useAppSelector((state) => state.publicPost);
     const { account } = useAppSelector((state) => state.auth);
     const [editorContent, setEditorContent] = useState<Descendant[]>([]);
+    const [comments, setComments] = useState<ICommentResponse[]>([]);
 
     useEffect(() => {
         if (post) {
             setEditorContent(JSON.parse(post?.content));
         }
-    }, [post])
+    }, [post]);
+
+    const getAllComments = async () => {
+        try {
+            const rs = await axios.get(`/posts/${postId}/comments`, {
+                params: {
+                    limit: 10000
+                }
+            });
+            setComments(rs.data?.content);
+        } catch (error) {
+
+        }
+    }
 
     useEffect(() => {
         if (postId) {
+            getAllComments();
             dispatch(getPublicPostsDetails(postId));
         }
     }, [postId]);
@@ -73,6 +90,23 @@ const PostDetailsContainer: FC = () => {
         )
     }
 
+    /**
+     * Handle submit comment in row for editor
+     * @param title 
+     * @param content 
+     */
+    const handleSubmitComment = async (title: string, content: string) => {
+        try {
+            await axios.post(`/posts/${postId}/comments`, {
+                title,
+                content,
+            });
+            getAllComments();
+        } catch (error) {
+            console.log("Post comment error", error);
+        }
+    }
+
     return (
         <>
             {sortAuthor(post?.user)}
@@ -82,8 +116,18 @@ const PostDetailsContainer: FC = () => {
                     <i className="fa fa-share"></i>
                 </div>
             </div>
-            {showEditor && <Editor readonly postId={postId} author={account} initValue={editorContent} onSave={() => { }} />}
+            {showEditor &&
+                <Editor
+                    readonly
+                    author={account}
+                    initValue={editorContent}
+                    onSave={() => { }}
+                    onCommentSubmit={handleSubmitComment}
+                />
+            }
             <div className="mt-5"></div>
+
+            <Comments author={account} comments={comments} />
         </>
     )
 }

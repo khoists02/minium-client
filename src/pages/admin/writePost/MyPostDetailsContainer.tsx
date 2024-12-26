@@ -69,12 +69,16 @@ const MyPostDetailsContainer: FC = () => {
 
   return (
     <div className="pb-5">
-      {showEditor && <Editor postId={postId} author={{
-        ...post?.user,
-        photoUrl: `${axios.defaults.baseURL.replace("/api", "")}${post?.user?.photoUrl}`
-      }} initValue={editorContent} onSave={(ct) => {
-        handleSavePost(ct)
-      }} />}
+      {showEditor && <Editor
+        author={{
+          ...post?.user,
+          photoUrl: `${axios.defaults.baseURL.replace("/api", "")}${post?.user?.photoUrl}`
+        }}
+        initValue={editorContent}
+        onSave={(ct) => {
+          handleSavePost(ct)
+        }}
+      />}
     </div>
   )
 }

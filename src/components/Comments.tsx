@@ -8,127 +8,77 @@
  * from LKG.  Access to the source code contained herein is hereby forbidden to anyone except current LKG employees, managers or contractors who have executed
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
-import React, { useState } from "react";
-import { Button, Card, Form, ListGroup, InputGroup } from "react-bootstrap";
+import React, { FC, useState } from "react";
+import { ICommentResponse, IUserResponse } from "../types/general";
+import { Avatar } from "./Avatar";
+import axios from "axios";
 
-interface Comment {
-  id: number;
-  author: string;
-  content: string;
-  replies: Comment[];
+interface CommentsProps {
+  author: IUserResponse;
+  comments: ICommentResponse[];
 }
 
-const Comments: React.FC = () => {
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [newComment, setNewComment] = useState<string>("");
-  const [replyContent, setReplyContent] = useState<string>("");
-  const [replyingTo, setReplyingTo] = useState<number | null>(null);
-
-  const handleAddComment = () => {
-    const newCommentObj: Comment = {
-      id: Date.now(),
-      author: "User",
-      content: newComment,
-      replies: [],
-    };
-    setComments((prevComments) => [...prevComments, newCommentObj]);
-    setNewComment("");
-  };
-
-  const handleReply = (parentId: number) => {
-    if (replyContent.trim()) {
-      const updatedComments = comments.map((comment) => {
-        if (comment.id === parentId) {
-          comment.replies.push({
-            id: Date.now(),
-            author: "User",
-            content: replyContent,
-            replies: [],
-          });
-        }
-        return comment;
-      });
-      setComments(updatedComments);
-      setReplyContent("");
-      setReplyingTo(null);
+export const Comments: FC<CommentsProps> = ({
+  author,
+  comments,
+}) => {
+  const [focused, setFocused] = useState(false);
+  const getRandomColor = (): string => {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
     }
-  };
+    return color;
+  }
 
-  return (
-    <div className="mt-4">
-      <h4>Comments</h4>
+  const getSortAuthor = (name: string) => {
+    if (!name) return "A";
+    const splitObject = name.split(" ");
 
-      <Form>
-        <InputGroup className="mb-3">
-          <Form.Control
-            as="textarea"
-            rows={3}
-            placeholder="Write a comment"
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-          />
-        </InputGroup>
-        <Button onClick={handleAddComment} disabled={!newComment}>
-          Add Comment
-        </Button>
-      </Form>
+    let letter = splitObject[0][0].toUpperCase();
 
-      <ListGroup className="mt-4">
-        {comments.map((comment) => (
-          <ListGroup.Item key={comment.id}>
-            <Card>
-              <Card.Body>
-                <Card.Title>{comment.author}</Card.Title>
-                <Card.Text>{comment.content}</Card.Text>
+    if (splitObject.length > 1) {
+      letter = `${letter}${splitObject[1][0].toUpperCase()}`
+    }
+    return letter;
+  }
 
-                <Button
-                  variant="link"
-                  onClick={() => setReplyingTo(comment.id)}
-                >
-                  Reply
-                </Button>
+  const sortAuthor = (user: any) => {
+    return !user?.photoUrl ? <span className="author btn-profile size-xs mr-1" style={{ background: getRandomColor() }}>
+      {getSortAuthor(user?.name)}
+    </span> : (
+      <Avatar description={user.description} size="xxs" url={user.photoUrl} className="mr-2 mb-3" />
+    )
+  }
+  return <div className="comments mb-5">
+    <div className="comments-box mb-5">
+      <h3 className="mb-3">Responses ({comments?.length > 0 ? (comments.length) : ""})</h3>
 
-                {replyingTo === comment.id && (
-                  <Form>
-                    <InputGroup className="mt-3">
-                      <Form.Control
-                        as="textarea"
-                        rows={2}
-                        value={replyContent}
-                        onChange={(e) => setReplyContent(e.target.value)}
-                      />
-                    </InputGroup>
-                    <Button
-                      variant="primary"
-                      onClick={() => handleReply(comment.id)}
-                      disabled={!replyContent}
-                    >
-                      Submit Reply
-                    </Button>
-                  </Form>
-                )}
-
-                {comment.replies.length > 0 && (
-                  <ListGroup className="mt-3">
-                    {comment.replies.map((reply) => (
-                      <ListGroup.Item key={reply.id}>
-                        <Card>
-                          <Card.Body>
-                            <Card.Title>{reply.author}</Card.Title>
-                            <Card.Text>{reply.content}</Card.Text>
-                          </Card.Body>
-                        </Card>
-                      </ListGroup.Item>
-                    ))}
-                  </ListGroup>
-                )}
-              </Card.Body>
-            </Card>
-          </ListGroup.Item>
-        ))}
-      </ListGroup>
+      <div className="comments__area" onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}>
+        {focused && <span>{sortAuthor(author)}</span>}
+        <textarea placeholder="Typing..." className="form-control" rows={focused ? 3 : 1} name="" id=""></textarea>
+        <div className={`d-flex buttons ${!focused ? "mt-0" : ""}`}>
+          {focused && <button className="btn btn-light mr-2" onClick={() => setFocused(false)}>Cancel</button>}
+          <button className="btn btn-success">Response</button>
+        </div>
+      </div>
     </div>
-  );
-};
 
-export default Comments;
+    <div className="comments-list">
+      {comments.map((cmt) => {
+        return <div className="comments__item">
+          <div className="mb2">
+            <span>{sortAuthor({
+              ...cmt?.author,
+              photoUrl: `${axios.defaults.baseURL.replace("/api", "")}${cmt?.author?.photoUrl}`
+            })}</span>
+            <span>{cmt?.author?.name}</span>
+          </div>
+          {cmt.title && <p className="title">{cmt.title}</p>}
+          <p className="content">{cmt.content}</p>
+        </div>
+      })}
+    </div>
+  </div>
+}

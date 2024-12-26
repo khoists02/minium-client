@@ -25,15 +25,15 @@ interface SlateEditorProps {
   onSave: (content: any) => void;
   initValue?: Descendant[];
   readonly?: boolean;
-  postId?: string;
   author?: IUserResponse;
+  onCommentSubmit?: (title: string, content: string) => void;
 }
 
 const SlateEditor: FC<SlateEditorProps> = ({
   onSave,
+  onCommentSubmit,
   initValue = [],
   readonly = false,
-  postId,
   author,
 }) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
@@ -229,6 +229,37 @@ const SlateEditor: FC<SlateEditorProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [menu]);
 
+  /**
+   * Comment handles
+   * 
+   */
+
+  const handleCommentCancel = () => {
+    setMenu({
+      ...menu,
+      visible: true,
+      show: true,
+    });
+  }
+
+  const handleCommentClickBtn = () => {
+    setMenu({
+      ...menu,
+      show: true,
+      visible: false,
+    })
+  }
+
+  const handleCommentSubmit = (title: string, content: string) => {
+    setMenu({
+      ...menu,
+      visible: false,
+      show: false,
+    });
+    // onCommentSubmitProp
+    if (onCommentSubmit) onCommentSubmit(title, content);
+  }
+
   return (
     <div style={{ position: "relative" }} >
       <Slate editor={editor} initialValue={initValue} onChange={(newValue) => {
@@ -278,28 +309,9 @@ const SlateEditor: FC<SlateEditorProps> = ({
             <CommentInBlock
               text={menu.text}
               author={author}
-              onCancel={() => {
-                setMenu({
-                  ...menu,
-                  visible: true,
-                  show: true,
-                });
-              }}
-              onSubmit={(title, content) => {
-                // console.log({ title, content });
-                setMenu({
-                  ...menu,
-                  visible: false,
-                  show: false,
-                });
-              }}
-              onClick={() => {
-                setMenu({
-                  ...menu,
-                  show: true,
-                  visible: false,
-                })
-              }}
+              onCancel={handleCommentCancel}
+              onSubmit={handleCommentSubmit}
+              onClick={handleCommentClickBtn}
               icoClassName="cursor-pointer"
             />
           </div>
