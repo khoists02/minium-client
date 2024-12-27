@@ -41,6 +41,9 @@ $navbar-height: 57px;
         font-size: 13px;
         color: #6B6B6B;
         line-height: 20px;
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
     }
 
     .break {

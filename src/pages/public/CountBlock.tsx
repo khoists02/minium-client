@@ -16,10 +16,16 @@ export const CountBlock: FC<{
   post?: IPostResponse;
   account?: IUserResponse;
   reload?: () => void;
+  disabled?: boolean;
+  wrapperClass?: string;
+  inline?: boolean;
 }> = ({
   post,
   account,
   reload,
+  disabled = false,
+  inline,
+  wrapperClass,
 }) => {
     const [loading, setLoading] = useState(false);
     const [visible, setVisible] = useState(false);
@@ -38,6 +44,7 @@ export const CountBlock: FC<{
     }
 
     const handleLikeOrUnlike = useCallback(async () => {
+      if (disabled) return;
       if (loading) return; // prevent if API still loading.
       try {
         if (!visible) {
@@ -58,15 +65,14 @@ export const CountBlock: FC<{
     }, [visible, loading]);
 
     useEffect(() => {
-      checkVisibleLike();
-    }, [account, post]);
-
+      if (!disabled) checkVisibleLike();
+    }, [account, post, disabled]);
 
     return (
       <>
-        <div className="block-count">
+        <div className={`block-count ${wrapperClass}`} style={{ display: inline ? "inline" : "block" }}>
           <span className="text-muted mr-4 cursor-pointer">
-            <i className={`fa fa-heart-o  ${visible ? "text-danger" : ""}`} onClick={handleLikeOrUnlike} ></i>
+            <i className={`fa fa-heart-o  ${visible && !disabled ? "text-danger" : ""}`} onClick={handleLikeOrUnlike} ></i>
             {post?.countLikes > 0 && <span className="ml-1">{post?.countLikes}</span>}
           </span>
           <span className="text-muted cursor-pointer">

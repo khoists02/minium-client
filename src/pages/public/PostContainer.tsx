@@ -15,13 +15,14 @@ import { getPublicPosts } from "./ducks/operators";
 import { useNavigate } from "react-router";
 import { Avatar } from "../../components/Avatar";
 import axios from "axios";
+import { CountBlock } from "./CountBlock";
 
 const PostContainer: FC = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const { entities } = useAppSelector((state) => state.publicPost);
-
+    const { account } = useAppSelector((state) => state.auth);
     useEffect(() => {
         dispatch(getPublicPosts());
     }, []);
@@ -72,6 +73,8 @@ const PostContainer: FC = () => {
                                 <p className="description truncate-3-lines">{p.description}</p>
                                 <p className="mb-0 footer">
                                     <span>{format(new Date(p.updatedAt), "MMM, dd yyyy HH:mm")}</span>
+
+                                    <CountBlock inline wrapperClass="ml-2" disabled post={p} account={account} />
                                 </p>
                                 <p className="break"></p>
                             </div>

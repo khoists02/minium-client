@@ -14,7 +14,6 @@ import { useAppDispatch, useAppSelector } from "../../config/hook";
 import { getPublicPostsDetails } from "./ducks/operators";
 import Editor from "../../components/Editor/Editor";
 import { Descendant } from "slate";
-import { format } from "date-fns";
 import { CountBlock } from "./CountBlock";
 import { Avatar } from "../../components/Avatar";
 import axios from "axios";
@@ -101,7 +100,9 @@ const PostDetailsContainer: FC = () => {
                 title,
                 content,
             });
-            getAllComments();
+            setTimeout(() => {
+                getAllComments();
+            }, 1000);
         } catch (error) {
             console.log("Post comment error", error);
         }
