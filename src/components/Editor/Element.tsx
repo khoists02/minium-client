@@ -26,7 +26,7 @@ import { Description } from "./Elements/Description";
 interface ElementProps {
   attributes: any;
   children: React.ReactElement | React.ReactElement[];
-  element: CustomElement,
+  element: CustomElement;
   onSelect: (format: string) => void;
   readonly: boolean;
 }
@@ -40,78 +40,139 @@ export const Element: FC<ElementProps> = ({
 }) => {
   const editor = useSlate();
   const isEmpty = element.children[0]?.text === "";
-  const isCurrentBlockFocused = isBlockFocused(editor, element.type, element.id);
+  const isCurrentBlockFocused = isBlockFocused(
+    editor,
+    element.type,
+    element.id
+  );
   switch (element.type) {
     case "paragraph":
       return (
-        <WrapperElement onSelect={onSelect} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
+        <WrapperElement
+          onSelect={onSelect}
+          isEmpty={isEmpty}
+          id={element.id}
+          focused={isCurrentBlockFocused}
+        >
           <Paragraph
             isEmpty={isEmpty}
             readonly={readonly}
             element={element}
             children={children}
-            attributes={attributes} />
+            attributes={attributes}
+          />
         </WrapperElement>
-
       );
     case "quote":
       return (
-        <Quote isEmpty={isEmpty} readonly={readonly} element={element} children={children} attributes={attributes} />
+        <Quote
+          isEmpty={isEmpty}
+          readonly={readonly}
+          element={element}
+          children={children}
+          attributes={attributes}
+        />
       );
     case "image":
       return (
-        <Image onDelete={() => {
-          // Remove node.
-          const path = ReactEditor.findPath(editor, element);
-          // @ts-ignore
-          Transforms.removeNodes(editor, { at: path });
-        }}
+        <Image
+          onDelete={() => {
+            // Remove node.
+            const path = ReactEditor.findPath(editor, element);
+            // @ts-ignore
+            Transforms.removeNodes(editor, { at: path });
+          }}
           readonly={readonly}
           attributes={attributes}
           children={children}
           element={element}
-          focused={isCurrentBlockFocused} />
+          focused={isCurrentBlockFocused}
+        />
       );
     case "code-block":
       return (
-        <WrapperElement onSelect={onSelect} type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
-          {isCurrentBlockFocused && !readonly && <LanguageSelector lang={element.language} />}
-          <CodeBlock readonly={readonly} attributes={attributes} children={children} element={element} />
+        <WrapperElement
+          onSelect={onSelect}
+          type={element.type}
+          isEmpty={isEmpty}
+          id={element.id}
+          focused={isCurrentBlockFocused}
+        >
+          {isCurrentBlockFocused && !readonly && (
+            <LanguageSelector lang={element.language} />
+          )}
+          <CodeBlock
+            readonly={readonly}
+            attributes={attributes}
+            children={children}
+            element={element}
+          />
         </WrapperElement>
-
       );
     case "title":
       return (
-        <WrapperElement onSelect={onSelect} type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
-          <Title isEmpty={isEmpty} readonly={readonly} attributes={attributes} children={children} element={element} />
+        <WrapperElement
+          onSelect={onSelect}
+          type={element.type}
+          isEmpty={isEmpty}
+          id={element.id}
+          focused={isCurrentBlockFocused}
+        >
+          <Title
+            isEmpty={isEmpty}
+            readonly={readonly}
+            attributes={attributes}
+            children={children}
+            element={element}
+          />
         </WrapperElement>
-
       );
     case "description":
       return (
-        <WrapperElement onSelect={onSelect} type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
-          <Description isEmpty={isEmpty} readonly={readonly} attributes={attributes} children={children} element={element} />
+        <WrapperElement
+          onSelect={onSelect}
+          type={element.type}
+          isEmpty={isEmpty}
+          id={element.id}
+          focused={isCurrentBlockFocused}
+        >
+          <Description
+            isEmpty={isEmpty}
+            readonly={readonly}
+            attributes={attributes}
+            children={children}
+            element={element}
+          />
         </WrapperElement>
-
       );
     case "header":
       return (
-        <WrapperElement onSelect={onSelect} type={element.type} isEmpty={isEmpty} id={element.id} focused={isCurrentBlockFocused}>
-          <HeaderEl isEmpty={isEmpty} readonly={readonly} attributes={attributes} children={children} element={element} />
+        <WrapperElement
+          onSelect={onSelect}
+          type={element.type}
+          isEmpty={isEmpty}
+          id={element.id}
+          focused={isCurrentBlockFocused}
+        >
+          <HeaderEl
+            isEmpty={isEmpty}
+            readonly={readonly}
+            attributes={attributes}
+            children={children}
+            element={element}
+          />
         </WrapperElement>
-
       );
     case "break":
       return (
         <>
-          <div style={{ width: "100%", height: 1, background: "#000000" }}>
-
-          </div>
+          <div
+            style={{ width: "100%", height: 1, background: "#000000" }}
+          ></div>
           {children}
         </>
-
       );
     default:
       return <p {...attributes}>{children}</p>;
   }
-}
+};

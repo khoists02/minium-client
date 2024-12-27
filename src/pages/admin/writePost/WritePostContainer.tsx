@@ -16,62 +16,73 @@ import { v4 as uuidv4 } from "uuid";
 import { useAppSelector } from "../../../config/hook";
 
 const initValue = [
-    {
-        id: uuidv4(),
-        type: "title",
-        placeholder: "Title...",
-        children: [{
-            text: "",
-        }]
-    },
-    {
-        id: uuidv4(),
-        type: "paragraph",
-        placeholder: "Tell your story...",
-        children: [{
-            text: "",
-        }]
-    },
-
-]
+  {
+    id: uuidv4(),
+    type: "title",
+    placeholder: "Title...",
+    children: [
+      {
+        text: "",
+      },
+    ],
+  },
+  {
+    id: uuidv4(),
+    type: "paragraph",
+    placeholder: "Tell your story...",
+    children: [
+      {
+        text: "",
+      },
+    ],
+  },
+];
 
 const WritePostContainer: FC = () => {
-    const { account } = useAppSelector((state) => state.auth);
+  const { account } = useAppSelector((state) => state.auth);
 
-    const handleSavePost = async (content: any) => {
-        if (!content || content.length === 0) return;
-        let title = uuidv4();
-        const titleArr = content?.filter((x) => x.type === "title" || x.type === "paragraph");
-        if (titleArr?.length > 0) {
-            title = titleArr[0]?.children[0]?.text;
-        }
-        // FIlter content.
-        const final = content.filter((x) => x.type === "image" || x.type === "break" || (x.type !== "image" && x.children[0]?.text !== ""));
-        try {
-            await axios.post("/posts", {
-                title: title,
-                content: JSON.stringify(final)
-            })
-        } catch (error) {
-            console.log("Save post error !!!", error);
-        }
+  const handleSavePost = async (content: any) => {
+    if (!content || content.length === 0) return;
+    let title = uuidv4();
+    const titleArr = content?.filter(
+      (x) => x.type === "title" || x.type === "paragraph"
+    );
+    if (titleArr?.length > 0) {
+      title = titleArr[0]?.children[0]?.text;
     }
+    // FIlter content.
+    const final = content.filter(
+      (x) =>
+        x.type === "image" ||
+        x.type === "break" ||
+        (x.type !== "image" && x.children[0]?.text !== "")
+    );
+    try {
+      await axios.post("/posts", {
+        title: title,
+        content: JSON.stringify(final),
+      });
+    } catch (error) {
+      console.log("Save post error !!!", error);
+    }
+  };
 
-    return (
-        <div className="row">
-            <div className="col-md-12 pt-5">
-                <Editor
-                    initValue={initValue as any}
-                    author={{
-                        ...account,
-                        photoUrl: `${axios.defaults.baseURL.replace("/api", "")}${account?.photoUrl}`
-                    }}
-                    onSave={(value) => {
-                        handleSavePost(value)
-                    }} />
-            </div>
-        </div>
-    )
-}
+  return (
+    <div className="row">
+      <div className="col-md-12 pt-5">
+        <Editor
+          initValue={initValue as any}
+          author={{
+            ...account,
+            photoUrl: `${axios.defaults.baseURL.replace("/api", "")}${account?.photoUrl}`,
+          }}
+          onSave={(value) => {
+            handleSavePost(value);
+          }}
+        />
+      </div>
+    </div>
+  );
+};
 
 export default WritePostContainer;

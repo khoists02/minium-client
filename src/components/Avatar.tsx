@@ -13,7 +13,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export const Avatar: FC<{
   url: string;
-  className: string,
+  className: string;
   size: string;
   onClick?: () => void;
   description?: string;
@@ -26,46 +26,61 @@ export const Avatar: FC<{
   onClick,
   allowTrigger = true,
 }) => {
-    // Custom trigger component with ref forwarding
-    const TriggerDiv = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-      ({ children, ...props }, ref) => (
-        <div ref={ref} {...props} style={{ display: "inline-block", cursor: "pointer" }}>
-          {children}
-        </div>
-      )
-    );
-    return allowTrigger ? <>
+  // Custom trigger component with ref forwarding
+  const TriggerDiv = forwardRef<
+    HTMLDivElement,
+    React.HTMLAttributes<HTMLDivElement>
+  >(({ children, ...props }, ref) => (
+    <div
+      ref={ref}
+      {...props}
+      style={{ display: "inline-block", cursor: "pointer" }}
+    >
+      {children}
+    </div>
+  ));
+  return allowTrigger ? (
+    <>
       <OverlayTrigger
         trigger={["click"]}
         rootClose
         placement="auto" // Position of the tooltip (top, bottom, left, right)
-        overlay={<Tooltip className="tooltip-profile" id="button-tooltip">
-          <div className="d-flex w-100">
-            <div className="avatar xs ">
-              <img src={url} alt="Profile Image" />
+        overlay={
+          <Tooltip className="tooltip-profile" id="button-tooltip">
+            <div className="d-flex w-100">
+              <div className="avatar xs ">
+                <img src={url} alt="Profile Image" />
+              </div>
+              <span className="ml-3 mt-2">Follow</span>
             </div>
-            <span className="ml-3 mt-2">Follow</span>
-          </div>
-          <div className="w-100 text-muted truncate-6-lines description mt-3">
-            <small>{description}</small>
-          </div>
-        </Tooltip>}
+            <div className="w-100 text-muted truncate-6-lines description mt-3">
+              <small>{description}</small>
+            </div>
+          </Tooltip>
+        }
       >
         <TriggerDiv>
-          <div onClick={(e) => {
-            e.preventDefault();
-            if (onClick) onClick();
-          }} className={`avatar ${onClick ? "cursor-pointer" : ""} ${size} ${className}`}>
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              if (onClick) onClick();
+            }}
+            className={`avatar ${onClick ? "cursor-pointer" : ""} ${size} ${className}`}
+          >
             <img src={url} alt="Profile Image" />
           </div>
         </TriggerDiv>
-
       </OverlayTrigger>
-
-    </> : <div onClick={(e) => {
-      e.preventDefault();
-      if (onClick) onClick();
-    }} className={`avatar ${onClick ? "cursor-pointer" : ""} ${size} ${className}`}>
+    </>
+  ) : (
+    <div
+      onClick={(e) => {
+        e.preventDefault();
+        if (onClick) onClick();
+      }}
+      className={`avatar ${onClick ? "cursor-pointer" : ""} ${size} ${className}`}
+    >
       <img src={url} alt="Profile Image" />
     </div>
-  } 
+  );
+};

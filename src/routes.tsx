@@ -20,20 +20,29 @@ import MyPostDetailsContainer from "./pages/admin/writePost/MyPostDetailsContain
 import Profile from "./pages/admin/auth/Profile";
 
 const AppRouter: FC<{ isAuthenticated: boolean }> = ({ isAuthenticated }) => {
-    return <Routes>
-        <Route path="/" element={<Navigate to="/Posts" />}></Route>
-        <Route path="/Posts" element={<PostContainer />}></Route>
-        <Route path="/Posts/:postId" element={<PostDetailsContainer />}></Route>
-        <Route path="/Register" element={<RegisterContainer />}></Route>
-        {!isAuthenticated && <Route path="/Login" element={<LoginContainer />}></Route>}
-        <Route path="*" element={<span>Not Found</span>}></Route>
-        {isAuthenticated && <>
-            <Route path="/WritePost" element={<WritePostContainer />}></Route>
-            <Route path="/Profile" element={<Profile />}></Route>
-            <Route path="/MyPost" element={<MyPostContainer />}></Route>
-            <Route path="/MyPost/:postId/Edit" element={<MyPostDetailsContainer />}></Route>
-        </>}
+  return (
+    <Routes>
+      <Route path="/" element={<Navigate to="/Posts" />}></Route>
+      <Route path="/Posts" element={<PostContainer />}></Route>
+      <Route path="/Posts/:postId" element={<PostDetailsContainer />}></Route>
+      <Route path="/Register" element={<RegisterContainer />}></Route>
+      {!isAuthenticated && (
+        <Route path="/Login" element={<LoginContainer />}></Route>
+      )}
+      <Route path="*" element={<span>Not Found</span>}></Route>
+      {isAuthenticated && (
+        <>
+          <Route path="/WritePost" element={<WritePostContainer />}></Route>
+          <Route path="/Profile" element={<Profile />}></Route>
+          <Route path="/MyPost" element={<MyPostContainer />}></Route>
+          <Route
+            path="/MyPost/:postId/Edit"
+            element={<MyPostDetailsContainer />}
+          ></Route>
+        </>
+      )}
     </Routes>
-}
+  );
+};
 
 export { AppRouter };

@@ -13,21 +13,23 @@ import { ILoginForm, LoginForm } from "./LoginForm";
 import axios from "axios";
 
 const LoginContainer: React.FC = () => {
-    const handleLogin = async (data: ILoginForm) => {
-        try {
-            await axios.post("/auth/login", data);
-            window.location.href = "/";
-        } catch (error) {
-            console.log("Login Error", error);
-        }
+  const handleLogin = async (data: ILoginForm) => {
+    try {
+      await axios.post("/auth/login", data);
+      window.location.href = "/";
+    } catch (error) {
+      console.log("Login Error", error);
     }
-    return (
-        <div className="form-container flex-center">
-            <LoginForm onSubmit={(data) => {
-                handleLogin(data);
-            }} />
-        </div>
-    );
+  };
+  return (
+    <div className="form-container flex-center">
+      <LoginForm
+        onSubmit={(data) => {
+          handleLogin(data);
+        }}
+      />
+    </div>
+  );
 };
 
 export default LoginContainer;

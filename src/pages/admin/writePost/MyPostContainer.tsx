@@ -26,30 +26,25 @@ const MyPostContainer: FC = () => {
     try {
       await axios.delete("/posts/" + row.id);
       getMyPost();
-    } catch (error) {
-
-    }
+    } catch (error) {}
   };
 
   const getMyPost = async () => {
     try {
       const rs = await axios.get("/myposts");
       setPosts(rs.data?.content);
-    } catch (error) {
-
-    }
-  }
+    } catch (error) {}
+  };
 
   useEffect(() => {
     getMyPost();
-  }, [])
-
+  }, []);
 
   const columns = [
     {
       id: "title",
       Header: "Title",
-      accessor: "title"
+      accessor: "title",
     },
     {
       Header: "",
@@ -57,18 +52,28 @@ const MyPostContainer: FC = () => {
       style: { minWidth: "80px" }, // set width for this column
       Cell: ({ row }: any) => (
         <div className="text-right">
-          <i className="fa fa-pencil cursor-pointer" aria-hidden="true" onClick={() => handleEdit(row.original)} />
-          <i className="fa fa-trash ml-2 text-danger cursor-pointer" aria-hidden="true" onClick={() => handleDelete(row.original)} />
+          <i
+            className="fa fa-pencil cursor-pointer"
+            aria-hidden="true"
+            onClick={() => handleEdit(row.original)}
+          />
+          <i
+            className="fa fa-trash ml-2 text-danger cursor-pointer"
+            aria-hidden="true"
+            onClick={() => handleDelete(row.original)}
+          />
         </div>
       ),
     },
-  ]
+  ];
 
-  return <div className="row">
-    <div className="col-lg-12">
-      <TableComponent columns={columns} data={posts} />
+  return (
+    <div className="row">
+      <div className="col-lg-12">
+        <TableComponent columns={columns} data={posts} />
+      </div>
     </div>
-  </div>
-}
+  );
+};
 
 export default MyPostContainer;

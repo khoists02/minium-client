@@ -20,7 +20,13 @@ interface ToolbarButtonProps {
   isLeaf?: boolean;
 }
 
-const ToolbarButton: React.FC<ToolbarButtonProps> = ({ format, icon, className, onClick, isLeaf = false }) => {
+const ToolbarButton: React.FC<ToolbarButtonProps> = ({
+  format,
+  icon,
+  className,
+  onClick,
+  isLeaf = false,
+}) => {
   const editor = useSlate();
 
   return (

@@ -8,17 +8,16 @@
  * from LKG.  Access to the source code contained herein is hereby forbidden to anyone except current LKG employees, managers or contractors who have executed
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
-import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
+import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import publicPostReducer from "../pages/public/ducks/slice";
 import authReducer from "../pages/admin/auth/ducks/slices";
 
 export const store = configureStore({
-    reducer: {
-        publicPost: publicPostReducer,
-        auth: authReducer,
-    },
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(), // Add custom middleware if needed
+  reducer: {
+    publicPost: publicPostReducer,
+    auth: authReducer,
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(), // Add custom middleware if needed
 });
 
 // Infer RootState and AppDispatch types

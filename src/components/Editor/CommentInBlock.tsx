@@ -43,48 +43,74 @@ export const CommentInBlock: FC<CommentInBlockProps> = ({
   const handleSubmit = () => {
     setShow(false);
     if (onSubmit) onSubmit(text, content);
-  }
+  };
 
   const handleCancel = () => {
     setShow(false);
     if (onCancel) onCancel();
-  }
+  };
 
   const renderTooltip = (props: any) => (
-    <Tooltip onClick={(e) => e.stopPropagation()} id="button-tooltip" {...props} className="comment-tooltip">
+    <Tooltip
+      onClick={(e) => e.stopPropagation()}
+      id="button-tooltip"
+      {...props}
+      className="comment-tooltip"
+    >
       <div className="comment-menu">
         <div className="comment-menu__header mb-2 d-flex">
           <Avatar url={author?.photoUrl} className={""} size={"xxs"} />
           <span className="ml-3">
             <p className="text-muted mb-1">{author?.name}</p>
-            <p className="text-muted truncate-3-lines mb-0">{author?.description}</p>
+            <p className="text-muted truncate-3-lines mb-0">
+              {author?.description}
+            </p>
           </span>
         </div>
 
         <div className="comment-menu__textarea mb-2">
-          <textarea rows={3} onChange={(e) => {
-            setContent(e.target.value)
-          }} style={{ fontSize: 12 }} className="form-control" name="" id=""></textarea>
+          <textarea
+            rows={3}
+            onChange={(e) => {
+              setContent(e.target.value);
+            }}
+            style={{ fontSize: 12 }}
+            className="form-control"
+            name=""
+            id=""
+          ></textarea>
         </div>
 
         <div className="comment-menu__button">
-          <button className="btn btn-light" onClick={handleCancel}>Cancel</button>
-          <button onClick={handleSubmit} disabled={!content} className="btn btn-success">Save</button>
+          <button className="btn btn-light" onClick={handleCancel}>
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={!content}
+            className="btn btn-success"
+          >
+            Save
+          </button>
         </div>
-
       </div>
     </Tooltip>
   );
 
-  return <>
-    <OverlayTrigger
-      trigger={["click"]}
-      show={show}
-      placement="auto" // Position of the tooltip: top, right, bottom, left
-      overlay={renderTooltip} // Tooltip content
-    >
-      <i
-        onClick={handleClick} contentEditable={false} className={`fa fa-lock ${icoClassName}`} />
-    </OverlayTrigger>
-  </>
-}
+  return (
+    <>
+      <OverlayTrigger
+        trigger={["click"]}
+        show={show}
+        placement="auto" // Position of the tooltip: top, right, bottom, left
+        overlay={renderTooltip} // Tooltip content
+      >
+        <i
+          onClick={handleClick}
+          contentEditable={false}
+          className={`fa fa-lock ${icoClassName}`}
+        />
+      </OverlayTrigger>
+    </>
+  );
+};

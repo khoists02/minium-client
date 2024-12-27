@@ -14,8 +14,8 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import setupAxiosInterceptors from "./config/axios-interceptor";
 import axios from "axios";
-import { Provider } from 'react-redux';
-import { store } from './config/store';
+import { Provider } from "react-redux";
+import { store } from "./config/store";
 import "./style.scss";
 
 setupAxiosInterceptors(store);
@@ -29,6 +29,5 @@ createRoot(document.getElementById("root")!).render(
         <App />
       </BrowserRouter>
     </Provider>
-
-  </StrictMode>,
+  </StrictMode>
 );

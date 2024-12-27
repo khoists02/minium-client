@@ -8,8 +8,8 @@
  * from LKG.  Access to the source code contained herein is hereby forbidden to anyone except current LKG employees, managers or contractors who have executed
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
-import React, { FC, useCallback, useEffect, useState } from "react"
-import { IPostResponse, IUserResponse } from "../../types/general"
+import React, { FC, useCallback, useEffect, useState } from "react";
+import { IPostResponse, IUserResponse } from "../../types/general";
 import axios from "axios";
 
 export const CountBlock: FC<{

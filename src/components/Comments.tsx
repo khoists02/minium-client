@@ -34,7 +34,7 @@ export const Comments: FC<CommentsProps> = ({
       color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
-  }
+  };
 
   const getSortAuthor = (name: string) => {
     if (!name) return "A";
@@ -43,56 +43,102 @@ export const Comments: FC<CommentsProps> = ({
     let letter = splitObject[0][0].toUpperCase();
 
     if (splitObject.length > 1) {
-      letter = `${letter}${splitObject[1][0].toUpperCase()}`
+      letter = `${letter}${splitObject[1][0].toUpperCase()}`;
     }
     return letter;
-  }
+  };
 
   const sortAuthor = (user: any) => {
-    return !user?.photoUrl ? <span className="author btn-profile size-xs mr-1" style={{ background: getRandomColor() }}>
-      {getSortAuthor(user?.name)}
-    </span> : (
-      <Avatar description={user.description} size="xxs" url={user.photoUrl} className="mr-2 mb-3" />
-    )
-  }
+    return !user?.photoUrl ? (
+      <span
+        className="author btn-profile size-xs mr-1"
+        style={{ background: getRandomColor() }}
+      >
+        {getSortAuthor(user?.name)}
+      </span>
+    ) : (
+      <Avatar
+        description={user.description}
+        size="xxs"
+        url={user.photoUrl}
+        className="mr-2 mb-3"
+      />
+    );
+  };
 
   const deleteComment = async (commentId: string) => {
     try {
       await axios.delete(`/posts/${postId}/comments/${commentId}`);
       fetching();
-    } catch (error) {
-    }
-  }
+    } catch (error) {}
+  };
 
-  return <div className="comments mb-5">
-    <div className="comments-box mb-5">
-      <h4 className="mb-3">Responses {comments?.length > 0 ? <span>({comments.length})</span> : <span></span>}</h4>
+  return (
+    <div className="comments mb-5">
+      <div className="comments-box mb-5">
+        <h4 className="mb-3">
+          Responses{" "}
+          {comments?.length > 0 ? (
+            <span>({comments.length})</span>
+          ) : (
+            <span></span>
+          )}
+        </h4>
 
-      <div className="comments__area" onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}>
-        {focused && <span>{sortAuthor(author)}</span>}
-        <textarea placeholder="Typing..." className="form-control" rows={focused ? 3 : 1} name="" id=""></textarea>
-        <div className={`d-flex buttons ${!focused ? "mt-0" : ""}`}>
-          {focused && <button className="btn btn-light mr-2" onClick={() => setFocused(false)}>Cancel</button>}
-          <button className="btn btn-success">Response</button>
+        <div
+          className="comments__area"
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+        >
+          {focused && <span>{sortAuthor(author)}</span>}
+          <textarea
+            placeholder="Typing..."
+            className="form-control"
+            rows={focused ? 3 : 1}
+            name=""
+            id=""
+          ></textarea>
+          <div className={`d-flex buttons ${!focused ? "mt-0" : ""}`}>
+            {focused && (
+              <button
+                className="btn btn-light mr-2"
+                onClick={() => setFocused(false)}
+              >
+                Cancel
+              </button>
+            )}
+            <button className="btn btn-success">Response</button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div className="comments-list">
-      {comments.map((cmt) => {
-        return <div className="comments__item pb-2">
-          <div className="mb2">
-            <span>{sortAuthor({
-              ...cmt?.author,
-              photoUrl: `${axios.defaults.baseURL.replace("/api", "")}${cmt?.author?.photoUrl}`
-            })}</span>
-            <span>{cmt?.author?.name}</span>
-          </div>
-          {cmt.title && <p className="title">{cmt.title}</p>}
-          <p className="content mb-0">{cmt.content}</p>
-          {author?.id === cmt?.author?.id && <small onClick={() => deleteComment(cmt.id)} className="text-danger pb-2 cursor-pointer">Delete</small>}
-        </div>
-      })}
+      <div className="comments-list">
+        {comments.map((cmt) => {
+          return (
+            <div className="comments__item pb-2">
+              <div className="mb2">
+                <span>
+                  {sortAuthor({
+                    ...cmt?.author,
+                    photoUrl: `${axios.defaults.baseURL.replace("/api", "")}${cmt?.author?.photoUrl}`,
+                  })}
+                </span>
+                <span>{cmt?.author?.name}</span>
+              </div>
+              {cmt.title && <p className="title">{cmt.title}</p>}
+              <p className="content mb-0">{cmt.content}</p>
+              {author?.id === cmt?.author?.id && (
+                <small
+                  onClick={() => deleteComment(cmt.id)}
+                  className="text-danger pb-2 cursor-pointer"
+                >
+                  Delete
+                </small>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
-  </div>
-}
+  );
+};

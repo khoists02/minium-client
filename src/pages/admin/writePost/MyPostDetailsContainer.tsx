@@ -27,10 +27,9 @@ const MyPostDetailsContainer: FC = () => {
   useEffect(() => {
     if (post) {
       const beforeRender: CustomElement[] = JSON.parse(post?.content);
-      setEditorContent(beforeRender)
-
+      setEditorContent(beforeRender);
     }
-  }, [post])
+  }, [post]);
 
   useEffect(() => {
     if (postId) {
@@ -43,7 +42,9 @@ const MyPostDetailsContainer: FC = () => {
     if (!content || content.length === 0) return;
     let title = uuidv4();
     let description = "";
-    const titleArr = content?.filter((x) => x.type === "title" || x.type === "paragraph");
+    const titleArr = content?.filter(
+      (x) => x.type === "title" || x.type === "paragraph"
+    );
     const descriptionArr = content?.filter((x) => x.type === "description");
     if (titleArr?.length > 0) {
       title = titleArr[0]?.children[0]?.text;
@@ -53,34 +54,44 @@ const MyPostDetailsContainer: FC = () => {
       description = descriptionArr[0]?.children[0]?.text;
     }
     // FIlter content.
-    const final = content.filter((x) => x.type === "image" || x.type === "break" || (x.type !== "image" && x.children[0]?.text !== ""));
+    const final = content.filter(
+      (x) =>
+        x.type === "image" ||
+        x.type === "break" ||
+        (x.type !== "image" && x.children[0]?.text !== "")
+    );
     try {
       await axios.put(`/posts/${post.id}`, {
         title: post.title,
         content: JSON.stringify(final),
         description: description,
-      })
+      });
     } catch (error) {
       console.log("Updated post error !!!", error);
     }
-  }
+  };
 
-  const showEditor = useMemo(() => post && editorContent.length > 0, [post, editorContent]);
+  const showEditor = useMemo(
+    () => post && editorContent.length > 0,
+    [post, editorContent]
+  );
 
   return (
     <div className="pb-5">
-      {showEditor && <Editor
-        author={{
-          ...post?.user,
-          photoUrl: `${axios.defaults.baseURL.replace("/api", "")}${post?.user?.photoUrl}`
-        }}
-        initValue={editorContent}
-        onSave={(ct) => {
-          handleSavePost(ct)
-        }}
-      />}
+      {showEditor && (
+        <Editor
+          author={{
+            ...post?.user,
+            photoUrl: `${axios.defaults.baseURL.replace("/api", "")}${post?.user?.photoUrl}`,
+          }}
+          initValue={editorContent}
+          onSave={(ct) => {
+            handleSavePost(ct);
+          }}
+        />
+      )}
     </div>
-  )
-}
+  );
+};
 
 export default MyPostDetailsContainer;

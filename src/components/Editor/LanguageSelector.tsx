@@ -13,9 +13,7 @@ import { Editor, Transforms } from "slate";
 import { useSlateStatic } from "slate-react";
 
 // Language Selector Component
-export const LanguageSelector = ({
-  lang
-}) => {
+export const LanguageSelector = ({ lang }) => {
   const editor = useSlateStatic();
   const handleChange = (event) => {
     const language = event.target.value;

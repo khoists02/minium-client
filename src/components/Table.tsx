@@ -21,10 +21,11 @@ interface TableComponentProps {
 
 const TableComponent: React.FC<TableComponentProps> = ({ columns, data }) => {
   // Use the useTable hook from react-table
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
-    columns,
-    data,
-  });
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable({
+      columns,
+      data,
+    });
 
   return (
     <Table {...getTableProps()} bordered responsive>

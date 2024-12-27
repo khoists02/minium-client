@@ -21,116 +21,132 @@ import { ICommentResponse } from "../../types/general";
 import { Comments } from "../../components/Comments";
 
 const PostDetailsContainer: FC = () => {
-    const dispatch = useAppDispatch();
-    const { postId } = useParams<{ postId: string }>();
-    const { post } = useAppSelector((state) => state.publicPost);
-    const { account } = useAppSelector((state) => state.auth);
-    const [editorContent, setEditorContent] = useState<Descendant[]>([]);
-    const [comments, setComments] = useState<ICommentResponse[]>([]);
+  const dispatch = useAppDispatch();
+  const { postId } = useParams<{ postId: string }>();
+  const { post } = useAppSelector((state) => state.publicPost);
+  const { account } = useAppSelector((state) => state.auth);
+  const [editorContent, setEditorContent] = useState<Descendant[]>([]);
+  const [comments, setComments] = useState<ICommentResponse[]>([]);
 
-    useEffect(() => {
-        if (post) {
-            setEditorContent(JSON.parse(post?.content));
-        }
-    }, [post]);
-
-    const getAllComments = async () => {
-        try {
-            const rs = await axios.get(`/posts/${postId}/comments`, {
-                params: {
-                    limit: 10000
-                }
-            });
-            setComments(rs.data?.content);
-        } catch (error) {
-
-        }
+  useEffect(() => {
+    if (post) {
+      setEditorContent(JSON.parse(post?.content));
     }
+  }, [post]);
 
-    useEffect(() => {
-        if (postId) {
-            getAllComments();
-            dispatch(getPublicPostsDetails(postId));
-        }
-    }, [postId]);
+  const getAllComments = async () => {
+    try {
+      const rs = await axios.get(`/posts/${postId}/comments`, {
+        params: {
+          limit: 10000,
+        },
+      });
+      setComments(rs.data?.content);
+    } catch (error) {}
+  };
 
-    const reload = () => {
-        dispatch(getPublicPostsDetails(postId));
+  useEffect(() => {
+    if (postId) {
+      getAllComments();
+      dispatch(getPublicPostsDetails(postId));
     }
+  }, [postId]);
 
-    const showEditor = useMemo(() => post && editorContent.length > 0, [post, editorContent]);
+  const reload = () => {
+    dispatch(getPublicPostsDetails(postId));
+  };
 
-    const getSortAuthor = (name: string) => {
-        if (!name) return "A";
-        const splitObject = name.split(" ");
+  const showEditor = useMemo(
+    () => post && editorContent.length > 0,
+    [post, editorContent]
+  );
 
-        let letter = splitObject[0][0].toUpperCase();
+  const getSortAuthor = (name: string) => {
+    if (!name) return "A";
+    const splitObject = name.split(" ");
 
-        if (splitObject.length > 1) {
-            letter = `${letter}${splitObject[1][0].toUpperCase()}`
-        }
-        return letter;
+    let letter = splitObject[0][0].toUpperCase();
+
+    if (splitObject.length > 1) {
+      letter = `${letter}${splitObject[1][0].toUpperCase()}`;
     }
+    return letter;
+  };
 
-    const getRandomColor = (): string => {
-        const letters = "0123456789ABCDEF";
-        let color = "#";
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
+  const getRandomColor = (): string => {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
     }
+    return color;
+  };
 
-    const sortAuthor = (user: any) => {
-        return !user?.photoUrl ? <span className="author btn-profile size-xs mr-1" style={{ background: getRandomColor() }}>
-            {getSortAuthor(user?.name)}
-        </span> : (
-            <Avatar description={user.description} size="xxs" url={`${axios.defaults.baseURL.replace("/api", "")}${user.photoUrl}`} className="mr-2 mb-4" />
-        )
+  const sortAuthor = (user: any) => {
+    return !user?.photoUrl ? (
+      <span
+        className="author btn-profile size-xs mr-1"
+        style={{ background: getRandomColor() }}
+      >
+        {getSortAuthor(user?.name)}
+      </span>
+    ) : (
+      <Avatar
+        description={user.description}
+        size="xxs"
+        url={`${axios.defaults.baseURL.replace("/api", "")}${user.photoUrl}`}
+        className="mr-2 mb-4"
+      />
+    );
+  };
+
+  /**
+   * Handle submit comment in row for editor
+   * @param title
+   * @param content
+   */
+  const handleSubmitComment = async (title: string, content: string) => {
+    try {
+      await axios.post(`/posts/${postId}/comments`, {
+        title,
+        content,
+      });
+      setTimeout(() => {
+        getAllComments();
+      }, 1000);
+    } catch (error) {
+      console.log("Post comment error", error);
     }
+  };
 
-    /**
-     * Handle submit comment in row for editor
-     * @param title 
-     * @param content 
-     */
-    const handleSubmitComment = async (title: string, content: string) => {
-        try {
-            await axios.post(`/posts/${postId}/comments`, {
-                title,
-                content,
-            });
-            setTimeout(() => {
-                getAllComments();
-            }, 1000);
-        } catch (error) {
-            console.log("Post comment error", error);
-        }
-    }
+  return (
+    <>
+      {sortAuthor(post?.user)}
+      <div className="border-top border-bottom mb-5 pt-2 pb-2 d-flex flex-center-between">
+        <CountBlock reload={reload} account={account} post={post} />
+        <div className="right">
+          <i className="fa fa-share"></i>
+        </div>
+      </div>
+      {showEditor && (
+        <Editor
+          readonly
+          author={account}
+          initValue={editorContent}
+          onSave={() => {}}
+          onCommentSubmit={handleSubmitComment}
+        />
+      )}
+      <div className="mt-5"></div>
 
-    return (
-        <>
-            {sortAuthor(post?.user)}
-            <div className="border-top border-bottom mb-5 pt-2 pb-2 d-flex flex-center-between">
-                <CountBlock reload={reload} account={account} post={post} />
-                <div className="right">
-                    <i className="fa fa-share"></i>
-                </div>
-            </div>
-            {showEditor &&
-                <Editor
-                    readonly
-                    author={account}
-                    initValue={editorContent}
-                    onSave={() => { }}
-                    onCommentSubmit={handleSubmitComment}
-                />
-            }
-            <div className="mt-5"></div>
-
-            <Comments postId={postId} fetching={getAllComments} author={account} comments={comments} />
-        </>
-    )
-}
+      <Comments
+        postId={postId}
+        fetching={getAllComments}
+        author={account}
+        comments={comments}
+      />
+    </>
+  );
+};
 
 export default PostDetailsContainer;

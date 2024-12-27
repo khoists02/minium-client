@@ -32,7 +32,7 @@ export const Leaf: FC<LeafProps> = ({
   }
 
   if (leaf.highlight) {
-    children = <span style={{ backgroundColor: "#92d892", fontWeight: 500, color: "#ffffff" }}>{children}</span>;
+    children = <span style={{ backgroundColor: "#4ec94e", fontWeight: 500, color: "#333333" }}>{children}</span>;
   }
 
   if (leaf.link) {

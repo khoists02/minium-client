@@ -28,10 +28,10 @@ export const isMarkActive = (editor: Editor, mark: string) => {
 
 /**
  * return value to present focussed block.
- * @param editor 
- * @param blockType 
- * @param id 
- * @returns 
+ * @param editor
+ * @param blockType
+ * @param id
+ * @returns
  */
 export const isBlockFocused = (editor, blockType, id) => {
   if (!editor.selection) return false; // No selection means no block is focused
