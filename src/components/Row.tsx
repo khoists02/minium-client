@@ -11,15 +11,10 @@
 import React, { FC } from "react";
 
 interface IRow {
-    isTitle?: boolean;
-    content?: string;
+  isTitle?: boolean;
+  content?: string;
 }
 
-export const Row: FC<IRow> = ({
-    isTitle,
-    content,
-}) => {
-    return <>
-
-    </>
-}
+export const Row: FC<IRow> = ({ isTitle, content }) => {
+  return <></>;
+};

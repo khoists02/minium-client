@@ -16,11 +16,7 @@ interface LeafProps {
   leaf: any;
 }
 
-export const Leaf: FC<LeafProps> = ({
-  attributes,
-  children,
-  leaf,
-}) => {
+export const Leaf: FC<LeafProps> = ({ attributes, children, leaf }) => {
   if (leaf.bold) {
     children = <strong>{children}</strong>;
   }
@@ -32,11 +28,24 @@ export const Leaf: FC<LeafProps> = ({
   }
 
   if (leaf.highlight) {
-    children = <span style={{ backgroundColor: "#4ec94e", fontWeight: 500, color: "#333333" }}>{children}</span>;
+    children = (
+      <span
+        style={{
+          backgroundColor: "#4ec94e",
+          color: "#333333",
+        }}
+      >
+        {children}
+      </span>
+    );
   }
 
   if (leaf.link) {
-    children = <a className="link" href={leaf.link}>{children}</a>;
+    children = (
+      <a className="link" href={leaf.link}>
+        {children}
+      </a>
+    );
   }
   return <span {...attributes}>{children}</span>;
 };
