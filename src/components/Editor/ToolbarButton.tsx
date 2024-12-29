@@ -11,9 +11,10 @@
 import React from "react";
 import { useSlate } from "slate-react";
 import { Transforms, Text } from "slate";
+import { ElementType } from "../../constants";
 
 interface ToolbarButtonProps {
-  format: string;
+  format: ElementType;
   icon: React.ReactElement | React.ReactElement[] | string;
   className?: string;
   onClick?: () => void;
@@ -38,7 +39,7 @@ const ToolbarButton: React.FC<ToolbarButtonProps> = ({
         Transforms.setNodes(
           editor,
           { [format]: true },
-          { match: (n) => Text.isText(n), split: true }
+          { match: (n) => Text.isText(n), split: true },
         );
       }}
     >

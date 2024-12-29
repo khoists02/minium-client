@@ -10,6 +10,7 @@
  */
 import React, { FC, useMemo } from "react";
 import Toolbar from "../Toolbar";
+import { ElementType } from "../../../constants";
 
 interface WrapperElementProps {
   children: React.ReactElement | React.ReactElement[];
@@ -28,6 +29,17 @@ export const WrapperElement: FC<WrapperElementProps> = ({
   type = "",
   onSelect,
 }) => {
+  const toolbarElements = useMemo(() => {
+    return [
+      ElementType.IMAGE,
+      ElementType.CODE,
+      ElementType.QUOTE,
+      ElementType.HEADER,
+      ElementType.DESCRIPTION,
+      ElementType.BREAK,
+    ];
+  }, []);
+
   const isShowAddSidebar = useMemo(
     () => focused && isEmpty,
     [focused, isEmpty],
@@ -35,7 +47,11 @@ export const WrapperElement: FC<WrapperElementProps> = ({
   return (
     <div data-id={id} data-focused={focused} className="editor-item">
       {isShowAddSidebar && (
-        <Toolbar onSelect={onSelect} wrapperClass={`add-new ${type}`} />
+        <Toolbar
+          toolbarElements={toolbarElements}
+          onSelect={onSelect}
+          wrapperClass={`add-new ${type}`}
+        />
       )}
       {children}
     </div>

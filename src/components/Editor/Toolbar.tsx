@@ -11,13 +11,19 @@
 import React, { FC, useEffect, useRef, useState } from "react";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import ToolbarButton from "./ToolbarButton";
+import { ElementType } from "../../constants";
 
 interface ToolbarProps {
   wrapperClass?: string;
-  onSelect: (format: string) => void;
+  onSelect: (format: ElementType) => void;
+  toolbarElements: ElementType[];
 }
 
-const Toolbar: FC<ToolbarProps> = ({ onSelect, wrapperClass = "" }) => {
+const Toolbar: FC<ToolbarProps> = ({
+  toolbarElements,
+  onSelect,
+  wrapperClass = "",
+}) => {
   const [show, setShow] = useState(false);
   const tooltipTarget = useRef<HTMLDivElement>(null);
 
@@ -28,7 +34,7 @@ const Toolbar: FC<ToolbarProps> = ({ onSelect, wrapperClass = "" }) => {
     setShow(!show);
   };
 
-  const handleSelect = (fmt: string) => {
+  const handleSelect = (fmt: ElementType) => {
     onSelect(fmt);
     setShow(false);
   };
@@ -52,44 +58,46 @@ const Toolbar: FC<ToolbarProps> = ({ onSelect, wrapperClass = "" }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [show]);
 
+  const renderIcon = (type: ElementType) => {
+    let icoClass = "";
+
+    switch (type) {
+      case ElementType.IMAGE:
+        icoClass = "image";
+        break;
+      case ElementType.CODE:
+        icoClass = "code";
+        break;
+      case ElementType.QUOTE:
+        icoClass = "quote-right";
+        break;
+      case ElementType.HEADER:
+        icoClass = "header";
+        break;
+      case ElementType.DESCRIPTION:
+        icoClass = "text-width";
+        break;
+      case ElementType.BREAK:
+        icoClass = "scissors";
+        break;
+      default:
+        break;
+    }
+    return <i className={`fa fa-${icoClass}`} />;
+  };
+
   const renderTooltip = (props: any) => (
     <Tooltip id="button-tooltip" {...props} className="toolbar-tooltip">
       <div>
-        <ToolbarButton
-          onClick={() => handleSelect("image")}
-          icon={<i className="fa fa-image " />}
-          format="image"
-        />
-        <ToolbarButton
-          onClick={() => handleSelect("code-block")}
-          className=""
-          icon={<i className="fa fa-code " />}
-          format="code-block"
-        />
-        <ToolbarButton
-          onClick={() => handleSelect("quote")}
-          className=""
-          icon={<i className="fa fa-quote-right " />}
-          format="quote"
-        />
-        <ToolbarButton
-          onClick={() => handleSelect("header")}
-          className=""
-          icon={<i className="fa fa-header " />}
-          format="header"
-        />
-        <ToolbarButton
-          onClick={() => handleSelect("description")}
-          className=""
-          icon={<i className="fa fa-text-width " />}
-          format="description"
-        />
-        <ToolbarButton
-          onClick={() => handleSelect("break")}
-          className=""
-          icon={<i className="fa fa-scissors " />}
-          format="break"
-        />
+        {toolbarElements.map((el) => {
+          return (
+            <ToolbarButton
+              onClick={() => handleSelect(el)}
+              icon={renderIcon(el)}
+              format={el}
+            />
+          );
+        })}
       </div>
     </Tooltip>
   );
