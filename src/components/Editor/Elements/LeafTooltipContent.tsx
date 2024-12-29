@@ -12,17 +12,19 @@ import React, { FC, useMemo } from "react";
 
 interface LeafTooltipContentProps {
   handleFormatClick: (fmt: string) => void;
+  leafTypes: string[];
 }
 
 export const LeafTooltipContent: FC<LeafTooltipContentProps> = ({
+  leafTypes,
   handleFormatClick,
 }) => {
-  const leafTypes = useMemo(() => {
-    return ["bold", "italic", "link"];
-  }, []);
+  const types = useMemo(() => {
+    return leafTypes;
+  }, [leafTypes]);
   return (
     <>
-      {leafTypes.map((l) => {
+      {types.map((l) => {
         return (
           <i
             className={`fa fa-${l} cursor-pointer`}

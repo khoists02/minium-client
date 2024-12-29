@@ -295,7 +295,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
   };
 
   // show menu tooltip content.
-  const handleCommentClickBtn = () => {
+  const handleCommentClick = () => {
     setMenu({
       ...menu,
       show: true,
@@ -374,7 +374,10 @@ const SlateEditor: FC<SlateEditorProps> = ({
         >
           <div className="menu-inner">
             {!readonly && (
-              <LeafTooltipContent handleFormatClick={handleFormatClick} />
+              <LeafTooltipContent
+                leafTypes={["bold", "italic", "link"]}
+                handleFormatClick={handleFormatClick}
+              />
             )}
             <CommentInBlock
               text={menu.text}
@@ -382,7 +385,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
               onCancel={handleCommentCancel}
               onSubmit={handleCommentSubmit}
               onClick={() => {
-                handleCommentClickBtn();
+                handleCommentClick();
               }}
               icoClassName="cursor-pointer"
             />

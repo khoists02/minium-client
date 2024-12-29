@@ -106,6 +106,10 @@ const PostDetailsContainer: FC = () => {
    * @param title
    * @param content
    */
+
+  const scrollToComment = () => {
+    commentRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
   const handleSubmitComment = async (title: string, content: string) => {
     try {
       await axios.post(`/posts/${postId}/comments`, {
@@ -114,14 +118,11 @@ const PostDetailsContainer: FC = () => {
       });
       setTimeout(() => {
         getAllComments();
+        scrollToComment();
       }, 1000);
     } catch (error) {
       console.log("Post comment error", error);
     }
-  };
-
-  const scrollToComment = () => {
-    commentRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (

@@ -100,6 +100,7 @@ const PostContainer: FC = () => {
                       disabled
                       post={p}
                       account={account}
+                      scrollToComment={() => {}}
                     />
                   </p>
                   <p className="break"></p>

@@ -16,20 +16,20 @@ import { Avatar } from "../Avatar";
 
 interface CommentInBlockProps {
   icoClassName?: string;
+  author?: IUserResponse;
+  text?: string;
   onClick?: () => void;
   onCancel?: () => void;
   onSubmit?: (title?: string, content?: string) => void;
-  author?: IUserResponse;
-  text?: string;
 }
 
 export const CommentInBlock: FC<CommentInBlockProps> = ({
   icoClassName = "",
+  author,
+  text,
   onClick,
   onCancel,
   onSubmit,
-  author,
-  text,
 }) => {
   const [show, setShow] = useState(false);
   const [content, setContent] = useState("");
