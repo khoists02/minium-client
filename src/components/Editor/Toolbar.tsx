@@ -92,6 +92,7 @@ const Toolbar: FC<ToolbarProps> = ({
         {toolbarElements.map((el) => {
           return (
             <ToolbarButton
+              key={el}
               onClick={() => handleSelect(el)}
               icon={renderIcon(el)}
               format={el}

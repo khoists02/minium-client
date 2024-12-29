@@ -35,6 +35,7 @@ import axios from "axios";
 import { CommentInBlock } from "./CommentInBlock";
 import { IUserResponse } from "../../types/general";
 import { ElementType } from "../../constants";
+import { LeafTooltipContent } from "./Elements/LeafTooltipContent";
 
 interface SlateEditorProps {
   onSave: (content: any) => void;
@@ -372,20 +373,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
         >
           <div className="menu-inner">
             {!readonly && (
-              <>
-                <i
-                  className="fa fa-bold  cursor-pointer"
-                  onClick={() => handleFormatClick("bold")}
-                ></i>
-                <i
-                  className="fa fa-italic  cursor-pointer "
-                  onClick={() => handleFormatClick("italic")}
-                ></i>
-                <i
-                  className="fa fa-link  cursor-pointer "
-                  onClick={() => handleFormatClick("link")}
-                ></i>
-              </>
+              <LeafTooltipContent handleFormatClick={handleFormatClick} />
             )}
             <CommentInBlock
               text={menu.text}
