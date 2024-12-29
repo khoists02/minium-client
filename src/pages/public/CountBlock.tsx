@@ -19,6 +19,7 @@ export const CountBlock: FC<{
   disabled?: boolean;
   wrapperClass?: string;
   inline?: boolean;
+  scrollToComment: () => void;
 }> = ({
   post,
   account,
@@ -26,60 +27,72 @@ export const CountBlock: FC<{
   disabled = false,
   inline,
   wrapperClass,
+  scrollToComment,
 }) => {
-    const [loading, setLoading] = useState(false);
-    const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
 
-    const checkVisibleLike = async () => {
-      if (!post?.id || !account?.id) return;
+  const checkVisibleLike = async () => {
+    if (!post?.id || !account?.id) return;
 
-      try {
-        setLoading(true);
-        const rs = await axios.get(`/posts/${post?.id}/users/${account?.id}/visible`);
-        setVisible(rs.data?.visible);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
+    try {
+      setLoading(true);
+      const rs = await axios.get(
+        `/posts/${post?.id}/users/${account?.id}/visible`,
+      );
+      setVisible(rs.data?.visible);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
     }
+  };
 
-    const handleLikeOrUnlike = useCallback(async () => {
-      if (disabled) return;
-      if (loading) return; // prevent if API still loading.
-      try {
-        if (!visible) {
-          // Like
-          await axios.post(`/posts/${post?.id}/users/${account?.id}/like`);
-          if (reload) reload();
-          checkVisibleLike();
-        } else {
-          // Unlike
-          await axios.delete(`/posts/${post?.id}/users/${account?.id}/unlike`);
-          if (reload) reload();
-          checkVisibleLike();
-        }
-      } catch (error) {
-        console.log("Count Error", error);
+  const handleLikeOrUnlike = useCallback(async () => {
+    if (disabled) return;
+    if (loading) return; // prevent if API still loading.
+    try {
+      if (!visible) {
+        // Like
+        await axios.post(`/posts/${post?.id}/users/${account?.id}/like`);
+        if (reload) reload();
+        checkVisibleLike();
+      } else {
+        // Unlike
+        await axios.delete(`/posts/${post?.id}/users/${account?.id}/unlike`);
+        if (reload) reload();
+        checkVisibleLike();
       }
+    } catch (error) {
+      console.log("Count Error", error);
+    }
+  }, [visible, loading]);
 
-    }, [visible, loading]);
+  useEffect(() => {
+    if (!disabled) checkVisibleLike();
+  }, [account, post, disabled]);
 
-    useEffect(() => {
-      if (!disabled) checkVisibleLike();
-    }, [account, post, disabled]);
-
-    return (
-      <>
-        <div className={`block-count ${wrapperClass}`} style={{ display: inline ? "inline" : "block" }}>
-          <span className="text-muted mr-4 cursor-pointer">
-            <i className={`fa fa-heart-o  ${visible && !disabled ? "text-danger" : ""}`} onClick={handleLikeOrUnlike} ></i>
-            {post?.countLikes > 0 && <span className="ml-1">{post?.countLikes}</span>}
-          </span>
-          <span className="text-muted cursor-pointer">
-            <i className="fa fa-comment-o"></i>
-            {post?.countComments > 0 && <span className="ml-1">{post?.countComments}</span>}
-          </span>
-        </div>
-      </>
-    )
-  }
+  return (
+    <>
+      <div
+        className={`block-count ${wrapperClass}`}
+        style={{ display: inline ? "inline" : "block" }}
+      >
+        <span className="text-muted mr-4 cursor-pointer">
+          <i
+            className={`fa fa-heart-o  ${visible && !disabled ? "text-danger" : ""}`}
+            onClick={handleLikeOrUnlike}
+          ></i>
+          {post?.countLikes > 0 && (
+            <span className="ml-1">{post?.countLikes}</span>
+          )}
+        </span>
+        <span className="text-muted cursor-pointer">
+          <i className="fa fa-comment-o" onClick={scrollToComment}></i>
+          {post?.countComments > 0 && (
+            <span className="ml-1">{post?.countComments}</span>
+          )}
+        </span>
+      </div>
+    </>
+  );
+};

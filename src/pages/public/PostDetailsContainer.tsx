@@ -8,7 +8,7 @@
  * from LKG.  Access to the source code contained herein is hereby forbidden to anyone except current LKG employees, managers or contractors who have executed
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
-import React, { FC, useEffect, useMemo, useState } from "react";
+import React, { FC, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../config/hook";
 import { getPublicPostsDetails } from "./ducks/operators";
@@ -23,6 +23,7 @@ import { Comments } from "../../components/Comments";
 const PostDetailsContainer: FC = () => {
   const dispatch = useAppDispatch();
   const { postId } = useParams<{ postId: string }>();
+  const commentRef = useRef<HTMLDivElement>(null);
   const { post } = useAppSelector((state) => state.publicPost);
   const { account } = useAppSelector((state) => state.auth);
   const [editorContent, setEditorContent] = useState<Descendant[]>([]);
@@ -58,7 +59,7 @@ const PostDetailsContainer: FC = () => {
 
   const showEditor = useMemo(
     () => post && editorContent.length > 0,
-    [post, editorContent]
+    [post, editorContent],
   );
 
   const getSortAuthor = (name: string) => {
@@ -119,14 +120,21 @@ const PostDetailsContainer: FC = () => {
     }
   };
 
+  const scrollToComment = () => {
+    commentRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <>
       {sortAuthor(post?.user)}
       <div className="border-top border-bottom mb-5 pt-2 pb-2 d-flex flex-center-between">
-        <CountBlock reload={reload} account={account} post={post} />
-        <div className="right">
-          <i className="fa fa-share"></i>
-        </div>
+        <CountBlock
+          scrollToComment={scrollToComment}
+          reload={reload}
+          account={account}
+          post={post}
+        />
+        <div className="right"></div>
       </div>
       {showEditor && (
         <Editor
@@ -140,6 +148,7 @@ const PostDetailsContainer: FC = () => {
       <div className="mt-5"></div>
 
       <Comments
+        ref={commentRef}
         postId={postId}
         fetching={getAllComments}
         author={account}

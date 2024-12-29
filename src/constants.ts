@@ -17,4 +17,5 @@ export enum ElementType {
   IMAGE = "image",
   QUOTE = "quote",
   PARAGRAPH = "paragraph",
+  DIVIDER = "divider",
 }
