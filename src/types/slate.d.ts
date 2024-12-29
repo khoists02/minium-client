@@ -35,8 +35,8 @@ export type QuoteElement = {
 };
 export type ImageElement = {
   type: ElementType.IMAGE;
-  url: string;
-  alt: string;
+  url?: string;
+  alt?: string;
   children: CustomText[];
   id: string;
 };
@@ -44,7 +44,7 @@ export type CodeElement = {
   type: ElementType.CODE;
   children: CustomText[];
   id: string;
-  language: "javascript";
+  language?: "javascript";
   placeholder?: string;
 };
 export type TitleElement = {

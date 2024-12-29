@@ -30,7 +30,7 @@ import { v4 as uuidv4 } from "uuid";
 import { CustomElement, ImageElement } from "../../types/slate";
 import { Element } from "./Element";
 import { Leaf } from "./Leaf";
-import { addNewElement, toggleFormat, toggleMark } from "./helpers";
+import { toggleFormat, toggleMark } from "./helpers";
 import axios from "axios";
 import { CommentInBlock } from "./CommentInBlock";
 import { IUserResponse } from "../../types/general";
@@ -69,6 +69,10 @@ const SlateEditor: FC<SlateEditorProps> = ({
     position: { x: 0, y: 0 },
     text: "",
   });
+
+  const addNewElement = (item: CustomElement) => {
+    Transforms.insertNodes(editor, item as any);
+  };
 
   // handle show tooltip toolbar after select text
   const handleSelection = useCallback(
@@ -119,7 +123,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
       children: [{ text: "" }],
     };
     // Insert new paragraph with the UUID
-    addNewElement(editor, newParagraph);
+    addNewElement(newParagraph);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -127,6 +131,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
       event.preventDefault();
       // GENERATE NEW UUID.
       handleAddNewElement();
+      return;
     }
 
     // Detect Cmd+S (macOS) or Ctrl+S (Windows/Linux)
@@ -189,7 +194,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
       children: [{ text: "" }],
       id: uuidv4(),
     };
-    addNewElement(editor, image);
+    addNewElement(image);
   };
 
   const handleFileUpload = async (
@@ -233,7 +238,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
         placeholder: "",
         children: [{ text: "" }],
       };
-      addNewElement(editor, item);
+      addNewElement(item);
     } else {
       const item: CustomElement = {
         type: fmt as unknown as any,
@@ -241,7 +246,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
         placeholder: "",
         children: [{ text: "" }],
       };
-      addNewElement(editor, item);
+      addNewElement(item);
     }
   };
 
