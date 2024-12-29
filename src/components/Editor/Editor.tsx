@@ -54,9 +54,10 @@ const SlateEditor: FC<SlateEditorProps> = ({
 }) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   const temporaryReadonly = useRef(false);
-  const [value, setValue] = useState<Descendant[]>();
   const inputRef = useRef<HTMLInputElement>(null);
   const tooltipTarget = React.useRef<HTMLDivElement | null>(null);
+
+  const [value, setValue] = useState<Descendant[]>();
   const [menu, setMenu] = useState<{
     text: string;
     show: boolean;
@@ -322,7 +323,7 @@ const SlateEditor: FC<SlateEditorProps> = ({
   };
 
   return (
-    <div style={{ position: "relative" }}>
+    <div className="pos-r">
       <Slate
         editor={editor}
         initialValue={initValue}

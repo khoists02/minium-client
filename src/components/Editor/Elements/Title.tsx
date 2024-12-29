@@ -27,11 +27,7 @@ export const Title: FC<TitleProps> = ({
   children,
 }) => {
   return (
-    <h3
-      contentEditable={!readonly}
-      {...attributes}
-      style={{ position: "relative" }}
-    >
+    <h3 contentEditable={!readonly} {...attributes} className="pos-r">
       {isEmpty && (
         <span
           contentEditable={false}

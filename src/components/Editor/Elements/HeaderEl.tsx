@@ -27,11 +27,7 @@ export const HeaderEl: FC<HeaderElProps> = ({
   children,
 }) => {
   return (
-    <h4
-      contentEditable={!readonly}
-      {...attributes}
-      style={{ position: "relative" }}
-    >
+    <h4 contentEditable={!readonly} {...attributes} className="pos-r">
       {isEmpty && (
         <span
           contentEditable={false}

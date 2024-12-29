@@ -25,11 +25,7 @@ export const CodeBlock = ({ attributes, children, element, readonly }) => {
     language,
   );
   return (
-    <pre
-      contentEditable={!readonly}
-      {...attributes}
-      style={{ position: "relative" }}
-    >
+    <pre contentEditable={!readonly} {...attributes} className="pos-r">
       {/* Render Prism.js highlighting */}
       <code
         className={`language-${language}`}

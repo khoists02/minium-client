@@ -27,11 +27,7 @@ export const Paragraph: FC<ParagraphProps> = ({
   children,
 }) => {
   return (
-    <p
-      contentEditable={!readonly}
-      {...attributes}
-      style={{ position: "relative" }}
-    >
+    <p contentEditable={!readonly} {...attributes} className="pos-r">
       {isEmpty && (
         <span
           contentEditable={false}
