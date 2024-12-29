@@ -8,18 +8,33 @@
  * from LKG.  Access to the source code contained herein is hereby forbidden to anyone except current LKG employees, managers or contractors who have executed
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { createEditor, Descendant, Editor, Transforms, Range } from "slate";
-import { Slate, Editable, withReact, } from "slate-react";
+import React, {
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import {
+  createEditor,
+  Descendant,
+  Editor,
+  Transforms,
+  Range,
+  Text,
+} from "slate";
+import { Slate, Editable, withReact } from "slate-react";
 import { withHistory } from "slate-history";
 import { v4 as uuidv4 } from "uuid";
-import { CustomElement } from "../../types/slate";
+import { CustomElement, ImageElement } from "../../types/slate";
 import { Element } from "./Element";
 import { Leaf } from "./Leaf";
-import { toggleFormat, toggleMark } from "./helpers";
+import { addNewElement, toggleFormat, toggleMark } from "./helpers";
 import axios from "axios";
 import { CommentInBlock } from "./CommentInBlock";
 import { IUserResponse } from "../../types/general";
+import { ElementType } from "../../constants";
 
 interface SlateEditorProps {
   onSave: (content: any) => void;
@@ -37,67 +52,73 @@ const SlateEditor: FC<SlateEditorProps> = ({
   author,
 }) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+  const temporaryReadonly = useRef(false);
   const [value, setValue] = useState<Descendant[]>();
   const inputRef = useRef<HTMLInputElement>(null);
   const tooltipTarget = React.useRef<HTMLDivElement | null>(null);
-  const [menu, setMenu] = useState<{ text: string; show: boolean; visible: boolean, position: { x: number; y: number } }>({
+  const [menu, setMenu] = useState<{
+    text: string;
+    show: boolean;
+    visible: boolean;
+    position: { x: number; y: number };
+  }>({
     show: false,
     visible: false,
     position: { x: 0, y: 0 },
     text: "",
   });
 
-  const handleSelection = useCallback((event) => {
-    event.preventDefault();
-    const domSelection = window.getSelection();
-    if (!domSelection || domSelection.rangeCount === 0) {
-      setMenu({ ...menu, show: false, visible: false, text: "" });
-      return;
-    }
+  // handle show tooltip toolbar after select text
+  const handleSelection = useCallback(
+    (event) => {
+      event.preventDefault();
+      const domSelection = window.getSelection();
+      if (!domSelection || domSelection.rangeCount === 0) {
+        setMenu({ ...menu, show: false, visible: false, text: "" });
+        return;
+      }
 
-    const range = domSelection.getRangeAt(0);
-    const rect = range.getBoundingClientRect();
+      const range = domSelection.getRangeAt(0);
+      const rect = range.getBoundingClientRect();
 
-
-    if (rect.width > 0 && domSelection.toString().trim()) {
-      const pY = !readonly ? rect.top + window.scrollY - 125 : rect.top + window.scrollY - 280;
-      setMenu({
-        show: true,
-        text: domSelection.toString().trim(),
-        visible: true,
-        position: { x: rect.left + rect.width / 2 + window.scrollX, y: pY },
-      });
-    } else {
-      setMenu({ ...menu, show: false, visible: false, text: "" });
-    }
-  }, [editor, readonly]);
+      if (rect.width > 0 && domSelection.toString().trim()) {
+        const pY = !readonly
+          ? rect.top + window.scrollY - 125
+          : rect.top + window.scrollY - 280;
+        setMenu({
+          show: true,
+          text: domSelection.toString().trim(),
+          visible: true,
+          position: { x: rect.left + rect.width / 2 + window.scrollX, y: pY },
+        });
+      } else {
+        setMenu({ ...menu, show: false, visible: false, text: "" });
+      }
+    },
+    [editor, readonly],
+  );
 
   const handlePaste = useCallback(
     (event: React.ClipboardEvent<HTMLDivElement>) => {
-      if (readonly) return;
       event.preventDefault();
-
       const text = event.clipboardData.getData("text/plain").trim();
-
       // Insert the pasted text into the current block
       Transforms.insertText(editor, text);
     },
-    [editor]
+    [editor],
   );
 
   const handleAddNewElement = () => {
     if (readonly) return;
-    const newUuid = uuidv4();
     const newParagraph: CustomElement = {
-      type: "paragraph",
-      id: newUuid,
+      type: ElementType.PARAGRAPH,
+      id: uuidv4(),
       placeholder: "Add new your story...",
       children: [{ text: "" }],
     };
-
     // Insert new paragraph with the UUID
-    Transforms.insertNodes(editor, newParagraph);
-  }
+    addNewElement(editor, newParagraph);
+  };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "Enter") {
@@ -157,81 +178,82 @@ const SlateEditor: FC<SlateEditorProps> = ({
     }
   };
 
-  const insertImage = (editor: any, url: string, alt: string = "") => {
-    const image = {
-      type: "image",
+  // Add image node after upload.
+  const addNewImageElement = (url: string, alt: string = "") => {
+    const image: ImageElement = {
+      type: ElementType.IMAGE,
       url,
       alt,
-      children: [{ text: "" }], // Images must have an empty text node as children
+      children: [{ text: "" }],
+      id: uuidv4(),
     };
-    Transforms.setNodes(editor, image as any);
+    addNewElement(editor, image);
   };
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
       // // Simulate upload and get a URL (replace with your upload logic)
 
       const fd = new FormData();
       fd.append("postImage", file);
-      fd.append("fieldname", uuidv4())
+      fd.append("fieldname", uuidv4());
 
       try {
         const rs = await axios.post("/posts/upload", fd, {
           headers: {
             "Content-Type": "multipart/form-data",
-          }
+          },
         });
 
-        insertImage(editor, rs.data.imgUrl, file.name);
+        addNewImageElement(rs.data.imgUrl, file.name);
       } catch (error) {
-
+        console.log("Upload image err", error);
       }
 
       // Insert the image into the editor
     }
   };
 
-  const handleSelect = (fmt: string) => {
+  // toolbar select
+  const handleSelect = (fmt: ElementType) => {
     if (readonly) return;
-    if (fmt === "image") {
+    if (fmt === ElementType.IMAGE) {
       // Handle insert image.
       inputRef.current.click();
-
-    } else if (fmt === "code-block") {
-      const newUuid = uuidv4();
+    } else if (fmt === ElementType.CODE) {
       const item: CustomElement = {
         type: fmt as unknown as any,
-        id: newUuid,
+        id: uuidv4(),
         language: "javascript",
         placeholder: "",
         children: [{ text: "" }],
       };
-
-      // Insert new paragraph with the UUID
-      Transforms.setNodes(editor, item as any);
+      addNewElement(editor, item);
     } else {
-      const newUuid = uuidv4();
       const item: CustomElement = {
         type: fmt as unknown as any,
-        id: newUuid,
+        id: uuidv4(),
         placeholder: "",
         children: [{ text: "" }],
       };
-
-      // Insert new paragraph with the UUID
-      Transforms.setNodes(editor, item as any);
+      addNewElement(editor, item);
     }
-  }
+  };
 
+  // toggle format text
   const handleFormatClick = (fmt: string) => {
-    if (readonly) return;
     toggleFormat(editor, fmt);
-  }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (tooltipTarget.current && !tooltipTarget.current.contains(event.target as Node)) {
+      if (
+        tooltipTarget.current &&
+        !tooltipTarget.current.contains(event.target as Node)
+      ) {
         setMenu({ ...menu, show: true, visible: false });
       }
     };
@@ -242,8 +264,23 @@ const SlateEditor: FC<SlateEditorProps> = ({
 
   /**
    * Comment handles
-   * 
+   *
    */
+
+  useEffect(() => {
+    temporaryReadonly.current = readonly;
+  }, [readonly]);
+
+  const highlightText = () => {
+    if (!editor.selection) return; // Ensure there's a selection
+
+    Transforms.setNodes(
+      editor,
+      // @ts-ignore
+      { highlight: true },
+      { match: (node) => Text.isText(node), split: true },
+    );
+  };
 
   const handleCommentCancel = () => {
     setMenu({
@@ -251,15 +288,25 @@ const SlateEditor: FC<SlateEditorProps> = ({
       visible: true,
       show: true,
     });
-  }
 
+    toggleFormat(editor, "highlight");
+  };
+
+  // show menu tooltip content.
   const handleCommentClickBtn = () => {
     setMenu({
       ...menu,
       show: true,
       visible: false,
-    })
-  }
+    });
+
+    // temporaryReadonly.current = false;
+
+    highlightText();
+
+    // temporaryReadonly.current = readonly;
+    // highlight text after tooltip open
+  };
 
   const handleCommentSubmit = (title: string, content: string) => {
     setMenu({
@@ -267,15 +314,21 @@ const SlateEditor: FC<SlateEditorProps> = ({
       visible: false,
       show: false,
     });
-    // onCommentSubmitProp
     if (onCommentSubmit) onCommentSubmit(title, content);
-  }
+
+    // mark
+    // toggleMark(editor, "highlight");
+  };
 
   return (
-    <div style={{ position: "relative" }} >
-      <Slate editor={editor} initialValue={initValue} onChange={(newValue) => {
-        if (!readonly) setValue(newValue);
-      }}>
+    <div style={{ position: "relative" }}>
+      <Slate
+        editor={editor}
+        initialValue={initValue}
+        onChange={(newValue) => {
+          setValue(newValue);
+        }}
+      >
         <input
           type="file"
           accept="image/*"
@@ -285,19 +338,25 @@ const SlateEditor: FC<SlateEditorProps> = ({
           ref={inputRef}
         />
         <Editable
-          readOnly={readonly}
+          readOnly={readonly ? temporaryReadonly.current : false}
           onSelect={(e) => {
-            if (!readonly) handleSelection(e);
+            handleSelection(e);
           }}
           onPaste={handlePaste}
           onMouseUp={(e) => {
-            if (readonly) handleSelection(e);
+            handleSelection(e);
           }}
           className="editor-editable"
           onKeyDown={handleKeyDown}
-          renderElement={(props) => <Element readonly={readonly} onSelect={(fmt: string) => {
-            handleSelect(fmt);
-          }} {...props} />}
+          renderElement={(props) => (
+            <Element
+              readonly={readonly}
+              onSelect={(fmt: ElementType) => {
+                handleSelect(fmt);
+              }}
+              {...props}
+            />
+          )}
           renderLeaf={(props) => <Leaf {...props} />}
         />
       </Slate>
@@ -312,27 +371,37 @@ const SlateEditor: FC<SlateEditorProps> = ({
           }}
         >
           <div className="menu-inner">
-            {!readonly && <>
-              <i className="fa fa-bold  cursor-pointer" onClick={() => handleFormatClick("bold")}></i>
-              <i className="fa fa-italic  cursor-pointer " onClick={() => handleFormatClick("italic")}></i>
-              <i className="fa fa-link  cursor-pointer " onClick={() => handleFormatClick("link")}></i>
-            </>}
+            {!readonly && (
+              <>
+                <i
+                  className="fa fa-bold  cursor-pointer"
+                  onClick={() => handleFormatClick("bold")}
+                ></i>
+                <i
+                  className="fa fa-italic  cursor-pointer "
+                  onClick={() => handleFormatClick("italic")}
+                ></i>
+                <i
+                  className="fa fa-link  cursor-pointer "
+                  onClick={() => handleFormatClick("link")}
+                ></i>
+              </>
+            )}
             <CommentInBlock
               text={menu.text}
               author={author}
               onCancel={handleCommentCancel}
               onSubmit={handleCommentSubmit}
-              onClick={handleCommentClickBtn}
+              onClick={() => {
+                handleCommentClickBtn();
+              }}
               icoClassName="cursor-pointer"
             />
           </div>
         </div>
       )}
     </div>
-
   );
 };
-
-
 
 export default SlateEditor;

@@ -20,19 +20,24 @@ interface WrapperElementProps {
   onSelect: (format: string) => void;
 }
 
-export const WrapperElement: FC<WrapperElementProps> = (
-  {
-    children,
-    isEmpty,
-    focused,
-    id,
-    type = "",
-    onSelect,
-  }
-) => {
-  const isShowAddSidebar = useMemo(() => focused && isEmpty, [focused, isEmpty]);
-  return <div data-id={id} data-focused={focused} className="editor-item">
-    {isShowAddSidebar && <Toolbar onSelect={onSelect} wrapperClass={`add-new ${type}`} />}
-    {children}
-  </div>
-}
+export const WrapperElement: FC<WrapperElementProps> = ({
+  children,
+  isEmpty,
+  focused,
+  id,
+  type = "",
+  onSelect,
+}) => {
+  const isShowAddSidebar = useMemo(
+    () => focused && isEmpty,
+    [focused, isEmpty],
+  );
+  return (
+    <div data-id={id} data-focused={focused} className="editor-item">
+      {isShowAddSidebar && (
+        <Toolbar onSelect={onSelect} wrapperClass={`add-new ${type}`} />
+      )}
+      {children}
+    </div>
+  );
+};

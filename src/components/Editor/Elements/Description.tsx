@@ -26,20 +26,26 @@ export const Description: FC<DescriptionProps> = ({
   element,
   children,
 }) => {
-  return <h5 contentEditable={!readonly} {...attributes} style={{ position: "relative", color: "#6B6B6B" }}>
-    {isEmpty && (
-      <span
-        contentEditable={false}
-        style={{
-          position: "absolute",
-          pointerEvents: "none",
-          opacity: 0.5,
-          userSelect: "none",
-        }}
-      >
-        {element.placeholder}
-      </span>
-    )}
-    {children}
-  </h5>
-}
+  return (
+    <h5
+      contentEditable={!readonly}
+      {...attributes}
+      style={{ position: "relative", color: "#6B6B6B" }}
+    >
+      {isEmpty && (
+        <span
+          contentEditable={false}
+          style={{
+            position: "absolute",
+            pointerEvents: "none",
+            opacity: 0.5,
+            userSelect: "none",
+          }}
+        >
+          {element.placeholder}
+        </span>
+      )}
+      {children}
+    </h5>
+  );
+};

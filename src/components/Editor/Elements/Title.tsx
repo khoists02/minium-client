@@ -26,20 +26,26 @@ export const Title: FC<TitleProps> = ({
   element,
   children,
 }) => {
-  return <h3 contentEditable={!readonly} {...attributes} style={{ position: "relative" }}>
-    {isEmpty && (
-      <span
-        contentEditable={false}
-        style={{
-          position: "absolute",
-          pointerEvents: "none",
-          opacity: 0.5,
-          userSelect: "none",
-        }}
-      >
-        {element.placeholder}
-      </span>
-    )}
-    {children}
-  </h3>
-}
+  return (
+    <h3
+      contentEditable={!readonly}
+      {...attributes}
+      style={{ position: "relative" }}
+    >
+      {isEmpty && (
+        <span
+          contentEditable={false}
+          style={{
+            position: "absolute",
+            pointerEvents: "none",
+            opacity: 0.5,
+            userSelect: "none",
+          }}
+        >
+          {element.placeholder}
+        </span>
+      )}
+      {children}
+    </h3>
+  );
+};

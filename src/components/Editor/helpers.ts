@@ -9,6 +9,7 @@
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
 import { Editor, Transforms, Text } from "slate";
+import { CustomElement } from "../../types/slate";
 
 // Helper function to toggle mark
 export const toggleMark = (editor: Editor, mark: string) => {
@@ -52,7 +53,7 @@ export const isFormatActive = (editor: Editor, format: string) => {
       // @ts-ignore
       match: (n) => Text.isText(n) && n[format as keyof Text] === true,
       universal: true,
-    })
+    }),
   );
   return !!match;
 };
@@ -62,6 +63,11 @@ export const toggleFormat = (editor: Editor, format: string) => {
   Transforms.setNodes(
     editor,
     { [format]: isActive ? false : true },
-    { match: (n) => Text.isText(n), split: true }
+    { match: (n) => Text.isText(n), split: true },
   );
+};
+
+export const addNewElement = (editor: Editor, item: CustomElement) => {
+  // @ts-ignore
+  Transforms.setNodes(editor, item);
 };

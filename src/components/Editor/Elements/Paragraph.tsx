@@ -26,20 +26,26 @@ export const Paragraph: FC<ParagraphProps> = ({
   element,
   children,
 }) => {
-  return <p contentEditable={!readonly} {...attributes} style={{ position: "relative" }}>
-    {isEmpty && (
-      <span
-        contentEditable={false}
-        style={{
-          position: "absolute",
-          pointerEvents: "none",
-          opacity: 0.5,
-          userSelect: "none",
-        }}
-      >
-        {element?.placeholder}
-      </span>
-    )}
-    {children}
-  </p>
-}
+  return (
+    <p
+      contentEditable={!readonly}
+      {...attributes}
+      style={{ position: "relative" }}
+    >
+      {isEmpty && (
+        <span
+          contentEditable={false}
+          style={{
+            position: "absolute",
+            pointerEvents: "none",
+            opacity: 0.5,
+            userSelect: "none",
+          }}
+        >
+          {element?.placeholder}
+        </span>
+      )}
+      {children}
+    </p>
+  );
+};

@@ -11,55 +11,56 @@
 import { BaseEditor, Descendant } from "slate";
 import { ReactEditor } from "slate-react";
 import { HistoryEditor } from "slate-history";
+import { ElementType } from "../constants";
 
 export type ParagraphElement = {
-  type: "paragraph";
+  type: ElementType.PARAGRAPH;
   children: CustomText[];
   placeholder?: string;
   id: string;
   placeholder?: string;
 };
 export type DescriptionElement = {
-  type: "description";
+  type: ElementType.DESCRIPTION;
   children: CustomText[];
   placeholder?: string;
   id: string;
   placeholder?: string;
 };
 export type QuoteElement = {
-  type: "quote";
+  type: ElementType.QUOTE;
   children: CustomText[];
   placeholder?: string;
   id: string;
 };
 export type ImageElement = {
-  type: "image";
+  type: ElementType.IMAGE;
   url: string;
   alt: string;
   children: CustomText[];
   id: string;
 };
 export type CodeElement = {
-  type: "code-block";
+  type: ElementType.CODE;
   children: CustomText[];
   id: string;
   language: "javascript";
   placeholder?: string;
 };
 export type TitleElement = {
-  type: "title";
+  type: ElementType.TITLE;
   placeholder?: string;
   children: CustomText[];
   id: string;
 };
 export type HeaderElement = {
-  type: "header";
+  type: ElementType.HEADER;
   placeholder?: string;
   children: CustomText[];
   id: string;
 };
 export type BreakLine = {
-  type: "break";
+  type: ElementType.BREAK;
   placeholder?: string;
   children: CustomText[];
   id: string;

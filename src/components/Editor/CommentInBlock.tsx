@@ -108,7 +108,7 @@ export const CommentInBlock: FC<CommentInBlockProps> = ({
         <i
           onClick={handleClick}
           contentEditable={false}
-          className={`fa fa-lock ${icoClassName}`}
+          className={`fa fa-lightbulb-o ${icoClassName}`}
         />
       </OverlayTrigger>
     </>

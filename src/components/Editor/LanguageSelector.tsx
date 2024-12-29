@@ -31,7 +31,7 @@ export const LanguageSelector = ({ lang }) => {
         // @ts-ignore
         { language },
         // @ts-ignore
-        { match: (n) => n.type === "code-block" }
+        { match: (n) => n.type === "code-block" },
       );
     }
   };

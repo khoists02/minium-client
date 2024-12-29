@@ -22,13 +22,14 @@ import { Image } from "./Elements/Image";
 import { HeaderEl } from "./Elements/HeaderEl";
 import { Transforms } from "slate";
 import { Description } from "./Elements/Description";
+import { ElementType } from "../../constants";
 
 interface ElementProps {
   attributes: any;
   children: React.ReactElement | React.ReactElement[];
   element: CustomElement;
-  onSelect: (format: string) => void;
   readonly: boolean;
+  onSelect: (format: ElementType) => void;
 }
 
 export const Element: FC<ElementProps> = ({
@@ -40,19 +41,15 @@ export const Element: FC<ElementProps> = ({
 }) => {
   const editor = useSlate();
   const isEmpty = element.children[0]?.text === "";
-  const isCurrentBlockFocused = isBlockFocused(
-    editor,
-    element.type,
-    element.id
-  );
+  const blockFocused = isBlockFocused(editor, element.type, element.id);
   switch (element.type) {
-    case "paragraph":
+    case ElementType.PARAGRAPH:
       return (
         <WrapperElement
           onSelect={onSelect}
           isEmpty={isEmpty}
           id={element.id}
-          focused={isCurrentBlockFocused}
+          focused={blockFocused}
         >
           <Paragraph
             isEmpty={isEmpty}
@@ -63,7 +60,7 @@ export const Element: FC<ElementProps> = ({
           />
         </WrapperElement>
       );
-    case "quote":
+    case ElementType.QUOTE:
       return (
         <Quote
           isEmpty={isEmpty}
@@ -73,7 +70,7 @@ export const Element: FC<ElementProps> = ({
           attributes={attributes}
         />
       );
-    case "image":
+    case ElementType.IMAGE:
       return (
         <Image
           onDelete={() => {
@@ -86,19 +83,19 @@ export const Element: FC<ElementProps> = ({
           attributes={attributes}
           children={children}
           element={element}
-          focused={isCurrentBlockFocused}
+          focused={blockFocused}
         />
       );
-    case "code-block":
+    case ElementType.CODE:
       return (
         <WrapperElement
           onSelect={onSelect}
           type={element.type}
           isEmpty={isEmpty}
           id={element.id}
-          focused={isCurrentBlockFocused}
+          focused={blockFocused}
         >
-          {isCurrentBlockFocused && !readonly && (
+          {blockFocused && !readonly && (
             <LanguageSelector lang={element.language} />
           )}
           <CodeBlock
@@ -116,7 +113,7 @@ export const Element: FC<ElementProps> = ({
           type={element.type}
           isEmpty={isEmpty}
           id={element.id}
-          focused={isCurrentBlockFocused}
+          focused={blockFocused}
         >
           <Title
             isEmpty={isEmpty}
@@ -127,14 +124,14 @@ export const Element: FC<ElementProps> = ({
           />
         </WrapperElement>
       );
-    case "description":
+    case ElementType.DESCRIPTION:
       return (
         <WrapperElement
           onSelect={onSelect}
           type={element.type}
           isEmpty={isEmpty}
           id={element.id}
-          focused={isCurrentBlockFocused}
+          focused={blockFocused}
         >
           <Description
             isEmpty={isEmpty}
@@ -145,14 +142,14 @@ export const Element: FC<ElementProps> = ({
           />
         </WrapperElement>
       );
-    case "header":
+    case ElementType.HEADER:
       return (
         <WrapperElement
           onSelect={onSelect}
           type={element.type}
           isEmpty={isEmpty}
           id={element.id}
-          focused={isCurrentBlockFocused}
+          focused={blockFocused}
         >
           <HeaderEl
             isEmpty={isEmpty}
@@ -163,10 +160,11 @@ export const Element: FC<ElementProps> = ({
           />
         </WrapperElement>
       );
-    case "break":
+    case ElementType.BREAK:
       return (
         <>
           <div
+            {...attributes}
             style={{ width: "100%", height: 1, background: "#000000" }}
           ></div>
           {children}

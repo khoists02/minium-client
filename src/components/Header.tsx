@@ -17,109 +17,131 @@ import { useLocation, useNavigate } from "react-router";
 import { Avatar } from "./Avatar";
 
 export const Header: FC<{ showAdminRouter?: boolean }> = ({
-    showAdminRouter,
+  showAdminRouter,
 }) => {
-    const { account } = useAppSelector((state) => state.auth);
-    const navigate = useNavigate();
-    const dispatch = useAppDispatch();
-    const { pathname } = useLocation();
-    const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { account } = useAppSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { pathname } = useLocation();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
-    const toggleDropdown = () => {
-        setDropdownOpen(!dropdownOpen);
-    };
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
 
-    const handleLogout = async () => {
-        try {
-            await axios.delete("auth/logout");
-            // clear state.
-            dispatch(authClearState());
+  const handleLogout = async () => {
+    try {
+      await axios.delete("auth/logout");
+      // clear state.
+      dispatch(authClearState());
 
-            window.location.reload();
-        } catch (error) {
-            console.log(error)
-        }
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-    const showPublishPost = useMemo(() => {
-        return pathname.includes("/MyPost/");
-    }, [pathname]);
+  const showPublishPost = useMemo(() => {
+    return pathname.includes("/MyPost/");
+  }, [pathname]);
 
-    const publishPost = async () => {
-        try {
-            await axios.put(`/posts/${localStorage.getItem("postId")}/publish`);
-        } catch (error) {
+  const publishPost = async () => {
+    try {
+      await axios.put(`/posts/${localStorage.getItem("postId")}/publish`);
+    } catch (error) {}
+  };
 
-        }
+  const getSortAccountName = useMemo(() => {
+    if (!account?.name) return "A";
+    const splitObject = account.name.split(" ");
+
+    let letter = splitObject[0][0].toUpperCase();
+
+    if (splitObject.length > 1) {
+      letter = `${letter}${splitObject[1][0].toUpperCase()}`;
     }
+    return letter;
+  }, [account]);
 
-    const getSortAccountName = useMemo(() => {
-        if (!account?.name) return "A";
-        const splitObject = account.name.split(" ");
+  const showWritePost = useMemo(() => pathname !== "/WritePost", [pathname]);
+  return (
+    <>
+      <div className="navbar">
+        <div className="navbar__left ">
+          <div className="container d-flex justify-content-between">
+            <a
+              href="/"
+              className="navbar-brand d-flex align-items-center text-dark nav-logo"
+            >
+              Minium
+            </a>
+            {showAdminRouter && (
+              <div className="d-flex align-items-center">
+                {showWritePost && (
+                  <i
+                    onClick={() => navigate("/WritePost")}
+                    className="fa fa-pencil-square-o header-write mr-3"
+                    aria-hidden="true"
+                  ></i>
+                )}
+                {showPublishPost && (
+                  <span
+                    onClick={() => publishPost()}
+                    className="btn-publish cursor-pointer mr-3"
+                  >
+                    Publish
+                  </span>
+                )}
+                <Nav className="ms-auto">
+                  <Dropdown show={dropdownOpen} onToggle={toggleDropdown}>
+                    {account?.photoUrl ? (
+                      <Avatar
+                        allowTrigger={false}
+                        onClick={toggleDropdown}
+                        size="xs"
+                        className=""
+                        url={account?.photoUrl}
+                      />
+                    ) : (
+                      <Dropdown.Toggle
+                        as={Button}
+                        variant="light"
+                        className="btn-profile "
+                        onClick={toggleDropdown}
+                      >
+                        <span>{getSortAccountName}</span>
+                      </Dropdown.Toggle>
+                    )}
 
-        let letter = splitObject[0][0].toUpperCase();
+                    <Dropdown.Menu align="end">
+                      <Dropdown.Item href="/Profile">
+                        <span className="text-muted">
+                          <i className="fa fa-user mr-2"></i>
+                          <span>Profile</span>
+                        </span>
+                      </Dropdown.Item>
 
-        if (splitObject.length > 1) {
-            letter = `${letter}${splitObject[1][0].toUpperCase()}`
-        }
-        return letter;
-
-    }, [account]);
-
-
-    const showWritePost = useMemo(() => pathname !== "/WritePost", [pathname]);
-    return (
-        <>
-            <div className="navbar">
-                <div className="navbar__left " >
-                    <div className="container d-flex justify-content-between">
-                        <a href="/" className="navbar-brand d-flex align-items-center text-dark nav-logo">
-                            Minium
-                        </a>
-                        {showAdminRouter && <div className="d-flex align-items-center">
-                            {showWritePost && <i onClick={() => navigate("/WritePost")} className="fa fa-pencil-square-o header-write mr-3" aria-hidden="true"></i>}
-                            {showPublishPost && <span onClick={() => publishPost()} className="btn-publish cursor-pointer mr-3">Publish</span>}
-                            <Nav className="ms-auto">
-                                <Dropdown show={dropdownOpen} onToggle={toggleDropdown}>
-                                    {account?.photoUrl ? <Avatar allowTrigger={false} onClick={toggleDropdown} size="xs" className="" url={account?.photoUrl} /> : (
-                                        <Dropdown.Toggle
-                                            as={Button}
-                                            variant="light"
-                                            className="btn-profile "
-                                            onClick={toggleDropdown}
-                                        >
-                                            <span>{getSortAccountName}</span>
-                                        </Dropdown.Toggle>
-                                    )}
-
-                                    <Dropdown.Menu align="end">
-                                        <Dropdown.Item href="/Profile">
-                                            <span className="text-muted">
-                                                <i className="fa fa-user mr-2"></i>
-                                                <span>Profile</span>
-                                            </span>
-                                        </Dropdown.Item>
-
-                                        <Dropdown.Item href="/MyPost">
-                                            <span className="text-muted">
-                                                <i className="fa fa-file-text-o mr-2"></i>
-                                                <span>My Posts</span>
-                                            </span>
-                                        </Dropdown.Item>
-                                        <Dropdown.Divider />
-                                        <Dropdown.Item onClick={handleLogout}>
-                                            <span className="text-muted">
-                                                <i className="fa fa-sign-out mr-2"></i>
-                                                <span>Sign Out</span>
-                                            </span>
-                                        </Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </Nav>
-                        </div>}
-                    </div>
-                </div>
-            </div>
-        </>
-    )
-}
+                      <Dropdown.Item href="/MyPost">
+                        <span className="text-muted">
+                          <i className="fa fa-file-text-o mr-2"></i>
+                          <span>My Posts</span>
+                        </span>
+                      </Dropdown.Item>
+                      <Dropdown.Divider />
+                      <Dropdown.Item onClick={handleLogout}>
+                        <span className="text-muted">
+                          <i className="fa fa-sign-out mr-2"></i>
+                          <span>Sign Out</span>
+                        </span>
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Nav>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
