@@ -10,18 +10,20 @@
  */
 import { createSlice } from "@reduxjs/toolkit";
 import { IUserResponse } from "../../../../types/general";
-import { ListChannels } from "../../../../types/channels";
+import { Channels, ListChannels } from "../../../../types/channels";
 
 export interface ChannelState {
   loading: boolean;
   error?: any;
   channels: ListChannels;
+  channel: Channels | null;
 }
 
 const initialState: ChannelState = {
   loading: false,
   error: null,
   channels: [],
+  channel: null,
 };
 
 const channelSlice = createSlice({
@@ -29,8 +31,14 @@ const channelSlice = createSlice({
   initialState,
   reducers: {
     clearState: () => initialState,
+    getAllChannels(state, action) {
+      state.channels = action.payload;
+    },
+    getChannel(state, action) {
+      state.channel = action.payload;
+    },
   },
 });
 
-export const { clearState } = channelSlice.actions;
+export const { clearState, getAllChannels, getChannel } = channelSlice.actions;
 export default channelSlice.reducer;

@@ -20,6 +20,7 @@ import MyPostDetailsContainer from "./pages/admin/writePost/MyPostDetailsContain
 import Profile from "./pages/admin/auth/Profile";
 import ChannelsController from "./pages/admin/channels/ChannelController";
 import CreateNewChannel from "./pages/admin/channels/CreateNewChannel";
+import ChannelDetailsContainer from "./pages/admin/channels/ChannelDetailsContainer";
 
 const AppRouter: FC<{ isAuthenticated: boolean }> = ({ isAuthenticated }) => {
   return (
@@ -38,7 +39,15 @@ const AppRouter: FC<{ isAuthenticated: boolean }> = ({ isAuthenticated }) => {
           <Route path="/Profile" element={<Profile />}></Route>
           <Route path="/MyPost" element={<MyPostContainer />}></Route>
           <Route path="/Channels" element={<ChannelsController />}></Route>
-          <Route path="/Channels/Create" element={<CreateNewChannel />}></Route>
+          <Route
+            path="/Channels/Create"
+            index
+            element={<CreateNewChannel />}
+          ></Route>
+          <Route
+            path="/Channels/:id"
+            element={<ChannelDetailsContainer />}
+          ></Route>
           <Route
             path="/MyPost/:postId/Edit"
             element={<MyPostDetailsContainer />}

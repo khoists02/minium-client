@@ -10,11 +10,13 @@ $navbar-height: 57px;
 @import "./components/border.scss";
 @import "./components/navbar.scss";
 @import "./components/editor.scss";
+@import "./components/card.scss";
 
 @import "font-awesome/css/font-awesome.min.css";
 
 
-.article--item {
+.article--item,
+.channel--item {
     .author {
         font-size: 13px;
         color: #242424;

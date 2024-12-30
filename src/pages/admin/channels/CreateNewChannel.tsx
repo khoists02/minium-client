@@ -10,8 +10,12 @@
  */
 import React, { FC, useCallback, useState } from "react";
 import { CreateChannelRequest } from "../../../types/channels";
+import { CardForm } from "../../../components/Cards/CardForm";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const CreateNewChannel: FC = () => {
+  const navigate = useNavigate();
   const [model, setModel] = useState<CreateChannelRequest>({
     name: "",
     description: "",
@@ -23,47 +27,47 @@ const CreateNewChannel: FC = () => {
       [name]: value,
     });
   };
+
+  const handleSubmit = async () => {
+    try {
+      await axios.post("/channels", model);
+      navigate("/Channels");
+    } catch (error) {}
+  };
+
   return (
     <>
-      <div className="header mb-3">
-        <h4>Create your channel.</h4>
-      </div>
-      <div className="row">
-        <div className="col-md-6">
-          <div className="form-group">
-            <div className="label mb-2">Name</div>
-            <input
-              className="form-control"
-              name="name"
-              id="name"
-              value={model.name}
-              onChange={handleInputChange}
-            ></input>
-          </div>
+      <CardForm
+        classNames={{ wrapperClassName: "" }}
+        labels={{ title: "Create new channel" }}
+      >
+        <div className="form-group">
+          <div className="form-label mb-2">Name</div>
+          <input
+            className="form-control"
+            name="name"
+            id="name"
+            value={model.name}
+            onChange={handleInputChange}
+          ></input>
         </div>
-      </div>
 
-      <div className="row">
-        <div className="col-md-6">
-          <div className="form-group">
-            <div className="label mb-2">Description</div>
-            <textarea
-              className="form-control"
-              name="description"
-              rows={3}
-              id="description"
-              value={model.description}
-              onChange={handleInputChange}
-            />
-          </div>
+        <div className="form-group">
+          <div className="form-label mb-2">Description</div>
+          <textarea
+            className="form-control"
+            name="description"
+            rows={3}
+            id="description"
+            value={model.description}
+            onChange={handleInputChange}
+          />
         </div>
-      </div>
 
-      <div className="row">
-        <div className="form-group col-md-6">
-          <button className="btn btn-primary col-sm">Create</button>
-        </div>
-      </div>
+        <button className="btn btn-submit" onClick={handleSubmit}>
+          Create
+        </button>
+      </CardForm>
     </>
   );
 };

@@ -39,6 +39,28 @@ export const Avatar: FC<{
       {children}
     </div>
   ));
+
+  const getRandomColor = (): string => {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
+
+  const getSortAuthor = (name: string) => {
+    if (!name) return "A";
+    const splitObject = name.split(" ");
+
+    let letter = splitObject[0][0].toUpperCase();
+
+    if (splitObject.length > 1) {
+      letter = `${letter}${splitObject[1][0].toUpperCase()}`;
+    }
+    return letter;
+  };
+
   return allowTrigger ? (
     <>
       <OverlayTrigger
@@ -78,9 +100,23 @@ export const Avatar: FC<{
         e.preventDefault();
         if (onClick) onClick();
       }}
-      className={`avatar ${onClick ? "cursor-pointer" : ""} ${size} ${className}`}
+      className={`avatar w-100 ${onClick ? "cursor-pointer" : ""} ${size} ${className}`}
     >
-      <img src={url} alt="Profile Image" />
+      {url ? (
+        <img src={url} alt="Profile Image" />
+      ) : (
+        <span className="">
+          <span
+            className="author btn-profile size-SM mr-1"
+            style={{ background: getRandomColor() }}
+          >
+            {getSortAuthor("J")}
+          </span>
+          <p className="mt-2">
+            <small className="text-muted">{description}</small>
+          </p>
+        </span>
+      )}
     </div>
   );
 };

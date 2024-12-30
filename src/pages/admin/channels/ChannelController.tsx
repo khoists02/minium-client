@@ -8,20 +8,33 @@
  * from LKG.  Access to the source code contained herein is hereby forbidden to anyone except current LKG employees, managers or contractors who have executed
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
-import React, { FC, useCallback } from "react";
-import { useAppSelector } from "../../../config/hook";
+import React, { FC, useCallback, useEffect, useMemo } from "react";
+import { useAppDispatch, useAppSelector } from "../../../config/hook";
 import { useNavigate } from "react-router";
+import { getChannels } from "./ducks/operators";
 
 const ChannelsController: FC = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const { channels } = useAppSelector((state) => state.channels);
+
   const handleCreateChannel = useCallback(() => {
     navigate("/Channels/Create");
   }, []);
+
+  const handleNavigateDetails = useCallback((id: string) => {
+    navigate(`/Channels/${id}`);
+  }, []);
+
+  useEffect(() => {
+    dispatch(getChannels());
+  }, []);
+
   return (
     <>
       <div className="row">
-        <div className="col-md-8">
+        <div className="col-md-12">
           {channels.length === 0 && (
             <>
               <div className="no-rs">You don't have channel</div>
@@ -33,8 +46,29 @@ const ChannelsController: FC = () => {
               </button>
             </>
           )}
+
+          {channels.length > 0 && (
+            <>
+              <div className="channels-list">
+                {channels.map((c) => {
+                  return (
+                    <div key={c.id} className="channel--item">
+                      <h2
+                        onClick={() => handleNavigateDetails(c.id)}
+                        className="title cursor-pointer truncate-2-lines"
+                      >
+                        {c.name}
+                      </h2>
+                      <p className="description truncate-3-lines">
+                        {c.description}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
         </div>
-        <div className="col-md-4">right</div>
       </div>
     </>
   );
