@@ -74,33 +74,6 @@ const PostDetailsContainer: FC = () => {
     return letter;
   };
 
-  const getRandomColor = (): string => {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  };
-
-  const sortAuthor = (user: any) => {
-    return !user?.photoUrl ? (
-      <span
-        className="author btn-profile size-xs mr-1"
-        style={{ background: getRandomColor() }}
-      >
-        {getSortAuthor(user?.name)}
-      </span>
-    ) : (
-      <Avatar
-        description={user.description}
-        size="xxs"
-        url={`${axios.defaults.baseURL.replace("/api", "")}${user.photoUrl}`}
-        className="mr-2 mb-4"
-      />
-    );
-  };
-
   /**
    * Handle submit comment in row for editor
    * @param title
@@ -127,7 +100,13 @@ const PostDetailsContainer: FC = () => {
 
   return (
     <>
-      {sortAuthor(post?.user)}
+      <Avatar
+        description={account?.description}
+        size="xs"
+        placement="right"
+        url={account?.photoUrl ? account?.photoUrl : ""}
+        className="mr-2 mb-4"
+      />
       <div className="border-top border-bottom mb-5 pt-2 pb-2 d-flex flex-center-between">
         <CountBlock
           scrollToComment={scrollToComment}

@@ -43,7 +43,7 @@ const ChannelDetailsContainer: FC = () => {
         <div className="col-md-4 pl-2 pr-2">
           <div className="channel-logo">
             <Avatar
-              description={channel.description}
+              description={channel?.description}
               size="sm"
               className="mr-3"
               allowTrigger={false}

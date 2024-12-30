@@ -8,23 +8,31 @@
  * from LKG.  Access to the source code contained herein is hereby forbidden to anyone except current LKG employees, managers or contractors who have executed
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
-import React, { FC, forwardRef } from "react";
+import React, { FC, forwardRef, useMemo } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { ShortLogo } from "./ShortLogo";
+import { Placement } from "react-bootstrap/esm/types";
 
-export const Avatar: FC<{
-  url: string;
-  className: string;
-  size: string;
-  onClick?: () => void;
+interface AvatarProps {
+  url?: string;
+  className?: string;
+  size?: string;
   description?: string;
   allowTrigger?: boolean;
-}> = ({
+  shortName?: string;
+  placement?: Placement;
+  onClick?: () => void;
+}
+
+export const Avatar: FC<AvatarProps> = ({
   url,
   className,
   size = "sm",
   description = "",
-  onClick,
+  shortName,
   allowTrigger = true,
+  placement = "auto",
+  onClick,
 }) => {
   // Custom trigger component with ref forwarding
   const TriggerDiv = forwardRef<
@@ -40,25 +48,11 @@ export const Avatar: FC<{
     </div>
   ));
 
-  const getRandomColor = (): string => {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  };
-
-  const getSortAuthor = (name: string) => {
-    if (!name) return "A";
-    const splitObject = name.split(" ");
-
-    let letter = splitObject[0][0].toUpperCase();
-
-    if (splitObject.length > 1) {
-      letter = `${letter}${splitObject[1][0].toUpperCase()}`;
-    }
-    return letter;
+  const TooltipAction = () => {
+    if (url) return <img src={url} alt="Profile Image" />;
+    return (
+      <ShortLogo size={size} shortName={shortName} description={description} />
+    );
   };
 
   return allowTrigger ? (
@@ -66,14 +60,17 @@ export const Avatar: FC<{
       <OverlayTrigger
         trigger={["click"]}
         rootClose
-        placement="auto" // Position of the tooltip (top, bottom, left, right)
+        placement={placement} // Position of the tooltip (top, bottom, left, right)
         overlay={
           <Tooltip className="tooltip-profile" id="button-tooltip">
             <div className="d-flex w-100">
               <div className="avatar xs ">
                 <img src={url} alt="Profile Image" />
               </div>
-              <span className="ml-3 mt-2">Follow</span>
+              <span className="ml-3 ">
+                <p className="mt-2 mb-0">Follow</p>
+                <p className="mb-0 text-small">{shortName}</p>
+              </span>
             </div>
             <div className="w-100 text-muted truncate-6-lines description mt-3">
               <small>{description}</small>
@@ -102,21 +99,7 @@ export const Avatar: FC<{
       }}
       className={`avatar w-100 ${onClick ? "cursor-pointer" : ""} ${size} ${className}`}
     >
-      {url ? (
-        <img src={url} alt="Profile Image" />
-      ) : (
-        <span className="">
-          <span
-            className="author btn-profile size-SM mr-1"
-            style={{ background: getRandomColor() }}
-          >
-            {getSortAuthor("J")}
-          </span>
-          <p className="mt-2">
-            <small className="text-muted">{description}</small>
-          </p>
-        </span>
-      )}
+      {TooltipAction()}
     </div>
   );
 };
