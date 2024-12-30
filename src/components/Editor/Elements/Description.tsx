@@ -27,7 +27,7 @@ export const Description: FC<DescriptionProps> = ({
   children,
 }) => {
   return (
-    <h5
+    <p
       contentEditable={!readonly}
       {...attributes}
       style={{ position: "relative", color: "#6B6B6B" }}
@@ -46,6 +46,6 @@ export const Description: FC<DescriptionProps> = ({
         </span>
       )}
       {children}
-    </h5>
+    </p>
   );
 };

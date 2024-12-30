@@ -14,6 +14,7 @@ import {
   getPostDetailsSuccess,
   getPostsFail,
   getPostsSuccess,
+  getTabs,
   loading,
 } from "./slice";
 
@@ -37,4 +38,18 @@ export const getPublicPostsDetails =
     } catch (err) {
       dispatch(getPostsFail(err));
     }
+  };
+
+export const getChannelsDropdown =
+  (userId: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      const data = await axios.get("/public/channels", {
+        params: {
+          userId,
+          mode: "dropdown",
+        },
+      });
+      dispatch(getTabs(data.data?.content));
+    } catch (err) {}
   };

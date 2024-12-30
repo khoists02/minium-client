@@ -39,7 +39,7 @@ export const ShortLogo: FC<{
     <>
       <span className="">
         <span
-          className={`author size-${size} btn-profile  mr-1`}
+          className={`author size-${size} btn-profile  me-1`}
           style={{ background: getRandomColor() }}
         >
           {sortLabel}

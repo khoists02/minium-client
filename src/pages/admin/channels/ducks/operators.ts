@@ -12,12 +12,19 @@ import { getAllChannels, getChannel, getPosts } from "./slices";
  * from LKG.  Access to the source code contained herein is hereby forbidden to anyone except current LKG employees, managers or contractors who have executed
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
-export const getChannels = (): AppThunk => async (dispatch) => {
-  try {
-    const data = await axios.get("/channels");
-    dispatch(getAllChannels(data.data?.content));
-  } catch (err) {}
-};
+export const getChannels =
+  (userId: string, mode?: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      const data = await axios.get("/public/channels", {
+        params: {
+          userId,
+          mode,
+        },
+      });
+      dispatch(getAllChannels(data.data?.content));
+    } catch (err) {}
+  };
 
 export const getChannelsDetails =
   (id: string): AppThunk =>

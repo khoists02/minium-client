@@ -11,10 +11,9 @@
 import React, { FC, useEffect } from "react";
 import { format } from "date-fns";
 import { useAppDispatch, useAppSelector } from "../../config/hook";
-import { getPublicPosts } from "./ducks/operators";
+import { getChannelsDropdown, getPublicPosts } from "./ducks/operators";
 import { useNavigate } from "react-router";
 import { Avatar } from "../../components/Avatar";
-import axios from "axios";
 import { CountBlock } from "./CountBlock";
 
 const PostContainer: FC = () => {
@@ -27,8 +26,15 @@ const PostContainer: FC = () => {
     dispatch(getPublicPosts());
   }, []);
 
+  useEffect(() => {
+    if (account) dispatch(getChannelsDropdown(account.id));
+  }, [account]);
+
   return (
     <>
+      <div className="row">
+        <div className="col-md-8 tabs"></div>
+      </div>
       <div className="row">
         <div className="col-md-8 col-sm-12 col-xs-12">
           <div className="row">
@@ -40,7 +46,7 @@ const PostContainer: FC = () => {
                       description={p.user?.description}
                       size="xxs"
                       url={p.user?.photoUrl}
-                      className="mr-2"
+                      className="me-2"
                     />
                     <span className="username text-muted">{p.user?.name}</span>
                   </span>
@@ -62,7 +68,7 @@ const PostContainer: FC = () => {
 
                     <CountBlock
                       inline
-                      wrapperClass="ml-2"
+                      wrapperClass="ms-2"
                       disabled
                       post={p}
                       account={account}

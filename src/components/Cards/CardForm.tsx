@@ -35,7 +35,9 @@ export const CardForm: FC<CardFormProps> = ({
 }) => {
   return (
     <>
-      <div className={`card card__form ${classNames.wrapperClassName}`}>
+      <div
+        className={`card card__form py-2 px-2 ${classNames.wrapperClassName}`}
+      >
         <div
           className={`card-header d-flex justify-content-between align-items-center ${classNames.cardHeaderClassName}`}
         >

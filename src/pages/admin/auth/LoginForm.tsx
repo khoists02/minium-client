@@ -81,7 +81,7 @@ export const LoginForm: FC<{ onSubmit: (data: ILoginForm) => void }> = ({
           <div className="form-group remember-me">
             <span>
               <input type="checkbox" name="" id="" />{" "}
-              <span className="font-weight ml-1">Remember me</span>
+              <span className="font-weight ms-1">Remember me</span>
             </span>
           </div>
 

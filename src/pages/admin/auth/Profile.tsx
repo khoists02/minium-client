@@ -86,16 +86,16 @@ const Profile: FC = () => {
         <div className="row">
           <div className="col-md-12">
             <div className="item">
-              <div className="text-muted">Photo</div>
+              <label className="form-label">Photo</label>
               <div className="mt-2 d-flex">
                 {showSortImage && (
-                  <button className="btn-profile size-sm mr-3">
+                  <button className="btn-profile size-sm me-3">
                     {getSortAccountName}
                   </button>
                 )}
-                {blobUrl && <Avatar size="sm" className="mr-3" url={blobUrl} />}
+                {blobUrl && <Avatar size="sm" className="me-3" url={blobUrl} />}
                 {showLogo && (
-                  <Avatar size="sm" className="mr-3" url={account.photoUrl} />
+                  <Avatar size="sm" className="me-3" url={account.photoUrl} />
                 )}
                 <div className="">
                   <div>
@@ -113,7 +113,7 @@ const Profile: FC = () => {
                       onChange={handleFileUpload}
                       ref={inputRef}
                     />
-                    <span className="text-danger ml-2 cursor-pointer">
+                    <span className="text-danger ms-2 cursor-pointer">
                       Remove
                     </span>
                   </div>
@@ -158,14 +158,14 @@ const Profile: FC = () => {
         </div>
         <div className="row mt-3">
           <div className="item form-group col-md-8 col-xs-12">
-            <label htmlFor="name" className="text-muted">
+            <label htmlFor="name" className="form-label">
               Description
             </label>
             <textarea
               rows={5}
               onChange={(e) => setDescription(e.target.value)}
               value={description}
-              className="form-control"
+              className="form-control font-xs"
               id="description"
               name="description"
             />

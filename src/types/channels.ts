@@ -14,6 +14,8 @@ export type Channels = {
   description?: string;
 };
 
+export type ChannelLight = Omit<Channels, "description">;
+
 export type ChannelResponse = Partial<Channels>;
 
 export type CreateChannelRequest = Omit<Channels, "id">;

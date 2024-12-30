@@ -60,7 +60,7 @@ export const CommentInBlock: FC<CommentInBlockProps> = ({
       <div className="comment-menu">
         <div className="comment-menu__header mb-2 d-flex">
           <Avatar url={author?.photoUrl} className={""} size={"xxs"} />
-          <span className="ml-3">
+          <span className="ms-3">
             <p className="text-muted mb-1">{author?.name}</p>
             <p className="text-muted truncate-3-lines mb-0">
               {author?.description}
@@ -74,8 +74,7 @@ export const CommentInBlock: FC<CommentInBlockProps> = ({
             onChange={(e) => {
               setContent(e.target.value);
             }}
-            style={{ fontSize: 12 }}
-            className="form-control"
+            className="form-control font-xs"
             name=""
             id=""
           ></textarea>
@@ -88,7 +87,7 @@ export const CommentInBlock: FC<CommentInBlockProps> = ({
           <button
             onClick={handleSubmit}
             disabled={!content}
-            className="btn btn-success"
+            className="btn btn-primary"
           >
             Save
           </button>

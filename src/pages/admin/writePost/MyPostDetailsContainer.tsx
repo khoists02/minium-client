@@ -62,7 +62,7 @@ const MyPostDetailsContainer: FC = () => {
     );
     try {
       await axios.put(`/posts/${post.id}`, {
-        title: post.title,
+        title: title,
         content: JSON.stringify(final),
         description: description,
       });

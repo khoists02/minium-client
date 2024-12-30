@@ -45,7 +45,7 @@ const ChannelDetailsContainer: FC = () => {
               <div className="channel-logo">
                 <Avatar
                   size="sm"
-                  className="mr-3"
+                  className="me-3"
                   allowTrigger={false}
                   url={""}
                 />
@@ -53,7 +53,7 @@ const ChannelDetailsContainer: FC = () => {
                   {channel?.name}{" "}
                   <i
                     onClick={handleWritePostInChannel}
-                    className="fa fa-pencil-square-o cursor-pointer ml-2"
+                    className="fa fa-pencil-square-o cursor-pointer ms-2"
                   ></i>
                 </p>
                 <p>{channel?.description}</p>
@@ -95,7 +95,7 @@ const ChannelDetailsContainer: FC = () => {
 
                       <CountBlock
                         inline
-                        wrapperClass="ml-2"
+                        wrapperClass="ms-2"
                         disabled
                         post={p}
                         account={account}
@@ -114,7 +114,7 @@ const ChannelDetailsContainer: FC = () => {
             <Avatar
               description={channel?.description}
               size="sm"
-              className="mr-3"
+              className="me-3"
               allowTrigger={false}
               url={""}
             />

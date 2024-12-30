@@ -70,7 +70,7 @@ export const Comments = forwardRef<HTMLDivElement, CommentsProps>(
             <div className={`d-flex buttons ${!focused ? "mt-0" : ""}`}>
               {focused && (
                 <button
-                  className="btn btn-light mr-2"
+                  className="btn btn-light me-2"
                   onClick={() => setFocused(false)}
                 >
                   Cancel
@@ -92,7 +92,7 @@ export const Comments = forwardRef<HTMLDivElement, CommentsProps>(
                     shortName={cmt?.author?.name}
                     size="xxs"
                     url={cmt?.author?.photoUrl}
-                    className="mr-2 mb-3"
+                    className="me-2 mb-3"
                   />
                 </div>
                 {cmt.title && <p className="title">{cmt.title}</p>}

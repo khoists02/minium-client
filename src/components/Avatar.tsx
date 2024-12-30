@@ -67,7 +67,7 @@ export const Avatar: FC<AvatarProps> = ({
               <div className="avatar xs ">
                 <img src={url} alt="Profile Image" />
               </div>
-              <span className="ml-3 ">
+              <span className="ms-3 ">
                 <p className="mt-2 mb-0">Follow</p>
                 <p className="mb-0 text-small">{shortName}</p>
               </span>

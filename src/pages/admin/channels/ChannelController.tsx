@@ -16,7 +16,7 @@ import { getChannels } from "./ducks/operators";
 const ChannelsController: FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
+  const { account } = useAppSelector((state) => state.auth);
   const { channels } = useAppSelector((state) => state.channels);
 
   const handleCreateChannel = useCallback(() => {
@@ -28,8 +28,8 @@ const ChannelsController: FC = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(getChannels());
-  }, []);
+    if (account) dispatch(getChannels(account?.id));
+  }, [account]);
 
   return (
     <>

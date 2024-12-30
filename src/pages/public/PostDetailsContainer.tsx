@@ -105,7 +105,7 @@ const PostDetailsContainer: FC = () => {
         size="xs"
         placement="right"
         url={account?.photoUrl ? account?.photoUrl : ""}
-        className="mr-2 mb-4"
+        className="me-2 mb-4"
       />
       <div className="border-top border-bottom mb-5 pt-2 pb-2 d-flex flex-center-between">
         <CountBlock

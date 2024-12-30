@@ -10,12 +10,14 @@
  */
 import { createSlice } from "@reduxjs/toolkit";
 import { IPostResponse } from "../../../types/general";
+import { ChannelLight } from "../../../types/channels";
 
 export interface PublicPostState {
   entities: IPostResponse[];
   post?: IPostResponse;
   loading: boolean;
   error?: any;
+  tabs: ChannelLight[];
 }
 
 const initialState: PublicPostState = {
@@ -23,6 +25,7 @@ const initialState: PublicPostState = {
   loading: false,
   error: null,
   post: null,
+  tabs: [],
 };
 
 const publicPostSlice = createSlice({
@@ -41,10 +44,18 @@ const publicPostSlice = createSlice({
     getPostDetailsSuccess(state, action) {
       state.post = action.payload;
     },
+    getTabs(state, action) {
+      state.tabs = action.payload;
+    },
     clearState: () => initialState,
   },
 });
 
-export const { loading, getPostsSuccess, getPostsFail, getPostDetailsSuccess } =
-  publicPostSlice.actions;
+export const {
+  loading,
+  getPostsSuccess,
+  getPostsFail,
+  getPostDetailsSuccess,
+  getTabs,
+} = publicPostSlice.actions;
 export default publicPostSlice.reducer;
