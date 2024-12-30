@@ -1,6 +1,6 @@
 import axios from "axios";
 import { AppThunk } from "../../../../config/store";
-import { getAllChannels, getChannel } from "./slices";
+import { getAllChannels, getChannel, getPosts } from "./slices";
 
 /*
  * Mimium Pty. Ltd. ("LKG") CONFIDENTIAL
@@ -25,5 +25,14 @@ export const getChannelsDetails =
     try {
       const data = await axios.get(`/channels/${id}`);
       dispatch(getChannel(data.data?.channel));
+    } catch (err) {}
+  };
+
+export const getAllPostsOfChannel =
+  (channelId: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      const data = await axios.get(`/channels/${channelId}/posts`);
+      dispatch(getPosts(data.data?.content));
     } catch (err) {}
   };

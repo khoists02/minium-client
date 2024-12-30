@@ -9,14 +9,15 @@
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
 import { createSlice } from "@reduxjs/toolkit";
-import { IUserResponse } from "../../../../types/general";
 import { Channels, ListChannels } from "../../../../types/channels";
+import { IPostResponse } from "../../../../types/general";
 
 export interface ChannelState {
   loading: boolean;
   error?: any;
   channels: ListChannels;
   channel: Channels | null;
+  posts: IPostResponse[];
 }
 
 const initialState: ChannelState = {
@@ -24,6 +25,7 @@ const initialState: ChannelState = {
   error: null,
   channels: [],
   channel: null,
+  posts: [],
 };
 
 const channelSlice = createSlice({
@@ -37,8 +39,12 @@ const channelSlice = createSlice({
     getChannel(state, action) {
       state.channel = action.payload;
     },
+    getPosts(state, action) {
+      state.posts = action.payload;
+    },
   },
 });
 
-export const { clearState, getAllChannels, getChannel } = channelSlice.actions;
+export const { clearState, getAllChannels, getChannel, getPosts } =
+  channelSlice.actions;
 export default channelSlice.reducer;

@@ -52,6 +52,14 @@ const AppRouter: FC<{ isAuthenticated: boolean }> = ({ isAuthenticated }) => {
             path="/MyPost/:postId/Edit"
             element={<MyPostDetailsContainer />}
           ></Route>
+          <Route
+            path="/Channels/WritePost/:id"
+            element={<WritePostContainer />}
+          ></Route>
+          <Route
+            path="/Channels/:channelId/Posts/:postId"
+            element={<PostDetailsContainer />}
+          ></Route>
         </>
       )}
     </Routes>

@@ -9,20 +9,30 @@
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
 import React, { FC, useEffect } from "react";
-import { useParams } from "react-router";
-import { getChannel } from "./ducks/slices";
+import { useNavigate, useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../../config/hook";
-import { getChannelsDetails } from "./ducks/operators";
+import { getAllPostsOfChannel, getChannelsDetails } from "./ducks/operators";
 import { Avatar } from "../../../components/Avatar";
+import { CountBlock } from "../../public/CountBlock";
+import { format } from "date-fns";
 
 const ChannelDetailsContainer: FC = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const { channel } = useAppSelector((state) => state.channels);
+  const navigate = useNavigate();
+  const { channel, posts } = useAppSelector((state) => state.channels);
+  const { account } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    if (id) dispatch(getChannelsDetails(id));
+    if (id) {
+      dispatch(getChannelsDetails(id));
+      dispatch(getAllPostsOfChannel(id));
+    }
   }, [id]);
+
+  const handleWritePostInChannel = () => {
+    navigate(`/Channels/WritePost/${id}`);
+  };
 
   return (
     <>
@@ -32,15 +42,74 @@ const ChannelDetailsContainer: FC = () => {
             <div className="channel-banner">
               <div className="channel-hero"></div>
 
-              <div className="channel-logo"></div>
+              <div className="channel-logo">
+                <Avatar
+                  size="sm"
+                  className="mr-3"
+                  allowTrigger={false}
+                  url={""}
+                />
+                <p>
+                  {channel?.name}{" "}
+                  <i
+                    onClick={handleWritePostInChannel}
+                    className="fa fa-pencil-square-o cursor-pointer ml-2"
+                  ></i>
+                </p>
+                <p>{channel?.description}</p>
+              </div>
             </div>
 
             <div className="channel-tabs"></div>
 
-            <div className="channel-posts"></div>
+            <div className="channel-posts mt-3">
+              {posts.map((p) => {
+                return (
+                  <div className="mb-3 mt-3 article--item" key={p.id}>
+                    <span className="d-flex align-items-center mb-2">
+                      <Avatar
+                        shortName={p.user?.name}
+                        size="xs"
+                        url={p.user?.photoUrl}
+                        description={p.user?.description}
+                      />
+                      <span className="username text-muted">
+                        {p.user?.name}
+                      </span>
+                    </span>
+                    <h2
+                      onClick={() => {
+                        navigate(`/Channels/${id}/Posts/${p.id}`);
+                      }}
+                      className="title cursor-pointer truncate-2-lines"
+                    >
+                      {p.title}
+                    </h2>
+                    <p className="description truncate-3-lines">
+                      {p.description}
+                    </p>
+                    <p className="mb-0 footer">
+                      <span>
+                        {format(new Date(p.updatedAt), "MMM, dd yyyy HH:mm")}
+                      </span>
+
+                      <CountBlock
+                        inline
+                        wrapperClass="ml-2"
+                        disabled
+                        post={p}
+                        account={account}
+                        scrollToComment={() => {}}
+                      />
+                    </p>
+                    <p className="break"></p>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
-        <div className="col-md-4 pl-2 pr-2">
+        {/* <div className="col-md-4 col-xs-12 pl-2 pr-2 channel-info">
           <div className="channel-logo">
             <Avatar
               description={channel?.description}
@@ -50,7 +119,7 @@ const ChannelDetailsContainer: FC = () => {
               url={""}
             />
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

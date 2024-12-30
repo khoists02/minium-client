@@ -14,6 +14,7 @@ import { Row } from "../../../components/Row";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { useAppSelector } from "../../../config/hook";
+import { useParams } from "react-router";
 
 const initValue = [
   {
@@ -40,12 +41,13 @@ const initValue = [
 
 const WritePostContainer: FC = () => {
   const { account } = useAppSelector((state) => state.auth);
+  const { id: channelId } = useParams();
 
   const handleSavePost = async (content: any) => {
     if (!content || content.length === 0) return;
     let title = uuidv4();
     const titleArr = content?.filter(
-      (x) => x.type === "title" || x.type === "paragraph"
+      (x) => x.type === "title" || x.type === "paragraph",
     );
     if (titleArr?.length > 0) {
       title = titleArr[0]?.children[0]?.text;
@@ -55,12 +57,13 @@ const WritePostContainer: FC = () => {
       (x) =>
         x.type === "image" ||
         x.type === "break" ||
-        (x.type !== "image" && x.children[0]?.text !== "")
+        (x.type !== "image" && x.children[0]?.text !== ""),
     );
     try {
       await axios.post("/posts", {
         title: title,
         content: JSON.stringify(final),
+        channelId,
       });
     } catch (error) {
       console.log("Save post error !!!", error);
@@ -72,10 +75,7 @@ const WritePostContainer: FC = () => {
       <div className="col-md-12 pt-5">
         <Editor
           initValue={initValue as any}
-          author={{
-            ...account,
-            photoUrl: `${axios.defaults.baseURL.replace("/api", "")}${account?.photoUrl}`,
-          }}
+          author={account}
           onSave={(value) => {
             handleSavePost(value);
           }}

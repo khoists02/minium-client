@@ -91,11 +91,7 @@ export const Comments = forwardRef<HTMLDivElement, CommentsProps>(
                     description={cmt?.author?.description}
                     shortName={cmt?.author?.name}
                     size="xxs"
-                    url={
-                      cmt?.author?.photoUrl
-                        ? `${axios.defaults.baseURL.replace("/api", "")}${cmt?.author?.photoUrl}`
-                        : ""
-                    }
+                    url={cmt?.author?.photoUrl}
                     className="mr-2 mb-3"
                   />
                 </div>

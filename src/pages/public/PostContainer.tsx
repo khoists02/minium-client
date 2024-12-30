@@ -27,45 +27,6 @@ const PostContainer: FC = () => {
     dispatch(getPublicPosts());
   }, []);
 
-  const getRandomColor = (): string => {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  };
-
-  const getSortAuthor = (name: string) => {
-    if (!name) return "A";
-    const splitObject = name.split(" ");
-
-    let letter = splitObject[0][0].toUpperCase();
-
-    if (splitObject.length > 1) {
-      letter = `${letter}${splitObject[1][0].toUpperCase()}`;
-    }
-    return letter;
-  };
-
-  const sortAuthor = (user: any) => {
-    return !user?.photoUrl ? (
-      <span
-        className="author btn-profile size-xs mr-1"
-        style={{ background: getRandomColor() }}
-      >
-        {getSortAuthor(user?.name)}
-      </span>
-    ) : (
-      <Avatar
-        description={user.description}
-        size="xxs"
-        url={`${axios.defaults.baseURL.replace("/api", "")}${user.photoUrl}`}
-        className="mr-2"
-      />
-    );
-  };
-
   return (
     <>
       <div className="row">
@@ -75,7 +36,12 @@ const PostContainer: FC = () => {
               return (
                 <div className="col-md-12 mb-3 article--item" key={p.id}>
                   <span className="d-flex align-items-center mb-2">
-                    {sortAuthor(p.user)}
+                    <Avatar
+                      description={p.user?.description}
+                      size="xxs"
+                      url={p.user?.photoUrl}
+                      className="mr-2"
+                    />
                     <span className="username text-muted">{p.user?.name}</span>
                   </span>
                   <h2
