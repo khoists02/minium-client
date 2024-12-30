@@ -127,6 +127,12 @@ export const Header: FC<{ showAdminRouter?: boolean }> = ({
                           <span>My Posts</span>
                         </span>
                       </Dropdown.Item>
+                      <Dropdown.Item href="/Channels">
+                        <span className="text-muted">
+                          <i className="fa fa-dashboard mr-2"></i>
+                          <span>My Channels</span>
+                        </span>
+                      </Dropdown.Item>
                       <Dropdown.Divider />
                       <Dropdown.Item onClick={handleLogout}>
                         <span className="text-muted">

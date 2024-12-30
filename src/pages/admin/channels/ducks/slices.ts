@@ -9,42 +9,28 @@
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
 import { createSlice } from "@reduxjs/toolkit";
-import { IPostResponse } from "../../../types/general";
+import { IUserResponse } from "../../../../types/general";
+import { ListChannels } from "../../../../types/channels";
 
-export interface PublicPostState {
-  entities: IPostResponse[];
-  post?: IPostResponse;
+export interface ChannelState {
   loading: boolean;
   error?: any;
+  channels: ListChannels;
 }
 
-const initialState: PublicPostState = {
-  entities: [],
+const initialState: ChannelState = {
   loading: false,
   error: null,
-  post: null,
+  channels: [],
 };
 
-const publicPostSlice = createSlice({
-  name: "publicPost",
+const channelSlice = createSlice({
+  name: "channels",
   initialState,
   reducers: {
-    loading: (state) => {
-      state.loading = true;
-    },
-    getPostsSuccess: (state, action) => {
-      state.entities = action.payload;
-    },
-    getPostsFail: (state, action) => {
-      state.error = action.payload;
-    },
-    getPostDetailsSuccess(state, action) {
-      state.post = action.payload;
-    },
     clearState: () => initialState,
   },
 });
 
-export const { loading, getPostsSuccess, getPostsFail, getPostDetailsSuccess } =
-  publicPostSlice.actions;
-export default publicPostSlice.reducer;
+export const { clearState } = channelSlice.actions;
+export default channelSlice.reducer;
