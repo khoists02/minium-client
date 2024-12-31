@@ -11,11 +11,13 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import publicPostReducer from "../pages/public/ducks/slice";
 import authReducer from "../pages/admin/auth/ducks/slices";
+import channelReducer from "../pages/admin/channels/ducks/slices";
 
 export const store = configureStore({
   reducer: {
     publicPost: publicPostReducer,
     auth: authReducer,
+    channels: channelReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(), // Add custom middleware if needed
 });

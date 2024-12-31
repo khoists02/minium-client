@@ -74,33 +74,6 @@ const PostDetailsContainer: FC = () => {
     return letter;
   };
 
-  const getRandomColor = (): string => {
-    const letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  };
-
-  const sortAuthor = (user: any) => {
-    return !user?.photoUrl ? (
-      <span
-        className="author btn-profile size-xs mr-1"
-        style={{ background: getRandomColor() }}
-      >
-        {getSortAuthor(user?.name)}
-      </span>
-    ) : (
-      <Avatar
-        description={user.description}
-        size="xxs"
-        url={`${axios.defaults.baseURL.replace("/api", "")}${user.photoUrl}`}
-        className="mr-2 mb-4"
-      />
-    );
-  };
-
   /**
    * Handle submit comment in row for editor
    * @param title
@@ -126,36 +99,44 @@ const PostDetailsContainer: FC = () => {
   };
 
   return (
-    <>
-      {sortAuthor(post?.user)}
-      <div className="border-top border-bottom mb-5 pt-2 pb-2 d-flex flex-center-between">
-        <CountBlock
-          scrollToComment={scrollToComment}
-          reload={reload}
-          account={account}
-          post={post}
+    <div className="post-container">
+      <div className="post-content">
+        <Avatar
+          description={account?.description}
+          size="xs"
+          placement="right"
+          url={account?.photoUrl ? account?.photoUrl : ""}
+          className="me-2 mb-4"
         />
-        <div className="right"></div>
-      </div>
-      {showEditor && (
-        <Editor
-          readonly
-          author={account}
-          initValue={editorContent}
-          onSave={() => {}}
-          onCommentSubmit={handleSubmitComment}
-        />
-      )}
-      <div className="mt-5"></div>
+        <div className="border-top border-bottom mb-5 pt-2 pb-2 d-flex flex-center-between">
+          <CountBlock
+            scrollToComment={scrollToComment}
+            reload={reload}
+            account={account}
+            post={post}
+          />
+          <div className="right"></div>
+        </div>
+        {showEditor && (
+          <Editor
+            readonly
+            author={account}
+            initValue={editorContent}
+            onSave={() => {}}
+            onCommentSubmit={handleSubmitComment}
+          />
+        )}
+        <div className="mt-5"></div>
 
-      <Comments
-        ref={commentRef}
-        postId={postId}
-        fetching={getAllComments}
-        author={account}
-        comments={comments}
-      />
-    </>
+        <Comments
+          ref={commentRef}
+          postId={postId}
+          fetching={getAllComments}
+          author={account}
+          comments={comments}
+        />
+      </div>
+    </div>
   );
 };
 

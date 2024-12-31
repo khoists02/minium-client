@@ -8,14 +8,16 @@
  * from LKG.  Access to the source code contained herein is hereby forbidden to anyone except current LKG employees, managers or contractors who have executed
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
-
-import axios from "axios";
-import { AppThunk } from "../../../../config/store";
-import { authenticationSuccess } from "./slices";
-
-export const getAuthenticatedUser = (): AppThunk => async (dispatch) => {
-  try {
-    const data = await axios.get("/authenticatedUser");
-    dispatch(authenticationSuccess(data.data?.account));
-  } catch (err) {}
+export type Channels = {
+  id?: string;
+  name?: string;
+  description?: string;
 };
+
+export type ChannelLight = Omit<Channels, "description">;
+
+export type ChannelResponse = Partial<Channels>;
+
+export type CreateChannelRequest = Omit<Channels, "id">;
+
+export type ListChannels = Array<Channels>;

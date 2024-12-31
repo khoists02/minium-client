@@ -9,37 +9,42 @@
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
 import { createSlice } from "@reduxjs/toolkit";
-import { IUserResponse } from "../../../../types/general";
+import { Channels, ListChannels } from "../../../../types/channels";
+import { IPostResponse } from "../../../../types/general";
 
-export interface AuthState {
-  account?: IUserResponse;
+export interface ChannelState {
   loading: boolean;
   error?: any;
-  sessionHasBeenFetched?: boolean;
-  isAuthenticated?: boolean;
+  channels: ListChannels;
+  channel: Channels | null;
+  posts: IPostResponse[];
 }
 
-const initialState: AuthState = {
-  account: null,
+const initialState: ChannelState = {
   loading: false,
   error: null,
-  sessionHasBeenFetched: false,
-  isAuthenticated: false,
+  channels: [],
+  channel: null,
+  posts: [],
 };
 
-const authSlice = createSlice({
-  name: "auth",
+const channelSlice = createSlice({
+  name: "channels",
   initialState,
   reducers: {
-    authClearState: () => initialState,
-    authenticationSuccess(state, action) {
-      state.loading = false;
-      state.isAuthenticated = true;
-      state.sessionHasBeenFetched = true;
-      state.account = action.payload;
+    clearState: () => initialState,
+    getAllChannels(state, action) {
+      state.channels = action.payload;
+    },
+    getChannel(state, action) {
+      state.channel = action.payload;
+    },
+    getPosts(state, action) {
+      state.posts = action.payload;
     },
   },
 });
 
-export const { authClearState, authenticationSuccess } = authSlice.actions;
-export default authSlice.reducer;
+export const { clearState, getAllChannels, getChannel, getPosts } =
+  channelSlice.actions;
+export default channelSlice.reducer;

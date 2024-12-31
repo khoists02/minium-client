@@ -9,17 +9,53 @@
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
 // main.scss
+$primary: #696cff;
+$border-color: #F2F2F2;
+$navbar-height: 57px;
+$display-font-weight: 500;
+
 @import "bootstrap/scss/bootstrap";
 @import "./assets/styles/index.scss";
 
 /* Typography */
 body {
-  font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  line-height: 1.6;
+  font-family: $font-family-sans-serif;
   margin: 0;
+  font-size: 1rem;
   padding: 0;
   color: #333;
   background-color: #f9f9f9;
+  box-sizing: border-box;
+}
+
+.btn-primary {
+  color: #ffffff;
+}
+
+.btn-profile-outline {
+  padding: 0;
+  margin: 0;
+
+  &:active,
+  &:focus,
+  &:visited,
+  &:hover {
+    background: transparent !important;
+    border: none !important;
+    border-color: transparent !important;
+  }
+
+  &::after {
+    display: none;
+  }
+}
+
+textarea {
+  &.form-control {
+    &.font-xs {
+      font-size: 0.8rem;
+    }
+  }
 }
 
 .post-card {

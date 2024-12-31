@@ -31,10 +31,7 @@ function App() {
   return (
     <>
       <Header showAdminRouter={showAdminRouter} />
-      <div className="main"></div>
-      <div className="container mt-4  ">
-        <AppRouter isAuthenticated={showAdminRouter} />
-      </div>
+      <AppRouter isAuthenticated={showAdminRouter} />
     </>
   );
 }

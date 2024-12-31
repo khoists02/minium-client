@@ -43,7 +43,7 @@ const MyPostDetailsContainer: FC = () => {
     let title = uuidv4();
     let description = "";
     const titleArr = content?.filter(
-      (x) => x.type === "title" || x.type === "paragraph"
+      (x) => x.type === "title" || x.type === "paragraph",
     );
     const descriptionArr = content?.filter((x) => x.type === "description");
     if (titleArr?.length > 0) {
@@ -58,11 +58,11 @@ const MyPostDetailsContainer: FC = () => {
       (x) =>
         x.type === "image" ||
         x.type === "break" ||
-        (x.type !== "image" && x.children[0]?.text !== "")
+        (x.type !== "image" && x.children[0]?.text !== ""),
     );
     try {
       await axios.put(`/posts/${post.id}`, {
-        title: post.title,
+        title: title,
         content: JSON.stringify(final),
         description: description,
       });
@@ -73,17 +73,14 @@ const MyPostDetailsContainer: FC = () => {
 
   const showEditor = useMemo(
     () => post && editorContent.length > 0,
-    [post, editorContent]
+    [post, editorContent],
   );
 
   return (
     <div className="pb-5">
       {showEditor && (
         <Editor
-          author={{
-            ...post?.user,
-            photoUrl: `${axios.defaults.baseURL.replace("/api", "")}${post?.user?.photoUrl}`,
-          }}
+          author={post?.user}
           initValue={editorContent}
           onSave={(ct) => {
             handleSavePost(ct);

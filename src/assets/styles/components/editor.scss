@@ -3,10 +3,6 @@
     border: none;
     padding: 0; // Optional: Adjust padding if necessary
     box-shadow: none;
-
-    p {
-        font-size: 18px;
-    }
 }
 
 .editor-item {
@@ -100,6 +96,10 @@
                 }
             }
         }
+    }
+
+    .tooltip-arrow {
+        display: none;
     }
 }
 

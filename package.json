@@ -18,7 +18,7 @@
     "@typescript-eslint/eslint-plugin": "^8.18.1",
     "@typescript-eslint/parser": "^8.18.1",
     "axios": "^1.7.7",
-    "bootstrap": "^4.5.3",
+    "bootstrap": "^5.3.3",
     "date-fns": "^4.1.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest": "^28.8.3",

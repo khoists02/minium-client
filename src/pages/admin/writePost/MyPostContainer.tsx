@@ -58,7 +58,7 @@ const MyPostContainer: FC = () => {
             onClick={() => handleEdit(row.original)}
           />
           <i
-            className="fa fa-trash ml-2 text-danger cursor-pointer"
+            className="fa fa-trash ms-2 text-danger cursor-pointer"
             aria-hidden="true"
             onClick={() => handleDelete(row.original)}
           />

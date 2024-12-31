@@ -1,6 +1,3 @@
-$border-color: #F2F2F2;
-$navbar-height: 57px;
-
 @import "./mixins/general.scss";
 
 // Vendors
@@ -10,11 +7,13 @@ $navbar-height: 57px;
 @import "./components/border.scss";
 @import "./components/navbar.scss";
 @import "./components/editor.scss";
+@import "./components/card.scss";
 
 @import "font-awesome/css/font-awesome.min.css";
 
 
-.article--item {
+.article--item,
+.channel--item {
     .author {
         font-size: 13px;
         color: #242424;
@@ -32,7 +31,7 @@ $navbar-height: 57px;
     }
 
     .description {
-        font-size: 16px;
+        font-size: 14px;
         color: #6B6B6B;
         line-height: 20px;
     }

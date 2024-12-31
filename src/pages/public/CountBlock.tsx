@@ -77,19 +77,19 @@ export const CountBlock: FC<{
         className={`block-count ${wrapperClass}`}
         style={{ display: inline ? "inline" : "block" }}
       >
-        <span className="text-muted mr-4 cursor-pointer">
+        <span className="text-muted me-4 cursor-pointer">
           <i
             className={`fa fa-heart-o  ${visible && !disabled ? "text-danger" : ""}`}
             onClick={handleLikeOrUnlike}
           ></i>
           {post?.countLikes > 0 && (
-            <span className="ml-1">{post?.countLikes}</span>
+            <span className="ms-1">{post?.countLikes}</span>
           )}
         </span>
         <span className="text-muted cursor-pointer">
           <i className="fa fa-comment-o" onClick={scrollToComment}></i>
           {post?.countComments > 0 && (
-            <span className="ml-1">{post?.countComments}</span>
+            <span className="ms-1">{post?.countComments}</span>
           )}
         </span>
       </div>

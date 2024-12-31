@@ -50,10 +50,10 @@ export const Image: FC<ImageProps> = ({
       {!readonly && clicked && (
         <div contentEditable={false} className="text-center w-100 mb-3">
           <button className="btn btn-success ">Full</button>
-          <button className="btn btn-success  ml-2 mr-2">Fit</button>
+          <button className="btn btn-success  ms-2 me-2">Fit</button>
           <button className="btn btn-success ">Small</button>
           <button
-            className="btn btn-danger ml-2"
+            className="btn btn-danger ms-2"
             onClick={() => {
               if (onDelete) onDelete();
             }}

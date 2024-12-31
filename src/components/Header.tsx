@@ -80,57 +80,71 @@ export const Header: FC<{ showAdminRouter?: boolean }> = ({
                 {showWritePost && (
                   <i
                     onClick={() => navigate("/WritePost")}
-                    className="fa fa-pencil-square-o header-write mr-3"
+                    className="fa fa-pencil-square-o header-write me-3"
                     aria-hidden="true"
                   ></i>
                 )}
                 {showPublishPost && (
                   <span
                     onClick={() => publishPost()}
-                    className="btn-publish cursor-pointer mr-3"
+                    className="btn-publish cursor-pointer me-3"
                   >
                     Publish
                   </span>
                 )}
                 <Nav className="ms-auto">
-                  <Dropdown show={dropdownOpen} onToggle={toggleDropdown}>
-                    {account?.photoUrl ? (
-                      <Avatar
-                        allowTrigger={false}
-                        onClick={toggleDropdown}
-                        size="xs"
-                        className=""
-                        url={account?.photoUrl}
-                      />
-                    ) : (
-                      <Dropdown.Toggle
-                        as={Button}
-                        variant="light"
-                        className="btn-profile "
-                        onClick={toggleDropdown}
-                      >
+                  <Dropdown
+                    show={dropdownOpen}
+                    placement="bottom"
+                    onToggle={toggleDropdown}
+                  >
+                    <Dropdown.Toggle
+                      as={Button}
+                      variant="light"
+                      className={
+                        account?.photoUrl
+                          ? "btn-profile-outline"
+                          : "btn-profile "
+                      }
+                      onClick={toggleDropdown}
+                    >
+                      {account?.photoUrl ? (
+                        <Avatar
+                          allowTrigger={false}
+                          onClick={toggleDropdown}
+                          size="xs"
+                          className=""
+                          url={account?.photoUrl}
+                        />
+                      ) : (
                         <span>{getSortAccountName}</span>
-                      </Dropdown.Toggle>
-                    )}
+                      )}
+                    </Dropdown.Toggle>
 
-                    <Dropdown.Menu align="end">
-                      <Dropdown.Item href="/Profile">
-                        <span className="text-muted">
-                          <i className="fa fa-user mr-2"></i>
+                    <Dropdown.Menu>
+                      <Dropdown.Item className="py-1 mb-1" href="/Profile">
+                        <span className="text-muted w-100">
+                          <i className="fa fa-user me-2"></i>
                           <span>Profile</span>
                         </span>
                       </Dropdown.Item>
 
-                      <Dropdown.Item href="/MyPost">
+                      <Dropdown.Item className="py-1 mb-1" href="/MyPost">
                         <span className="text-muted">
-                          <i className="fa fa-file-text-o mr-2"></i>
+                          <i className="fa fa-file-text-o me-2"></i>
                           <span>My Posts</span>
+                        </span>
+                      </Dropdown.Item>
+                      <Dropdown.Item className="py-1" href="/Channels">
+                        <span className="text-muted">
+                          <i className="fa fa-dashboard me-2"></i>
+                          <span>My Channels</span>
                         </span>
                       </Dropdown.Item>
                       <Dropdown.Divider />
                       <Dropdown.Item onClick={handleLogout}>
                         <span className="text-muted">
-                          <i className="fa fa-sign-out mr-2"></i>
+                          <i className="fa fa-sign-out me-2"></i>
                           <span>Sign Out</span>
                         </span>
                       </Dropdown.Item>

@@ -8,7 +8,7 @@
  * from LKG.  Access to the source code contained herein is hereby forbidden to anyone except current LKG employees, managers or contractors who have executed
  * Confidentiality and Non-disclosure agreements explicitly covering such access.
  */
-import React, { FC, forwardRef, useState } from "react";
+import React, { FC, forwardRef, useMemo, useState } from "react";
 import { ICommentResponse, IUserResponse } from "../types/general";
 import { Avatar } from "./Avatar";
 import axios from "axios";
@@ -24,51 +24,17 @@ interface CommentsProps {
 export const Comments = forwardRef<HTMLDivElement, CommentsProps>(
   ({ author, comments, fetching, postId }, ref) => {
     const [focused, setFocused] = useState(false);
-    const getRandomColor = (): string => {
-      const letters = "0123456789ABCDEF";
-      let color = "#";
-      for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
-    };
-
-    const getSortAuthor = (name: string) => {
-      if (!name) return "A";
-      const splitObject = name.split(" ");
-
-      let letter = splitObject[0][0].toUpperCase();
-
-      if (splitObject.length > 1) {
-        letter = `${letter}${splitObject[1][0].toUpperCase()}`;
-      }
-      return letter;
-    };
-
-    const sortAuthor = (user: any) => {
-      return !user?.photoUrl ? (
-        <span
-          className="author btn-profile size-xs mr-1"
-          style={{ background: getRandomColor() }}
-        >
-          {getSortAuthor(user?.name)}
-        </span>
-      ) : (
-        <Avatar
-          description={user.description}
-          size="xxs"
-          url={user.photoUrl}
-          className="mr-2 mb-3"
-        />
-      );
-    };
-
     const deleteComment = async (commentId: string) => {
       try {
         await axios.delete(`/posts/${postId}/comments/${commentId}`);
         fetching();
       } catch (error) {}
     };
+
+    const accountPhotoUrl = useMemo(() => {
+      if (!author) return "";
+      return author?.photoUrl;
+    }, [author]);
 
     return (
       <div className="comments mb-5" ref={ref}>
@@ -87,7 +53,14 @@ export const Comments = forwardRef<HTMLDivElement, CommentsProps>(
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
           >
-            {focused && <span>{sortAuthor(author)}</span>}
+            {focused && (
+              <Avatar
+                size="xs"
+                shortName={author?.name}
+                url={accountPhotoUrl}
+                description={author?.description}
+              />
+            )}
             <textarea
               placeholder="Typing..."
               className="form-control"
@@ -98,7 +71,7 @@ export const Comments = forwardRef<HTMLDivElement, CommentsProps>(
             <div className={`d-flex buttons ${!focused ? "mt-0" : ""}`}>
               {focused && (
                 <button
-                  className="btn btn-light mr-2"
+                  className="btn btn-light me-2"
                   onClick={() => setFocused(false)}
                 >
                   Cancel
@@ -114,13 +87,14 @@ export const Comments = forwardRef<HTMLDivElement, CommentsProps>(
             return (
               <div className="comments__item pb-2">
                 <div className="mb2">
-                  <span>
-                    {sortAuthor({
-                      ...cmt?.author,
-                      photoUrl: `${axios.defaults.baseURL.replace("/api", "")}${cmt?.author?.photoUrl}`,
-                    })}
-                  </span>
-                  <span>{cmt?.author?.name}</span>
+                  <Avatar
+                    placement="right"
+                    description={cmt?.author?.description}
+                    shortName={cmt?.author?.name}
+                    size="xxs"
+                    url={cmt?.author?.photoUrl}
+                    className="me-2 mb-3"
+                  />
                 </div>
                 {cmt.title && <p className="title">{cmt.title}</p>}
                 <p className="content mb-0">{cmt.content}</p>

@@ -273,9 +273,31 @@ h5 {
 }
 
 .btn-publish {
-    background: #1e7e34;
+    background: $primary;
     padding: 3px 7px;
     border-radius: 15px;
     font-size: 12px;
     color: #ffffff;
+}
+
+.post-container {
+    display: flex;
+    margin-top: 30px;
+    justify-content: center;
+
+    .post-content {
+        max-width: 680px;
+
+        @include media-breakpoint-down(sm) {
+            max-width: 100%;
+            padding-left: 29px;
+            padding-right: 29px;
+        }
+
+        @include media-breakpoint-down(md) {
+            max-width: 100%;
+            padding-left: 29px;
+            padding-right: 29px;
+        }
+    }
 }

@@ -165,7 +165,7 @@ export const Element: FC<ElementProps> = ({
         <>
           <div
             {...attributes}
-            style={{ width: "100%", height: 1, background: "#000000" }}
+            style={{ width: "100%", height: 1, background: "#dfdfdf" }}
           ></div>
           {children}
         </>
