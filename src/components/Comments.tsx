@@ -12,6 +12,7 @@ import React, { FC, forwardRef, useState } from "react";
 import { ICommentResponse, IUserResponse } from "../types/general";
 import { Avatar } from "./Avatar";
 import axios from "axios";
+import { MiniumUserResponse } from "@minium/common";
 
 interface CommentsProps {
   author: IUserResponse;

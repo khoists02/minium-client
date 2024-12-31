@@ -1,4 +1,5 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "jsx": "react-jsx",
     "composite": true,
@@ -7,4 +8,7 @@
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
   },
+  "include": [
+    "../packages/minium-common/src"
+  ]
 }
