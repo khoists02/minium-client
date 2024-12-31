@@ -17,7 +17,7 @@ import { getAuthenticatedUser } from "./pages/admin/auth/ducks/operators";
 function App() {
   const dispatch = useAppDispatch();
   const { isAuthenticated, sessionHasBeenFetched } = useAppSelector(
-    (state) => state.auth
+    (state) => state.auth,
   );
 
   const showAdminRouter = useMemo(() => {
@@ -31,10 +31,7 @@ function App() {
   return (
     <>
       <Header showAdminRouter={showAdminRouter} />
-      <div className="main"></div>
-      <div className="container mt-4  ">
-        <AppRouter isAuthenticated={showAdminRouter} />
-      </div>
+      <AppRouter isAuthenticated={showAdminRouter} />
     </>
   );
 }

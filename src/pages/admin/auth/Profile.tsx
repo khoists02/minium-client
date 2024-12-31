@@ -135,7 +135,7 @@ const Profile: FC = () => {
               disabled
               type="text"
               value={account.name}
-              className="form-control"
+              className="form-control form-control-sm"
               id="name"
               name="name"
             />
@@ -149,7 +149,7 @@ const Profile: FC = () => {
             <input
               disabled
               type="email"
-              className="form-control"
+              className="form-control form-control-sm"
               id="email"
               name="email"
               value={account.email}
@@ -165,7 +165,7 @@ const Profile: FC = () => {
               rows={5}
               onChange={(e) => setDescription(e.target.value)}
               value={description}
-              className="form-control font-xs"
+              className="form-control form-control-sm"
               id="description"
               name="description"
             />
