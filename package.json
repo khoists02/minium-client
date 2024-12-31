@@ -1,7 +1,7 @@
 {
-  "name": "ts-client-ui",
+  "name": "@minium/minium-client",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "start": "vite",
@@ -31,7 +31,7 @@
     "prismjs": "^1.29.0",
     "quill": "^2.0.3",
     "react": "^18.3.1",
-    "react-bootstrap": "^2.10.5",
+    "react-bootstrap": "^2.10.7",
     "react-dom": "^18.3.1",
     "react-quill": "^2.0.0",
     "react-redux": "^9.2.0",
